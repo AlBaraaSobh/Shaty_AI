@@ -38,7 +38,7 @@ class _SignInPatientState extends State<SignInPatient> {
         if (state is PatientRegisterLoading) {
           Helpers.handleLoading(context);
         } else if (state is PatientRegisterSuccess) {
-          Helpers.handleSuccess(context, state.message);
+          Helpers.handleSuccess(context, state.message, route:'/patient_bottom_nav_bar');
         } else if (state is PatientRegisterFailure) {
           Helpers.handleFailure(context, state.error);
         }

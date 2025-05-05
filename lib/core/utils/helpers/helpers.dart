@@ -43,11 +43,15 @@ class Helpers {
     showLoadingDialog(context);
   }
 
-  static void handleSuccess(BuildContext context, String message) {
+  static void handleSuccess(BuildContext context, String message,{String? route}) {
      hideLoadingDialog(context);
      showToast(message: message);
-    Navigator.pushNamed(context, '/patient_bottom_nav_bar');
-  }
+     if (route != null) {
+       Navigator.pushNamed(context, route);
+     }  }
+
+
+
 
   static void handleFailure(BuildContext context, String error) {
     hideLoadingDialog(context); //في حال حذفتها بتصير مشلكة انو لو صار خطا بضل يحمل وما بيرجع
