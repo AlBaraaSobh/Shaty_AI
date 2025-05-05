@@ -37,4 +37,21 @@ class Helpers {
   static void hideLoadingDialog(BuildContext context) {
     Navigator.of(context, rootNavigator: true).pop();
   }
+
+  //أفضل خيار عام لضمان عدم ظهور خطأ عند محاولة إغلاق شاشة غير موجودةNavigator.canPop
+  static void handleLoading(BuildContext context) {
+    showLoadingDialog(context);
+  }
+
+  static void handleSuccess(BuildContext context, String message) {
+     hideLoadingDialog(context);
+     showToast(message: message);
+    Navigator.pushNamed(context, '/patient_bottom_nav_bar');
+  }
+
+  static void handleFailure(BuildContext context, String error) {
+    hideLoadingDialog(context); //في حال حذفتها بتصير مشلكة انو لو صار خطا بضل يحمل وما بيرجع
+    showToast(message: error);
+    print('the error is : $error');
+  }
 }

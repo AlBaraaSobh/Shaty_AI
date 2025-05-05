@@ -35,15 +35,12 @@ class _SignInPatientState extends State<SignInPatient> {
   Widget build(BuildContext context) {
     return BlocListener<RegisterCubit, PatientRegisterState>(
       listener: (context, state) {
-        // TODO: implement listener
-        if (state is PatientRegisterSuccess) {
-          //Helpers.showToast(message: "تم إنشاء الحساب بنجاح");
-          Helpers.showToast(message:state.message);
-          Navigator.pushNamed(context, '/patient_bottom_nav_bar');
+        if (state is PatientRegisterLoading) {
+          Helpers.handleLoading(context);
+        } else if (state is PatientRegisterSuccess) {
+          Helpers.handleSuccess(context, state.message);
         } else if (state is PatientRegisterFailure) {
-          Helpers.showToast(message:state.error);
-
-          print('the error is : ${state.error}');
+          Helpers.handleFailure(context, state.error);
         }
       },
       child: Scaffold(
@@ -117,6 +114,8 @@ class _SignInPatientState extends State<SignInPatient> {
       ),
     );
   }
+
+
 
 
 }
