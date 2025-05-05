@@ -10,8 +10,8 @@ import '../../../shared/widgets/doctor_sign_in.dart';
 import '../../../shared/widgets/patient_sign_in.dart';
 import '../../../shared/widgets/primary_button .dart';
 import '../../../shared/widgets/toggle_user_role.dart';
-import '../cubit/PatientRegisterState.dart';
-import '../models/PatientRegisterModel .dart';
+import '../cubit/patient_register_state.dart';
+import '../models/patient_register_model .dart';
 
 
 class SignInPatient extends StatefulWidget {
@@ -94,9 +94,9 @@ class _SignInPatientState extends State<SignInPatient> {
                           name: _controllers.name.text.trim(),
                           email: _controllers.email.text.trim(),
                           password: _controllers.password.text.trim(),
-                          password_confirmation:
+                          passwordConfirmation:
                               _controllers.confirmPassword.text.trim(),
-                          is_doctor: false,
+                          isDoctor: false,
                         );
                         print('Patient data to send: ${patient.toJson()}');
                         context.read<RegisterCubit>().registerPatientCubit(patient);

@@ -2,12 +2,12 @@ import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shaty/core/network/api_consumer.dart';
 import 'package:shaty/core/network/end_points.dart';
-import 'package:shaty/features/auth/cubit/PatientRegisterState.dart';
-import 'package:shaty/features/auth/models/PatientRegisterModel%20.dart';
+import 'package:shaty/features/auth/cubit/patient_register_state.dart';
 import 'package:shaty/features/auth/models/patient_response_model.dart';
 
 import '../../../core/errors/exceptions.dart';
 import '../../../core/utils/helpers/helpers.dart';
+import '../models/patient_register_model .dart';
 
 class RegisterCubit extends Cubit<PatientRegisterState> {
   RegisterCubit(this.api) : super(PatientRegisterInitial());
