@@ -49,15 +49,15 @@ class DoctorSignIn extends StatelessWidget {
         ),
         const SizedBox(height: 25),
         LabeledTextField(
-          label: context.loc.specialization,
-          hintText: context.loc.hint_specialization,
-          controller: specializationController,
+          label: context.loc.job_number,
+          hintText: context.loc.hint_job_number,
+          controller: jobNumberController ,
         ),
         const SizedBox(height: 25),
         LabeledTextField(
-          label: context.loc.job_number,
-          hintText: context.loc.hint_job_number,
-          controller: jobNumberController,
+          label: context.loc.specialty_id,
+          hintText: context.loc.hint_specialty_id,
+          controller: specializationController,
         ),
       ],
     );

@@ -1,7 +1,7 @@
 import 'doctor_model.dart';
 
 class DoctorResponseModel {
-  final DoctorUser user;
+  final DoctorModel user;
   final String token;
 
   DoctorResponseModel({
@@ -11,7 +11,7 @@ class DoctorResponseModel {
 
   factory DoctorResponseModel.fromJson(Map<String, dynamic> json) {
     return DoctorResponseModel(
-      user: DoctorUser.fromJson(json['user']),
+      user: DoctorModel.fromJson(json['user']),
       token: json['token'],
     );
   }

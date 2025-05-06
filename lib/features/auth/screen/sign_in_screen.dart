@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shaty/core/constants/app_colors.dart';
 import 'package:shaty/core/extensions/localization_extension.dart';
-import 'package:shaty/features/auth/cubit/register_cubit.dart';
+import 'package:shaty/features/auth/cubit/doctor_register_cubit.dart';
+import 'package:shaty/features/auth/cubit/doctor_register_state.dart';
+import 'package:shaty/features/auth/cubit/patient_register_cubit.dart';
 import '../../../controllers/sign_in_controllers.dart';
 import '../../../core/enums/user_role_enum.dart';
 import '../../../core/utils/helpers/helpers.dart';
@@ -11,17 +13,18 @@ import '../../../shared/widgets/patient_sign_in.dart';
 import '../../../shared/widgets/primary_button .dart';
 import '../../../shared/widgets/toggle_user_role.dart';
 import '../cubit/patient_register_state.dart';
+import '../models/doctor_register_model.dart';
 import '../models/patient_register_model .dart';
 
 
-class SignInPatient extends StatefulWidget {
-  const SignInPatient({super.key});
+class SignInScreen extends StatefulWidget {
+  const SignInScreen({super.key});
 
   @override
-  State<SignInPatient> createState() => _SignInPatientState();
+  State<SignInScreen> createState() => _SignInScreenState();
 }
 
-class _SignInPatientState extends State<SignInPatient> {
+class _SignInScreenState extends State<SignInScreen> {
   UserRole _selectedRole = UserRole.patient;
   final _controllers = SignInControllers();
 
@@ -33,16 +36,32 @@ class _SignInPatientState extends State<SignInPatient> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<RegisterCubit, PatientRegisterState>(
-      listener: (context, state) {
-        if (state is PatientRegisterLoading) {
-          Helpers.handleLoading(context);
-        } else if (state is PatientRegisterSuccess) {
-          Helpers.handleSuccess(context, state.message, route:'/patient_bottom_nav_bar');
-        } else if (state is PatientRegisterFailure) {
-          Helpers.handleFailure(context, state.error);
-        }
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<PatientRegisterCubit, PatientRegisterState>(
+          listener: (context, state) {
+            if (state is PatientRegisterLoading) {
+              Helpers.handleLoading(context);
+            } else if (state is PatientRegisterSuccess) {
+              Helpers.handleSuccess(
+                  context, state.message, route: '/patient_bottom_nav_bar');
+            } else if (state is PatientRegisterFailure) {
+              Helpers.handleFailure(context, state.error);
+            }
+          },
+        ),
+        BlocListener<DoctorRegisterCubit, DoctorRegisterState>(
+          listener: (context, state) {
+            if (state is DoctorRegisterLoading) {
+              Helpers.handleLoading(context);
+            } else if (state is DoctorRegisterSuccess) {
+              Helpers.handleSuccess(context, state.message, route: '/bottom_navigation_screen');
+            } else if (state is DoctorRegisterFailure) {
+              Helpers.handleFailure(context, state.error);
+            }
+          },
+        ),
+      ],
       child: Scaffold(
         appBar: AppBar(),
         body: SafeArea(
@@ -54,7 +73,7 @@ class _SignInPatientState extends State<SignInPatient> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                context.loc.welcome_to_create_an_Account,
+                    context.loc.welcome_to_create_an_Account,
                     style: TextStyle(
                         fontSize: 20, color: AppColors.primaryColor),
                   ),
@@ -76,7 +95,7 @@ class _SignInPatientState extends State<SignInPatient> {
                       nameController: _controllers.name,
                       confirmPasswordController: _controllers.confirmPassword,
                       typeDiseaseController: _controllers.typeDisease
-                      )
+                  )
                       : DoctorSignIn(
                       emailController: _controllers.email,
                       passwordController: _controllers.password,
@@ -85,7 +104,7 @@ class _SignInPatientState extends State<SignInPatient> {
                       specializationController: _controllers.specialization,
                       jobNumberController: _controllers.jobNumber),
                   SizedBox(height: 50,),
-                     PrimaryButton(
+                  PrimaryButton(
                     label: context.loc.create_account,
                     onPressed: () {
                       if (_selectedRole == UserRole.patient) {
@@ -95,14 +114,24 @@ class _SignInPatientState extends State<SignInPatient> {
                           email: _controllers.email.text.trim(),
                           password: _controllers.password.text.trim(),
                           passwordConfirmation:
-                              _controllers.confirmPassword.text.trim(),
+                          _controllers.confirmPassword.text.trim(),
                           isDoctor: false,
                         );
                         print('Patient data to send: ${patient.toJson()}');
-                        context.read<RegisterCubit>().registerPatientCubit(patient);
-
+                        context.read<PatientRegisterCubit>()
+                            .registerPatientCubit(patient);
                       } else {
-                        // TODO doctor
+                        final doctor = DoctorRegisterModel(
+                          name: _controllers.name.text.trim(),
+                          email: _controllers.email.text.trim(),
+                          password: _controllers.password.text.trim(),
+                          passwordConfirmation: _controllers.confirmPassword.text.trim(),
+                          isDoctor: true,
+                          jobSpecialtyNumber: _controllers.jobNumber.text.trim(),
+                          specialtyId: _controllers.specialization.text.trim(),
+                        );
+                        print('Doctor data to send: ${doctor.toJson()}');
+                        context.read<DoctorRegisterCubit>().registerDoctorCubit(doctor);
                       }
                     },
                   ),
@@ -114,8 +143,6 @@ class _SignInPatientState extends State<SignInPatient> {
       ),
     );
   }
-
-
 
 
 }

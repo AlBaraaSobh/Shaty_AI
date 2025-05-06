@@ -19,6 +19,8 @@
   "enter_your_name": "Name",
   "specialization": "specialization",
   "hint_specialization": "Chronic diseases",
+  "hint_specialty_id": "2",
+  "specialty_id": "specialtyId",
   "job_number": "job Number",
   "hint_job_number": "40854598826",
   "login_as_patient": "Login as Patient",

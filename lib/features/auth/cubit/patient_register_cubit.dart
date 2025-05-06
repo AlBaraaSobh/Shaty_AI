@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shaty/core/network/api_consumer.dart';
 import 'package:shaty/core/network/end_points.dart';
@@ -9,8 +8,8 @@ import '../../../core/errors/exceptions.dart';
 import '../../../core/utils/helpers/helpers.dart';
 import '../models/patient_register_model .dart';
 
-class RegisterCubit extends Cubit<PatientRegisterState> {
-  RegisterCubit(this.api) : super(PatientRegisterInitial());
+class PatientRegisterCubit extends Cubit<PatientRegisterState> {
+  PatientRegisterCubit(this.api) : super(PatientRegisterInitial());
   final ApiConsumer api ;
 
  Future <void> registerPatientCubit(PatientRegisterModel patient) async {

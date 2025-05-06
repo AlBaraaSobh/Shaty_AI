@@ -1,4 +1,4 @@
-class DoctorUser {
+class DoctorModel {
   final int id;
   final String name;
   final String email;
@@ -6,7 +6,7 @@ class DoctorUser {
   final String? img;
   final String jobSpecialtyNumber;
 
-  DoctorUser({
+  DoctorModel({
     required this.id,
     required this.name,
     required this.email,
@@ -15,8 +15,8 @@ class DoctorUser {
     required this.jobSpecialtyNumber,
   });
 
-  factory DoctorUser.fromJson(Map<String, dynamic> json) {
-    return DoctorUser(
+  factory DoctorModel.fromJson(Map<String, dynamic> json) {
+    return DoctorModel(
       id: json['id'],
       name: json['name'],
       email: json['email'],

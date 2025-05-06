@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shaty/core/network/api_consumer.dart';
 import 'package:shaty/core/network/dio_consumer.dart';
-import 'package:shaty/features/auth/cubit/register_cubit.dart';
+import 'package:shaty/features/auth/cubit/patient_register_cubit.dart';
 import 'package:shaty/features/auth/screen/change_password_screen.dart';
 import 'package:shaty/features/auth/screen/login_screen.dart';
 import 'package:shaty/features/auth/screen/rest_password_screen.dart';
@@ -13,11 +13,17 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shaty/features/doctor/screen/bottom_navigation_screen.dart';
 import 'package:shaty/features/doctor/screen/doctor_home_screen.dart';
 import 'package:shaty/features/patient/widget/patient_bottom_nav_bar.dart';
-import 'features/auth/screen/sign_in_patient_screen.dart';
+import 'features/auth/cubit/doctor_register_cubit.dart';
+import 'features/auth/screen/sign_in_screen.dart';
 
 
 void main() {
-  runApp(const MyApp());
+  final api = DioConsumer(Dio());
+
+  runApp(MultiBlocProvider(providers: [
+    BlocProvider(create: (_) => PatientRegisterCubit(api)),
+    BlocProvider(create: (_) => DoctorRegisterCubit(api)),
+  ], child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -31,7 +37,7 @@ class MyApp extends StatelessWidget {
         initialRoute: '/login_screen',
       routes: {
         '/login_screen': (context)=> const LoginScreen(),
-        '/sign_in_screen': (context)=>  BlocProvider(create: (_)=>RegisterCubit(DioConsumer(Dio())),child: const SignInPatient(),),
+        '/sign_in_screen': (context)=> const SignInScreen(),
         '/rest_password_screen': (context)=> const RestPasswordScreen(),
         '/verification_screen': (context)=> const VerificationScreen(),
         '/change_password_screen': (context)=> const ChangePasswordScreen(),
