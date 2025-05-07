@@ -17,6 +17,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   late TextEditingController _emailTextEditingController;
   late TextEditingController _passwordTextEditingController;
+  bool _isDoctor = false;
+
 
   @override
   void initState() {
@@ -52,14 +54,38 @@ class _LoginScreenState extends State<LoginScreen> {
                   hintText: context.loc.hint_password,
                   controller: _passwordTextEditingController,obscure: true,),
               SizedBox(height: 15,),
-              InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, '/rest_password_screen');
-                },
-                child: Text(
-                  context.loc.forget_password,
-                  style: TextStyle(fontSize: 12, color: AppColors.accentColor),
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Checkbox(
+                        value: _isDoctor,
+                        onChanged: (value) {
+                          setState(() {
+                            _isDoctor = value ?? false;
+                          });
+                        },
+                      ),
+                      Text(
+                        context.loc.sign_in_doctor_title,
+                        style: const TextStyle(fontSize: 14),
+                      ),
+                    ],
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/rest_password_screen');
+                    },
+                    child: Text(
+                      context.loc.forget_password,
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: AppColors.accentColor,
+                      ),
+                    ),
+                  ),
+                ],
               ),
               SizedBox(height: 20,),
               PrimaryButton(label: context.loc.login,
@@ -91,31 +117,3 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-
-// Row(
-// children: [
-// Expanded(child: Divider(color: AppColors.accentColor,thickness: 2,)),
-// Padding(
-// padding: const EdgeInsets.symmetric(horizontal: 8),
-// child: Text(context.loc.register_through),
-// ),
-// Expanded(child: Divider(color: AppColors.accentColor,thickness: 2,)),
-//
-// ],
-// ),
-//&&&&&&&&&&&&&&&&&&7
-// ElevatedButton(
-// style: ElevatedButton.styleFrom(
-// backgroundColor: AppColors.primaryColor,
-// minimumSize: Size(double.infinity, 50),
-// shape: RoundedRectangleBorder(
-// borderRadius: BorderRadius.circular(8)
-// ),
-// ),
-//
-// onPressed: () {},
-// child: Text(
-// context.loc.login,
-// style: TextStyle(color: Colors.white),
-// ),
-// ),
