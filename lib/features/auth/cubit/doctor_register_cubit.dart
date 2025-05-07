@@ -23,7 +23,6 @@ class DoctorRegisterCubit extends Cubit<DoctorRegisterState> {
       print("User ID: ${authDoctor.user.id}");
       print("Token: ${authDoctor.token}");
       emit(DoctorRegisterSuccess("تم التسجيل بنجاح"));
-      Helpers.showToast(message: "تم التسجيل بنجاح");
     } catch (e) {
       final message = ErrorHandler.handle(e);
       emit(DoctorRegisterFailure(message));

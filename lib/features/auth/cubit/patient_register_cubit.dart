@@ -6,6 +6,7 @@ import 'package:shaty/features/auth/models/patient_response_model.dart';
 
 import '../../../core/errors/exceptions.dart';
 import '../../../core/utils/helpers/helpers.dart';
+import '../../../core/utils/helpers/storage_helper.dart';
 import '../models/patient_register_model .dart';
 
 class PatientRegisterCubit extends Cubit<PatientRegisterState> {
@@ -24,7 +25,8 @@ class PatientRegisterCubit extends Cubit<PatientRegisterState> {
       final authResponse = PatientResponseModel.fromJson(response);
      print("User ID: ${authResponse.user.id}");
      print("Token: ${authResponse.token}");
-     emit(PatientRegisterSuccess("تم التسجيل بنجاح"));
+      await StorageHelper.saveToken(authResponse.token);
+      emit(PatientRegisterSuccess("تم التسجيل بنجاح"));
      Helpers.showToast(message: "تم التسجيل بنجاح");
 
 

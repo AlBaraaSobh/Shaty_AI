@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shaty/core/network/api_consumer.dart';
 import 'package:shaty/core/network/dio_consumer.dart';
+import 'package:shaty/features/auth/cubit/login_cubit.dart';
 import 'package:shaty/features/auth/cubit/patient_register_cubit.dart';
 import 'package:shaty/features/auth/screen/change_password_screen.dart';
 import 'package:shaty/features/auth/screen/login_screen.dart';
@@ -23,6 +24,7 @@ void main() {
   runApp(MultiBlocProvider(providers: [
     BlocProvider(create: (_) => PatientRegisterCubit(api)),
     BlocProvider(create: (_) => DoctorRegisterCubit(api)),
+    BlocProvider(create: (_) => LoginCubit(api)),
   ], child: const MyApp()));
 }
 

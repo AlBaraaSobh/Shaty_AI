@@ -48,6 +48,8 @@ class ErrorHandler {
 
       return errorModel.message ?? 'حدث خطأ أثناء الاتصال بالخادم.';
     }
+    print("Status code: $statusCode");
+    print("Response data: $data");
 
     // fallback
     return 'حدث خطأ أثناء الاتصال بالخادم.';
