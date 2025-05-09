@@ -7,12 +7,16 @@ class LabeledTextField extends StatelessWidget {
   final String hintText ;
   final TextEditingController controller ;
   final bool obscure ;
+  final String? Function(String?)? validator;
 
-  LabeledTextField(
-      {required this.label,
-      required this.hintText,
-      required this.controller,
-       this.obscure = false});
+  const LabeledTextField({
+    required this.label,
+    required this.hintText,
+    required this.controller,
+    this.validator,
+    this.obscure = false,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +25,10 @@ class LabeledTextField extends StatelessWidget {
       children: [
         Text(label, style: TextStyle(fontSize: 12,color: AppColors.secondaryColor)),
         SizedBox(height: 8,),
-        TextField(
+        TextFormField(
           controller: controller,
           obscureText: obscure,
+          validator: validator,
           decoration: InputDecoration(
             hintText:hintText,
             fillColor: AppColors.backGroundFieldColor,
@@ -32,6 +37,7 @@ class LabeledTextField extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8)
             ),
           ),
+
         ),
       ],
     );

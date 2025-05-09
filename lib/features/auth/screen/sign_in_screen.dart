@@ -27,6 +27,8 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   UserRole _selectedRole = UserRole.patient;
   final _controllers = SignInControllers();
+  final _formKey = GlobalKey<FormState>();
+
 
   @override
   void dispose() {
@@ -62,80 +64,93 @@ class _SignInScreenState extends State<SignInScreen> {
           },
         ),
       ],
-      child: Scaffold(
-        appBar: AppBar(),
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-            child: SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    context.loc.welcome_to_create_an_Account,
-                    style: TextStyle(
-                        fontSize: 20, color: AppColors.primaryColor),
-                  ),
-                  SizedBox(height: 25,),
+      child: Form(
+        key: _formKey,
+        child: Scaffold(
+          appBar: AppBar(),
+          body: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+              child: SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      context.loc.welcome_to_create_an_Account,
+                      style: TextStyle(
+                          fontSize: 20, color: AppColors.primaryColor),
+                    ),
+                    SizedBox(height: 25,),
 
-                  RoleSelector(
-                    selectedRole: _selectedRole,
-                    onChanged: (role) {
-                      setState(() {
-                        _selectedRole = role;
-                      });
-                    },
-                  ),
+                    RoleSelector(
+                      selectedRole: _selectedRole,
+                      onChanged: (role) {
+                        setState(() {
+                          _selectedRole = role;
+                        });
+                      },
+                    ),
 
-                  _selectedRole == UserRole.patient
-                      ? PatientSignIn(
-                      emailController: _controllers.email,
-                      passwordController: _controllers.password,
-                      nameController: _controllers.name,
-                      confirmPasswordController: _controllers.confirmPassword,
-                      typeDiseaseController: _controllers.typeDisease
-                  )
-                      : DoctorSignIn(
-                      emailController: _controllers.email,
-                      passwordController: _controllers.password,
-                      nameController: _controllers.name,
-                      confirmPasswordController: _controllers.confirmPassword,
-                      specializationController: _controllers.specialization,
-                      jobNumberController: _controllers.jobNumber),
-                  SizedBox(height: 50,),
-                  PrimaryButton(
-                    label: context.loc.create_account,
-                    onPressed: () {
-                      if (_selectedRole == UserRole.patient) {
-                        // patient
-                        final patient = PatientRegisterModel(
-                          name: _controllers.name.text.trim(),
-                          email: _controllers.email.text.trim(),
-                          password: _controllers.password.text.trim(),
-                          passwordConfirmation:
-                          _controllers.confirmPassword.text.trim(),
-                          isDoctor: false,
-                        );
-                        print('Patient data to send: ${patient.toJson()}');
-                        context.read<PatientRegisterCubit>()
-                            .registerPatientCubit(patient);
-                      } else {
-                        final doctor = DoctorRegisterModel(
-                          name: _controllers.name.text.trim(),
-                          email: _controllers.email.text.trim(),
-                          password: _controllers.password.text.trim(),
-                          passwordConfirmation: _controllers.confirmPassword.text.trim(),
-                          isDoctor: true,
-                          jobSpecialtyNumber: _controllers.jobNumber.text.trim(),
-                          specialtyId: _controllers.specialization.text.trim(),
-                        );
-                        print('Doctor data to send: ${doctor.toJson()}');
-                        context.read<DoctorRegisterCubit>().registerDoctorCubit(doctor);
-                      }
-                    },
-                  ),
-                ],
+                    _selectedRole == UserRole.patient
+                        ? PatientSignIn(
+                        emailController: _controllers.email,
+                        passwordController: _controllers.password,
+                        nameController: _controllers.name,
+                        confirmPasswordController: _controllers.confirmPassword,
+                        typeDiseaseController: _controllers.typeDisease,
+                    )
+                        : DoctorSignIn(
+                        emailController: _controllers.email,
+                        passwordController: _controllers.password,
+                        nameController: _controllers.name,
+                        confirmPasswordController: _controllers.confirmPassword,
+                        specializationController: _controllers.specialization,
+                        jobNumberController: _controllers.jobNumber),
+                    SizedBox(height: 50,),
+                    PrimaryButton(
+                      label: context.loc.create_account,
+                      onPressed: () {
+
+                        if (_selectedRole == UserRole.patient) {
+                          // patient
+                          if(_formKey.currentState!.validate()){
+                            final patient = PatientRegisterModel(
+                              name: _controllers.name.text.trim(),
+                              email: _controllers.email.text.trim(),
+                              password: _controllers.password.text.trim(),
+                              passwordConfirmation:
+                              _controllers.confirmPassword.text.trim(),
+                              isDoctor: false,
+                            );
+                            print('Patient data to send: ${patient.toJson()}');
+                            context.read<PatientRegisterCubit>()
+                                .registerPatientCubit(patient);
+                          }
+                        } else {
+                          if (_formKey.currentState!.validate()) {
+                            final doctor = DoctorRegisterModel(
+                              name: _controllers.name.text.trim(),
+                              email: _controllers.email.text.trim(),
+                              password: _controllers.password.text.trim(),
+                              passwordConfirmation:
+                                  _controllers.confirmPassword.text.trim(),
+                              isDoctor: true,
+                              jobSpecialtyNumber:
+                                  _controllers.jobNumber.text.trim(),
+                              specialtyId:
+                                  _controllers.specialization.text.trim(),
+                            );
+                            print('Doctor data to send: ${doctor.toJson()}');
+                            context
+                                .read<DoctorRegisterCubit>()
+                                .registerDoctorCubit(doctor);
+                          }
+                        }
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
