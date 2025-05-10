@@ -5,6 +5,7 @@ import 'package:shaty/features/auth/cubit/login_state.dart';
 import '../../../core/errors/exceptions.dart';
 import '../../../core/network/api_consumer.dart';
 import '../../../core/utils/helpers/helpers.dart';
+import '../../../core/utils/helpers/storage_helper.dart';
 
 
 class LoginCubit extends Cubit<LoginState> {
@@ -41,6 +42,8 @@ class LoginCubit extends Cubit<LoginState> {
           ? '/bottom_navigation_screen'
           : '/patient_bottom_nav_bar';
 
+      await StorageHelper.saveToken(response['token']);
+      await StorageHelper.saveUserType(role == UserRole.doctor ? 'doctor' : 'patient');
       emit(LoginSuccess(message: "تم تسجيل الدخول بنجاح", route: route));
 
     }  catch (e) {

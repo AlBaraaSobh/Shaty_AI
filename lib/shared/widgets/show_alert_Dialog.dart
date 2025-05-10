@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:shaty/core/constants/app_colors.dart';
+
+import '../../core/utils/helpers/storage_helper.dart';
 class ShowAlertDialog extends StatelessWidget {
   final String title;
   final String action;
   final String? icon;
-  const ShowAlertDialog({super.key, required this.title, required this.action,  this.icon});
+  final VoidCallback onConfirmed;
+
+  const ShowAlertDialog({super.key, required this.title, required this.action,  this.icon, required this.onConfirmed});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +22,9 @@ class ShowAlertDialog extends StatelessWidget {
             children: [
               Expanded(
                   child: ElevatedButton(
-                onPressed: () {},
+                onPressed: (){
+                   onConfirmed();
+                },
                 child: Row(
                   children: [
                     if(icon != null)
@@ -36,7 +42,7 @@ class ShowAlertDialog extends StatelessWidget {
               const SizedBox(width: 10,),
               Expanded(child: ElevatedButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.of(context).pop();
                 },
                 style: ButtonStyle(
                   backgroundColor:

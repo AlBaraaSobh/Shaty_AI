@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shaty/core/constants/app_colors.dart';
+import 'package:shaty/core/utils/helpers/storage_helper.dart';
 
 class Helpers {
   static void showToast({
@@ -57,5 +58,15 @@ class Helpers {
     hideLoadingDialog(context); //في حال حذفتها بتصير مشلكة انو لو صار خطا بضل يحمل وما بيرجع
     showToast(message: error);
     print('the error is : $error');
+  }
+
+  static Future<void> logout(BuildContext context) async {
+    await StorageHelper.clearToken();
+
+    // إزالة جميع الصفحات السابقة  والانتقال إلى صفحة تسجيل الدخول
+    Navigator.of(context).pushNamedAndRemoveUntil(
+      '/login_screen',
+          (route) => false,
+    );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shaty/core/extensions/localization_extension.dart';
+import 'package:shaty/core/utils/helpers/helpers.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../shared/widgets/change_password_form.dart';
@@ -79,6 +80,7 @@ class _DoctorSettingScreenState extends State<DoctorSettingScreen> {
                     builder: (context) => ShowAlertDialog(
                       title: context.loc.logout_title,
                       action: context.loc.logout,
+                      onConfirmed: () => Helpers.logout(context),
                     ),
                   );
                 },

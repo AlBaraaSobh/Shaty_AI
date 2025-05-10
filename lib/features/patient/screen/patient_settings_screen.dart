@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shaty/core/extensions/localization_extension.dart';
+import 'package:shaty/core/utils/helpers/helpers.dart';
 
 import '../../../shared/widgets/change_password_form.dart';
 import '../../../shared/widgets/show_alert_Dialog.dart';
@@ -72,6 +73,7 @@ class _PatientSettingsScreenState extends State<PatientSettingsScreen> {
                     builder: (context) => ShowAlertDialog(
                       title: context.loc.logout_title,
                       action: context.loc.logout,
+                      onConfirmed: () => Helpers.logout(context),
                     ),
                   );
                 },
@@ -82,6 +84,7 @@ class _PatientSettingsScreenState extends State<PatientSettingsScreen> {
       ),
     );
   }
+
 
   void _showCreateTipsBottomSheet(BuildContext context) {
     showModalBottomSheet(

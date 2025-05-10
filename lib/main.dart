@@ -14,29 +14,41 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shaty/features/doctor/screen/bottom_navigation_screen.dart';
 import 'package:shaty/features/doctor/screen/doctor_home_screen.dart';
 import 'package:shaty/features/patient/widget/patient_bottom_nav_bar.dart';
+import 'core/utils/helpers/storage_helper.dart';
 import 'features/auth/cubit/doctor_register_cubit.dart';
 import 'features/auth/screen/sign_in_screen.dart';
 
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   final api = DioConsumer(Dio());
 
+  final token = await StorageHelper.getToken();
+  final userType = await StorageHelper.getUserType();
   runApp(MultiBlocProvider(providers: [
     BlocProvider(create: (_) => PatientRegisterCubit(api)),
     BlocProvider(create: (_) => DoctorRegisterCubit(api)),
     BlocProvider(create: (_) => LoginCubit(api)),
-  ], child: const MyApp()));
+  ], child:  MyApp(
+    initialRoute: token == null
+        ? '/login_screen'
+        : userType == 'doctor'
+        ? '/bottom_navigation_screen'
+        : '/patient_bottom_nav_bar',
+  )));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final String initialRoute;
+
+  const MyApp({super.key, required this.initialRoute});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-        initialRoute: '/login_screen',
+      initialRoute: initialRoute,
       routes: {
         '/login_screen': (context)=> const LoginScreen(),
         '/sign_in_screen': (context)=> const SignInScreen(),
