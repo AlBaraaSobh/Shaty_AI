@@ -10,11 +10,11 @@ import '../../../core/utils/helpers/storage_helper.dart';
 import '../models/patient_register_model .dart';
 
 class PatientRegisterCubit extends Cubit<PatientRegisterState> {
-  PatientRegisterCubit(this.api) : super(PatientRegisterInitial());
+  PatientRegisterCubit(this.api) : super(PatientRegisterState.initial());
   final ApiConsumer api ;
 
  Future <void> registerPatientCubit(PatientRegisterModel patient) async {
-    emit(PatientRegisterLoading());
+    emit(state.copyWith(isLoading: true , successMessage: null ,failureMessage: null));
     try {
       final response = await api.post(EndPoints.baseUrl + EndPoints.register,
           data: patient.toJson(),
@@ -26,13 +26,15 @@ class PatientRegisterCubit extends Cubit<PatientRegisterState> {
      print("User ID: ${authResponse.user.id}");
      print("Token: ${authResponse.token}");
       await StorageHelper.saveToken(authResponse.token);
-      emit(PatientRegisterSuccess("تم التسجيل بنجاح"));
-     Helpers.showToast(message: "تم التسجيل بنجاح");
+      emit(state.copyWith(isLoading: false,successMessage:"تم التسجيل بنجاح"));
+
+      Helpers.showToast(message: "تم التسجيل بنجاح");
 
 
     } catch (e) {
       final message = ErrorHandler.handle(e);
-      emit(PatientRegisterFailure(message));
+      emit(state.copyWith(isLoading: false,failureMessage:message));
+
       Helpers.showToast(message: message);
     }
   }

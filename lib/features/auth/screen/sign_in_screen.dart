@@ -42,24 +42,24 @@ class _SignInScreenState extends State<SignInScreen> {
       listeners: [
         BlocListener<PatientRegisterCubit, PatientRegisterState>(
           listener: (context, state) {
-            if (state is PatientRegisterLoading) {
+            if (state.isLoading) {
               Helpers.handleLoading(context);
-            } else if (state is PatientRegisterSuccess) {
+            } else if (state.successMessage !=null) {
               Helpers.handleSuccess(
-                  context, state.message, route: '/patient_bottom_nav_bar');
-            } else if (state is PatientRegisterFailure) {
-              Helpers.handleFailure(context, state.error);
+                  context, state.successMessage!, route: '/patient_bottom_nav_bar');
+            } else if (state.failureMessage!=null) {
+              Helpers.handleFailure(context, state.failureMessage!);
             }
           },
         ),
         BlocListener<DoctorRegisterCubit, DoctorRegisterState>(
           listener: (context, state) {
-            if (state is DoctorRegisterLoading) {
+            if (state.isLoading) {
               Helpers.handleLoading(context);
-            } else if (state is DoctorRegisterSuccess) {
-              Helpers.handleSuccess(context, state.message, route: '/bottom_navigation_screen');
-            } else if (state is DoctorRegisterFailure) {
-              Helpers.handleFailure(context, state.error);
+            } else if (state.successMessage !=null) {
+              Helpers.handleSuccess(context, state.successMessage!, route: '/bottom_navigation_screen');
+            } else if (state.failureMessage!=null) {
+              Helpers.handleFailure(context, state.failureMessage!);
             }
           },
         ),

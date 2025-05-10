@@ -1,16 +1,25 @@
 
-abstract class PatientRegisterState {}
+class PatientRegisterState {
+  final bool isLoading;
+  final String? failureMessage ;
+  final String? successMessage ;
+  final String? route;
 
-class PatientRegisterInitial extends PatientRegisterState {}
+  PatientRegisterState({this.isLoading = false, this.failureMessage , this.successMessage , this.route});
 
-class PatientRegisterLoading extends PatientRegisterState {}
+  factory PatientRegisterState.initial() => PatientRegisterState();
 
-class PatientRegisterSuccess extends PatientRegisterState {
-  final String message;
-  PatientRegisterSuccess(this.message);
-}
-
-class PatientRegisterFailure extends PatientRegisterState {
-  final String error;
-  PatientRegisterFailure(this.error);
+  PatientRegisterState copyWith({
+    bool? isLoading,
+    String? failureMessage,
+    String? successMessage,
+    String? route,
+  }) {
+    return PatientRegisterState(
+      isLoading: isLoading ?? this.isLoading,
+      failureMessage : failureMessage ,
+      successMessage : successMessage  ,
+      route: route ?? this.route,
+    );
+  }
 }

@@ -40,14 +40,26 @@ class _LoginScreenState extends State<LoginScreen> {
       appBar: AppBar(),
       body: BlocConsumer<LoginCubit, LoginState>(
         listener: (context, state) {
-          if (state is LoginLoading) {
+          if (state.isLoading) {
             Helpers.showLoadingDialog(context);
-          } else if (state is LoginSuccess) {
-            Helpers.handleSuccess(context, state.message, route: state.route);
-          } else if (state is LoginFailure) {
-            Helpers.handleFailure(context, state.error);
+          } else if (state.successMessage != null && state.route != null) {
+            Helpers.handleSuccess(context, state.successMessage!, route: state.route);
+            context.read<LoginCubit>().clearMessages();
+          } else if (state.failureMessage != null) {
+            Helpers.handleFailure(context, state.failureMessage!);
+            context.read<LoginCubit>().clearMessages();
           }
+
         },
+        // listener: (context, state) {
+        //   if (state.isLoading) {
+        //     Helpers.showLoadingDialog(context);
+        //   } else if (state.successMessage  != null && state.route != null) {
+        //     Helpers.handleSuccess(context, state.successMessage !, route: state.route);
+        //   } else if (state.failureMessage  != null) {
+        //     Helpers.handleFailure(context, state.failureMessage !);
+        //   }
+        // },
         builder: (context, state) {
           return SingleChildScrollView(
             child: Padding(

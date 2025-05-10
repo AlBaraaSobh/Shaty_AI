@@ -23,6 +23,7 @@ class Helpers {
     showDialog(
       context: context,
       barrierDismissible: false,
+      useRootNavigator: true,
       builder: (_) => AlertDialog(
         content: Row(
           children: [

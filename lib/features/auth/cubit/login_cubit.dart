@@ -10,7 +10,7 @@ import '../../../core/utils/helpers/storage_helper.dart';
 
 class LoginCubit extends Cubit<LoginState> {
   final ApiConsumer api;
-  LoginCubit(this.api) : super(LoginInitial());
+  LoginCubit(this.api) : super(LoginState.initial());
 
   Future<void> loginCubit({
     required String email,
@@ -18,7 +18,8 @@ class LoginCubit extends Cubit<LoginState> {
     required UserRole role,
 
   }) async {
-    emit(LoginLoading());
+    emit(state.copyWith(
+        isLoading: true, failureMessage: null, successMessage: null));
     try {
       final response = await api.post(EndPoints.baseUrl + EndPoints.login,
       data: {
@@ -33,7 +34,7 @@ class LoginCubit extends Cubit<LoginState> {
 
       if ((role == UserRole.doctor && isPatientFromAPI) ||
           (role == UserRole.patient && isDoctorFromAPI)) {
-        emit(LoginFailure("الرجاء التأكد من اختيار نوع المستخدم الصحيح."));
+        emit(state.copyWith(isLoading : false ,failureMessage: 'الرجاء التأكد من اختيار نوع المستخدم الصحيح'));
         return;
       }
 
@@ -44,18 +45,22 @@ class LoginCubit extends Cubit<LoginState> {
 
       await StorageHelper.saveToken(response['token']);
       await StorageHelper.saveUserType(role == UserRole.doctor ? 'doctor' : 'patient');
-      emit(LoginSuccess(message: "تم تسجيل الدخول بنجاح", route: route));
+      emit(state.copyWith(isLoading : false,successMessage: "تم تسجيل الدخول بنجاح" ,route: route));
 
     }  catch (e) {
       final message = ErrorHandler.handle(e);
       if (message.contains('credentials')) {
         Helpers.showToast(message: 'بيانات الدخول غير صحيحة');
-        emit(LoginFailure('بيانات الدخول غير صحيحة'));
+        emit(state.copyWith(isLoading: false,failureMessage: 'بيانات الدخول غير صحيحة'));
       } else {
         Helpers.showToast(message: message);
-        emit(LoginFailure(message));
+        emit(state.copyWith(isLoading : false ,failureMessage: message));
       }
 
     }
   }
+  void clearMessages() {
+    emit(state.copyWith(successMessage: null, failureMessage: null));
+  }
+
 }

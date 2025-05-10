@@ -12,20 +12,20 @@ import '../../../core/utils/helpers/helpers.dart';
 class DoctorRegisterCubit extends Cubit<DoctorRegisterState> {
   final ApiConsumer api;
 
-  DoctorRegisterCubit(this.api) : super(DoctorRegisterInitial());
+  DoctorRegisterCubit(this.api) : super(DoctorRegisterState.initial());
 
   Future<void> registerDoctorCubit(DoctorRegisterModel doctor) async {
-    emit(DoctorRegisterLoading());
+    emit(state.copyWith(isLoading:  true,failureMessage: null, successMessage: null));
     try {
       final response = await api.post(EndPoints.baseUrl + EndPoints.register,
           data: doctor.toJson());
       final authDoctor = DoctorResponseModel.fromJson(response);
       print("User ID: ${authDoctor.user.id}");
       print("Token: ${authDoctor.token}");
-      emit(DoctorRegisterSuccess("تم التسجيل بنجاح"));
+      emit(state.copyWith(isLoading: false,successMessage:"تم التسجيل بنجاح"));
     } catch (e) {
       final message = ErrorHandler.handle(e);
-      emit(DoctorRegisterFailure(message));
+      emit(state.copyWith(isLoading: false,failureMessage:message));
       Helpers.showToast(message: message);
 
     }
