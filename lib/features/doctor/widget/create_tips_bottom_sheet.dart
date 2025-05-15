@@ -1,13 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shaty/core/extensions/localization_extension.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../shared/widgets/primary_button .dart';
+import '../cubit/tips_cubit.dart';
 
 
-class CreateTipsBottomSheet extends StatelessWidget {
+class CreateTipsBottomSheet extends StatefulWidget {
   const CreateTipsBottomSheet({super.key});
 
+  @override
+  State<CreateTipsBottomSheet> createState() => _CreateTipsBottomSheetState();
+}
+
+
+class _CreateTipsBottomSheetState extends State<CreateTipsBottomSheet> {
+  final TextEditingController _tipController = TextEditingController();
+@override
+  void dispose() {
+  _tipController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -54,6 +68,7 @@ class CreateTipsBottomSheet extends StatelessWidget {
               ),
               SizedBox(height: 10,),
               TextField(
+                controller: _tipController,
                 maxLines: 2,
                 decoration: InputDecoration(
                   hintText: '"اشرب 8 أكواب ماء يوميًا للحفاظ على ترطيب جسمك"',
@@ -66,8 +81,13 @@ class CreateTipsBottomSheet extends StatelessWidget {
               SizedBox(height: 40,),
               PrimaryButton(label: context.loc.post,
                 onPressed: () {
-                  ///TODO
-                },),
+                  final text = _tipController.text.trim();
+                  if (text.isNotEmpty) {
+                    BlocProvider.of<TipsCubit>(context).addTips(tips: text);
+                    Navigator.of(context).pop();
+                  }
+                },
+              ),
             ],
           ),
         ),

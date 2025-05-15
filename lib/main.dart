@@ -11,8 +11,11 @@ import 'package:shaty/features/auth/screen/login_screen.dart';
 import 'package:shaty/features/auth/screen/rest_password_screen.dart';
 import 'package:shaty/features/auth/screen/verification_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:shaty/features/doctor/cubit/tips_cubit.dart';
+import 'package:shaty/features/doctor/data/repositories/tips_repository.dart';
 import 'package:shaty/features/doctor/screen/bottom_navigation_screen.dart';
 import 'package:shaty/features/doctor/screen/doctor_home_screen.dart';
+import 'package:shaty/features/doctor/widget/view_tips.dart';
 import 'package:shaty/features/patient/widget/patient_bottom_nav_bar.dart';
 import 'core/utils/helpers/storage_helper.dart';
 import 'features/auth/cubit/doctor_register_cubit.dart';
@@ -29,6 +32,7 @@ void main() async {
     BlocProvider(create: (_) => PatientRegisterCubit(api)),
     BlocProvider(create: (_) => DoctorRegisterCubit(api)),
     BlocProvider(create: (_) => LoginCubit(api)),
+    BlocProvider(create: (_) => TipsCubit(TipsRepository(api))),
   ], child:  MyApp(
     initialRoute: token == null
         ? '/login_screen'
@@ -58,6 +62,7 @@ class MyApp extends StatelessWidget {
         '/doctor_home_screen': (context)=> const DoctorHomeScreen(),
         '/bottom_navigation_screen': (context)=> const BottomNavigationScreen(),
         '/patient_bottom_nav_bar': (context)=> const PatientBottomNavBar(),
+        '/view_tips': (context)=> const ViewTips(),
       },
       localizationsDelegates: const [
         AppLocalizations.delegate,
