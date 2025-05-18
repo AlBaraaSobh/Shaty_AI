@@ -3,7 +3,6 @@ import 'package:shaty/core/errors/exceptions.dart';
 import 'package:shaty/features/doctor/cubit/tips_state.dart';
 import 'package:shaty/features/doctor/data/repositories/tips_repository.dart';
 
-import '../data/models/tips_model.dart';
 
 class TipsCubit extends Cubit<TipsState> {
   final TipsRepository tipsRepository;

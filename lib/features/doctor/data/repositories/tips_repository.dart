@@ -19,9 +19,8 @@ class TipsRepository {
         "Authorization": "Bearer ${token}",
       }),
     );
-    final tipData = response['data']; // <-- هذا هو الـ Tip نفسه
+    final tipData = response['data'];
     return TipsModel.fromJson(tipData);
-    // return TipsModel.fromJson(response['data']);
   }
 
   Future<void> deleteTips(int id) async {
@@ -35,14 +34,13 @@ class TipsRepository {
     );
   }
 
-
   Future<TipsModel> updateTip({
     required String id,
     required String advice,
   }) async {
     final token = await StorageHelper.getToken();
     if (token == null) throw Exception("Token is missing");
-    final response =  await api.post(
+    final response = await api.post(
       EndPoints.baseUrl + EndPoints.updateTip(id),
       data: {"advice": advice},
       options: Options(
@@ -51,7 +49,6 @@ class TipsRepository {
     );
     return TipsModel.fromJson(response['data']);
   }
-
 
   Future<List<TipsModel>> getTips() async {
     final token = await StorageHelper.getToken();
