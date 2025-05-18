@@ -5,5 +5,8 @@ class EndPoints{
   static  String login = 'login';
   static  String tips = 'doctor/advice/store';
   static  String getTips = 'doctor/get-today-advice';
+  static String deleteTips(String tipId) => 'doctor/advice/$tipId/destroy';
+  static String updateTip(String id) => 'doctor/advice/$id/update';
+
 
 }

@@ -8,7 +8,10 @@ import '../cubit/tips_cubit.dart';
 
 
 class CreateTipsBottomSheet extends StatefulWidget {
-  const CreateTipsBottomSheet({super.key});
+  final int? tipId;
+  final String? initialTip;
+
+  const CreateTipsBottomSheet({super.key, this.initialTip, this.tipId});
 
   @override
   State<CreateTipsBottomSheet> createState() => _CreateTipsBottomSheetState();
@@ -16,8 +19,15 @@ class CreateTipsBottomSheet extends StatefulWidget {
 
 
 class _CreateTipsBottomSheetState extends State<CreateTipsBottomSheet> {
-  final TextEditingController _tipController = TextEditingController();
-@override
+  late final TextEditingController _tipController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tipController = TextEditingController(text: widget.initialTip ?? '');
+  }
+
+  @override
   void dispose() {
   _tipController.dispose();
     super.dispose();
@@ -79,11 +89,19 @@ class _CreateTipsBottomSheetState extends State<CreateTipsBottomSheet> {
                 ),
               ),
               SizedBox(height: 40,),
-              PrimaryButton(label: context.loc.post,
+              PrimaryButton(
+                label:widget.tipId == null ?context.loc.post : 'تعديل النصيحة',
                 onPressed: () {
                   final text = _tipController.text.trim();
                   if (text.isNotEmpty) {
-                    BlocProvider.of<TipsCubit>(context).addTips(tips: text);
+                    if (widget.tipId == null) {
+                      // حالة الإضافة
+                      BlocProvider.of<TipsCubit>(context).addTips(tips: text);
+                    } else {
+                      // حالة التعديل
+                      BlocProvider.of<TipsCubit>(context).updateTip(widget.tipId!.toString(), text);
+                    }
+
                     Navigator.of(context).pop();
                   }
                 },

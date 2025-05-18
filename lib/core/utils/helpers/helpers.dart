@@ -3,6 +3,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shaty/core/constants/app_colors.dart';
 import 'package:shaty/core/utils/helpers/storage_helper.dart';
 
+import '../../../features/doctor/widget/create_tips_bottom_sheet.dart';
+
 class Helpers {
   static void showToast({
     required String message,
@@ -70,4 +72,17 @@ class Helpers {
           (route) => false,
     );
   }
+
+  static void showCreateTipsBottomSheet(BuildContext context,{String? initialTip, int? tipId}) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => CreateTipsBottomSheet(initialTip: initialTip, tipId: tipId),
+
+    );
+  }
+
 }

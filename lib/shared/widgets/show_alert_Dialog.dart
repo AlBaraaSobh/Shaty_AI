@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:shaty/core/constants/app_colors.dart';
 
-import '../../core/utils/helpers/storage_helper.dart';
 class ShowAlertDialog extends StatelessWidget {
   final String title;
   final String action;
-  final String? icon;
+  final IconData? icon;
   final VoidCallback onConfirmed;
 
-  const ShowAlertDialog({super.key, required this.title, required this.action,  this.icon, required this.onConfirmed});
+  const ShowAlertDialog({
+    super.key,
+    required this.title,
+    required this.action,
+    this.icon,
+    required this.onConfirmed,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,49 +21,52 @@ class ShowAlertDialog extends StatelessWidget {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(title,textAlign: TextAlign.center,),
-           const SizedBox(height: 10,),
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          const SizedBox(height: 16),
           Row(
             children: [
               Expanded(
-                  child: ElevatedButton(
-                onPressed: (){
-                   onConfirmed();
-                },
-                child: Row(
-                  children: [
-                    if(icon != null)
-                      Image.asset(icon!,height: 24,width: 24,),
-                    Text(
-                      action,
-                      style: TextStyle(color: AppColors.secondaryColor),
-                    ),
-                  ],
+                child: ElevatedButton(
+                  onPressed: onConfirmed,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if (icon != null) ...[
+                        Icon(icon, color: Colors.white),
+                        const SizedBox(width: 6),
+                      ],
+                      Text(
+                        action,
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
                 ),
-                style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all(Colors.red)),
               ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.grey.shade300,
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                  ),
+                  child: const Text(
+                    'إلغاء',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
               ),
-              const SizedBox(width: 10,),
-              Expanded(child: ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                style: ButtonStyle(
-                  backgroundColor:
-                  WidgetStateProperty.all(Colors.grey.shade300),
-                ),
-                child: const Text(
-                  'إلغاء',
-                  style: TextStyle(color: Colors.black),
-                ),
-              ),),
-
-
             ],
           ),
-
-
         ],
       ),
     );

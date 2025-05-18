@@ -10,7 +10,6 @@ class TipsRepository {
   TipsRepository(this.api);
 
   Future<TipsModel> addTip(String tip) async {
-
     final token = await StorageHelper.getToken();
     if (token == null) throw Exception("Token is missing");
     final response = await api.post(
@@ -25,6 +24,35 @@ class TipsRepository {
     // return TipsModel.fromJson(response['data']);
   }
 
+  Future<void> deleteTips(int id) async {
+    final token = await StorageHelper.getToken();
+    if (token == null) throw Exception("Token is missing");
+    final response = api.delete(
+      EndPoints.baseUrl + EndPoints.deleteTips('${id}'),
+      options: Options(headers: {
+        "Authorization": "Bearer ${token}",
+      }),
+    );
+  }
+
+
+  Future<TipsModel> updateTip({
+    required String id,
+    required String advice,
+  }) async {
+    final token = await StorageHelper.getToken();
+    if (token == null) throw Exception("Token is missing");
+    final response =  await api.post(
+      EndPoints.baseUrl + EndPoints.updateTip(id),
+      data: {"advice": advice},
+      options: Options(
+        headers: {"Authorization": "Bearer $token"},
+      ),
+    );
+    return TipsModel.fromJson(response['data']);
+  }
+
+
   Future<List<TipsModel>> getTips() async {
     final token = await StorageHelper.getToken();
     if (token == null) throw Exception("Token is missing");
@@ -34,17 +62,8 @@ class TipsRepository {
         "Authorization": "Bearer ${token}",
       }),
     );
-    // final List<dynamic> data = [
-    //   {
-    //     "id": 8,
-    //     "advice": "test2"
-    //   },
-    //   {
-    //     "id": 7,
-    //     "advice": "test6"
-    //   }
-    // ];
+
     final List<dynamic> data = response['data'];
-    return data.map((e)=> TipsModel.fromJson(e)).toList();
+    return data.map((e) => TipsModel.fromJson(e)).toList();
   }
 }
