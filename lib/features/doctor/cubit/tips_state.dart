@@ -6,8 +6,11 @@ class TipsState {
   final String? successMessage;
   final List<TipsModel> tips;
 
-
-  TipsState({this.isLoading = false, this.failureMessage, this.successMessage,this.tips = const []});
+  TipsState(
+      {this.isLoading = false,
+      this.failureMessage,
+      this.successMessage,
+      this.tips = const []});
 
   factory TipsState.initial() =>  TipsState();
 

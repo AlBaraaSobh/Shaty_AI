@@ -11,7 +11,9 @@ import 'package:shaty/features/auth/screen/login_screen.dart';
 import 'package:shaty/features/auth/screen/rest_password_screen.dart';
 import 'package:shaty/features/auth/screen/verification_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:shaty/features/doctor/cubit/article_cubit.dart';
 import 'package:shaty/features/doctor/cubit/tips_cubit.dart';
+import 'package:shaty/features/doctor/data/repositories/article_repository.dart';
 import 'package:shaty/features/doctor/data/repositories/tips_repository.dart';
 import 'package:shaty/features/doctor/screen/bottom_navigation_screen.dart';
 import 'package:shaty/features/doctor/screen/doctor_home_screen.dart';
@@ -33,6 +35,7 @@ void main() async {
     BlocProvider(create: (_) => DoctorRegisterCubit(api)),
     BlocProvider(create: (_) => LoginCubit(api)),
     BlocProvider(create: (_) => TipsCubit(TipsRepository(api))),
+    BlocProvider(create: (_) => ArticleCubit(ArticleRepository(api))),
   ], child:  MyApp(
     initialRoute: token == null
         ? '/login_screen'

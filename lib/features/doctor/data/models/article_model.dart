@@ -32,11 +32,5 @@ class ArticleModel {
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'title': title,
-      'subject': subject,
 
-    };
-  }
 }

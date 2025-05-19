@@ -24,6 +24,7 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
     // }
 
      context.read<TipsCubit>().getTips();
+     //context.read<ArticleCubit>().getArticles();
 
   }
 

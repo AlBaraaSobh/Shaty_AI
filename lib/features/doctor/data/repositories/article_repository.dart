@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 
 import '../../../../core/network/api_consumer.dart';
@@ -13,7 +15,7 @@ class ArticleRepository {
   Future<ArticleModel> createArticle(
      String title,
      String subject,
-     String? image,
+      String? image,
   ) async {
     final token = await StorageHelper.getToken();
     if (token == null) throw Exception("Token is missing");
@@ -31,7 +33,15 @@ class ArticleRepository {
         "Content-Type": "multipart/form-data",
       }),
     );
-    return ArticleModel.fromJson(response.data['data']);
+
+    print("Response Data*************************: ${response}");
+    print('Response type: ${response.runtimeType}');
+    print('Response content: $response');
+
+    return ArticleModel.fromJson(response['data']);
 
   }
+
+
+
 }
