@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'article_doctor_model.dart';
 import 'article_info_model.dart';
 
@@ -21,11 +23,17 @@ class ArticleModel {
   });
 
   factory ArticleModel.fromJson(Map<String, dynamic> json) {
+    String? imageUrl = json['img'];
+
+    //  تحويل localhost إلى 10.0.2.2 ليشتغل في المحاكي
+    if (imageUrl != null) {
+      imageUrl = imageUrl.replaceAll('127.0.0.1', '10.0.2.2');
+    }
     return ArticleModel(
       id: json['id'],
       title: json['title'],
       subject: json['subject'],
-      img: json['img'],
+      img: imageUrl,//json['img']
       doctor: ArticleDoctorModel.fromJson(json['doctor']),
       articleInfo: ArticleInfoModel.fromJson(json['article_info']),
       createdAt: json['created_at'],

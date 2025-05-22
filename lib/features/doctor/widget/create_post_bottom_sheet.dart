@@ -87,21 +87,8 @@ class _CreatePostBottomSheetState extends State<CreatePostBottomSheet> {
             ),
             Spacer(),
             IconButton(onPressed: (){
-              //TODO
-             // _pickImage();
-              // ElevatedButton.icon(
-              //   onPressed: _pickImage,
-              //   icon: const Icon(Icons.image),
-              //   label: const Text('إضافة صورة'),
-              // ),
-              // const SizedBox(width: 10),
-              // if (_selectedImage != null)
-              // Expanded(
-              // child: Text(
-              // 'تم اختيار صورة',
-              // style: TextStyle(color: Colors.green[700]),
-              // ),
-              // ),
+              _pickImage();
+
             }, icon: Icon(Icons.image),),
           ],),
           TextFormField(
@@ -140,13 +127,23 @@ class _CreatePostBottomSheetState extends State<CreatePostBottomSheet> {
               contentPadding: const EdgeInsets.all(12),
             ),
           ),
+          const SizedBox(height: 12),
+          if (_selectedImage != null) ...[
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.file(
+                _selectedImage!,
+                height: 150,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ],
           SizedBox(height: 40,),
           PrimaryButton(
             label: context.loc.post,
             onPressed: () {
               if (!state.isLoading) {
-                print("تم الضغط على الزرقبل تنفيذ الدالة");
-
                 _handlePost();
               }
             }
@@ -161,11 +158,8 @@ class _CreatePostBottomSheetState extends State<CreatePostBottomSheet> {
 );
   }
   void _handlePost() {
-    print("تم الضغط على الزر");
-
     final title = _titleController.text.trim();
     final subject = _subjectController.text.trim();
-
     if (title.isEmpty || subject.isEmpty) {
       Helpers.showToast(message: 'يرجى ملء جميع الحقول');
       return;
@@ -174,8 +168,7 @@ class _CreatePostBottomSheetState extends State<CreatePostBottomSheet> {
     context.read<ArticleCubit>().createArticle(
       title: title,
       subject: subject,
-      img: null,
-      //TODO _selectedImage?.path
+      img: _selectedImage,
     );
   }
   Future<void> _pickImage() async {

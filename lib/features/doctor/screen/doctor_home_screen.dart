@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../cubit/article_cubit.dart';
 import '../cubit/tips_cubit.dart';
 import '../widget/tips_section.dart';
 import '../widget/DoctorsPost.dart';
@@ -14,17 +15,12 @@ class DoctorHomeScreen extends StatefulWidget {
 }
 
 class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
-  bool _isFirstTime = true;
 
   @override
   void initState() {
      super.initState();
-    // if (_isFirstTime) {
-    //
-    // }
-
      context.read<TipsCubit>().getTips();
-     //context.read<ArticleCubit>().getArticles();
+     context.read<ArticleCubit>().getArticles();
 
   }
 
