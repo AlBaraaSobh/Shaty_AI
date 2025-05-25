@@ -16,11 +16,8 @@ class PatientRegisterCubit extends Cubit<PatientRegisterState> {
  Future <void> registerPatientCubit(PatientRegisterModel patient) async {
     emit(state.copyWith(isLoading: true , successMessage: null ,failureMessage: null));
     try {
-      final response = await api.post(EndPoints.baseUrl + EndPoints.register,
+      final response = await api.post(EndPoints.register,
           data: patient.toJson(),
-          // options: Options(headers: {
-          //   'Accept': 'application/json',
-          // })
       );
       final authResponse = PatientResponseModel.fromJson(response);
      print("User ID: ${authResponse.user.id}");
@@ -39,33 +36,3 @@ class PatientRegisterCubit extends Cubit<PatientRegisterState> {
     }
   }
 }
-// void registerPatientCubit(PatientRegisterModel patient) async {
-//   emit(PatientRegisterLoading());
-//   try {
-//     final response = await Dio().post(
-//       EndPoints.baseUrl + EndPoints.register,
-//       options: Options(
-//         headers: {
-//           'Accept': 'application/json',
-//         },
-//       ),
-//       data: patient.toJson(),
-//
-//     );
-//     print("👩‍💻 the response data is  = : ${response.data}");
-//
-//     if (response.statusCode == 200 || response.statusCode == 201) {
-//       final authResponse = PatientResponseModel.fromJson(response.data);
-//       //TODO  حفظ التوكن أو بيانات المستخدم
-//       print("User ID: ${authResponse.user.id}");
-//       print("Token: ${authResponse.token}");
-//       emit(PatientRegisterSuccess("Registration successful"));
-//     } else {
-//       emit(PatientRegisterFailure(
-//           "Registration failed: ${response.statusMessage}"));
-//     }
-//   } catch (e) {
-//     final message = ErrorHandler.handle(e);
-//     emit(PatientRegisterFailure(message));
-//   }
-// }

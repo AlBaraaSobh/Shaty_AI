@@ -9,6 +9,7 @@ class EndPoints{
   static String updateTip(String id) => 'doctor/advice/$id/update';
   static  String createArticle = 'doctor/article/store';
   static  String getArticle = 'doctor/articles';
+  static  String getAllArticle = 'doctors-articles';
   static String deleteArticle(String articleId) => 'doctor/article/delete/$articleId';
   static String updateArticle(String id) => 'doctor/article/$id/update';
 

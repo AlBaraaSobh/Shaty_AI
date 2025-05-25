@@ -19,158 +19,173 @@ class PostsSection extends StatelessWidget {
           Helpers.showToast(message: state.successMessage!);
           context.read<ArticleCubit>().clearMessages();
         } else if (state.failureMessage != null) {
-          Helpers.showToast(message : state.failureMessage!);
-        }      },
+          Helpers.showToast(message: state.failureMessage!);
+          context.read<ArticleCubit>().clearMessages();
+        }
+      },
       builder: (context, state) {
         final List<ArticleModel> articles = state.articles.toList();
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text(
-                context.loc.new_post,
-                style: const TextStyle(
-                  color: AppColors.secondaryColor,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            ListView.separated(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: articles.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 15),
-              itemBuilder: (context, index) {
-                final article = articles[index];
+        return SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              // ✅ حالة: لا توجد مقالات
+              if (articles.isEmpty && !state.isLoading) {
+                return const Center(child: Text("لا توجد مقالات حالياً"));
+              }
+              if (index == 0) {
                 return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[50],
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.grey.shade300),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-
-                        /// Header Row
-                        Row(
-                          children: [
-                            CircleAvatar(
-                              radius: 24,
-                              backgroundImage: AssetImage('images/doctor.png'),
-                            ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    article.doctor.name,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    article.doctor.email,
-                                    style: TextStyle(color: Colors.grey[600]),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            IconButton(
-                              onPressed: () {},
-                              icon: const Icon(Icons.more_horiz),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 12),
-
-                        /// Post Text
-                        Text(
-                         article.subject,
-                          style: const TextStyle(fontSize: 16),
-                        ),
-
-                        /// Post Image if available
-                        if (article.img != null) ...[
-                          const SizedBox(height: 12),
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
-                            child: Image.network(
-                              article.img!,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Container(
-                                  color: Colors.grey[300],
-                                  height: 200,
-                                  alignment: Alignment.center,
-                                  child: const Icon(Icons.broken_image, size: 48, color: Colors.grey),
-                                );
-                              },
-                            ),
-
-                          ),
-                        ],
-
-                        const SizedBox(height: 16),
-
-                        // Action Buttons
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            PostAction(
-                              icon: Icons.favorite_border,
-                              label: 'إعجاب',
-                              onPressed: () {
-                                //TODO
-                              },
-                            ),
-                            PostAction(
-                              icon: Icons.comment_outlined,
-                              label: 'تعليق',
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        PostDetailsScreen(
-                                          postContent: article.subject,
-                                        ),
-                                  ),
-                                );
-                              },
-                            ),
-                            PostAction(
-                              icon: Icons.share_outlined,
-                              label: 'مشاركة',
-                              onPressed: () {
-                                //TODO
-                              },
-                            ),
-                            PostAction(
-                              icon: Icons.bookmark_border,
-                              label: 'حفظ',
-                              onPressed: () {
-                                //TODO
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: Text(
+                    context.loc.new_post,
+                    style: const TextStyle(
+                      color: AppColors.secondaryColor,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 );
-              },
-            ),
-          ],
+              }
+
+              final articleIndex = index - 1;
+
+              // ✅ حالة: مؤشر التحميل (عند تحميل الصفحة الأولى أو التالية)
+              if (state.isLoading && articles.isEmpty) {
+                return const Center(child: LinearProgressIndicator());
+              }
+
+              // ✅ حالة: مؤشر التحميل (عند تحميل الصفحة التالية)
+              if (state.isLoading && index == articles.length + 1) {
+                return const Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              }
+              if (articleIndex >= articles.length)
+                return const SizedBox(); // حماية إضافية عشان لما يعمل سكرول بسرعة ما يصيرأكبر من articles.length + 1
+              final article = articles[articleIndex];
+
+              return Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[50],
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: Colors.grey.shade300),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Header
+                      Row(
+                        children: [
+                          const CircleAvatar(
+                            radius: 24,
+                            backgroundImage: AssetImage('images/doctor.png'),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  article.doctor.name,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  article.doctor.email,
+                                  style: TextStyle(color: Colors.grey[600]),
+                                ),
+                              ],
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () {},
+                            icon: const Icon(Icons.more_horiz),
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      // Post Text
+                      Text(article.subject,
+                          style: const TextStyle(fontSize: 16)),
+
+                      if (article.img != null) ...[
+                        const SizedBox(height: 12),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Image.network(
+                            article.img!,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Container(
+                                height: 200,
+                                color: Colors.grey[300],
+                                alignment: Alignment.center,
+                                child: const Icon(Icons.broken_image, size: 48),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+
+                      const SizedBox(height: 16),
+
+                      // Action Buttons
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          PostAction(
+                            icon: Icons.favorite_border,
+                            label: 'إعجاب',
+                            onPressed: () {
+                              //TODO  context.read<ArticleCubit>().likeArticle(article.id);
+                            },
+                          ),
+                          PostAction(
+                            icon: Icons.comment_outlined,
+                            label: 'تعليق',
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => PostDetailsScreen(
+                                    postContent: article.subject,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          PostAction(
+                            icon: Icons.share_outlined,
+                            label: 'مشاركة',
+                            onPressed: () {
+                              // يمكنك استخدام share_plus هنا لاحقًا
+                            },
+                          ),
+                          PostAction(
+                            icon: Icons.bookmark_border,
+                            label: 'حفظ',
+                            onPressed: () {
+                              //TODO context.read<ArticleCubit>().bookmarkArticle(article.id);
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+            childCount: articles.length + 1 + (state.isLoading ? 1 : 0), // state.isLoading ? articles.length + 2 : articles.length + 1,
+          ),
         );
       },
     );
@@ -197,10 +212,7 @@ class PostAction extends StatelessWidget {
         children: [
           Icon(icon, size: 22, color: Colors.grey[700]),
           const SizedBox(width: 6),
-          Text(
-            label,
-            style: TextStyle(color: Colors.grey[700]),
-          ),
+          Text(label, style: TextStyle(color: Colors.grey[700])),
         ],
       ),
     );

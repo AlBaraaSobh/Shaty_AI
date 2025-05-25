@@ -17,7 +17,7 @@ class DoctorRegisterCubit extends Cubit<DoctorRegisterState> {
   Future<void> registerDoctorCubit(DoctorRegisterModel doctor) async {
     emit(state.copyWith(isLoading:  true,failureMessage: null, successMessage: null));
     try {
-      final response = await api.post(EndPoints.baseUrl + EndPoints.register,
+      final response = await api.post(EndPoints.register,
           data: doctor.toJson());
       final authDoctor = DoctorResponseModel.fromJson(response);
       print("User ID: ${authDoctor.user.id}");

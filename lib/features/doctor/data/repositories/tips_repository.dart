@@ -13,10 +13,10 @@ class TipsRepository {
     final token = await StorageHelper.getToken();
     if (token == null) throw Exception("Token is missing");
     final response = await api.post(
-      EndPoints.baseUrl + EndPoints.tips,
+      EndPoints.tips,
       data: {"advice": tip},
       options: Options(headers: {
-        "Authorization": "Bearer ${token}",
+        "Authorization": "Bearer $token",
       }),
     );
     final tipData = response['data'];
@@ -27,9 +27,9 @@ class TipsRepository {
     final token = await StorageHelper.getToken();
     if (token == null) throw Exception("Token is missing");
     final response = api.delete(
-      EndPoints.baseUrl + EndPoints.deleteTips('${id}'),
+      EndPoints.deleteTips('$id'),
       options: Options(headers: {
-        "Authorization": "Bearer ${token}",
+        "Authorization": "Bearer $token",
       }),
     );
   }
@@ -41,7 +41,7 @@ class TipsRepository {
     final token = await StorageHelper.getToken();
     if (token == null) throw Exception("Token is missing");
     final response = await api.post(
-      EndPoints.baseUrl + EndPoints.updateTip(id),
+      EndPoints.updateTip(id),
       data: {"advice": advice},
       options: Options(
         headers: {"Authorization": "Bearer $token"},
@@ -54,9 +54,9 @@ class TipsRepository {
     final token = await StorageHelper.getToken();
     if (token == null) throw Exception("Token is missing");
     final response = await api.get(
-      EndPoints.baseUrl + EndPoints.getTips,
+      EndPoints.getTips,
       options: Options(headers: {
-        "Authorization": "Bearer ${token}",
+        "Authorization": "Bearer $token",
       }),
     );
 

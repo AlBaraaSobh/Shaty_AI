@@ -5,6 +5,7 @@ import 'package:shaty/features/doctor/cubit/article_state.dart';
 import 'package:shaty/features/doctor/data/repositories/article_repository.dart';
 
 import '../../../core/errors/exceptions.dart';
+import '../../../core/utils/helpers/helpers.dart';
 import '../data/models/article_model.dart';
 
 class ArticleCubit extends Cubit<ArticleState>{
@@ -16,10 +17,8 @@ class ArticleCubit extends Cubit<ArticleState>{
         required String subject ,
         File ?img }) async {
 
-    emit(state.copyWith(
-        isLoading: true, failureMessage: null, successMessage: null));
+    emit(state.copyWith(isLoading: true, failureMessage: null, successMessage: null));
     try {
-      // إنشاء المقال من خلال الريبو
       final ArticleModel newArticle = await articleRepository.createArticles(title, subject,img);
     //  await getArticles();
       emit(state.copyWith(
@@ -31,19 +30,43 @@ class ArticleCubit extends Cubit<ArticleState>{
   }
 
 
-  Future<void> getArticles() async {
+  Future<void> getPaginatedArticles(int page) async {
     emit(state.copyWith(
         isLoading: true, failureMessage: null, successMessage: null));
-
     try {
-      final articlesList  = await articleRepository.fetchArticles();
-      if (articlesList .isEmpty) {
-        emit(state.copyWith(
-            isLoading: false, articles: [], successMessage: 'لا توجد مقالات حالياً'));
+      final paginatedResponse = await articleRepository.fetchPaginatedArticles(page: page);
+      final articlesList = paginatedResponse.data;
+
+      if (articlesList.isEmpty) {
+        // الصفحة الأولى = لا توجد مقالات حالياً
+        if (page == 1) {
+          emit(state.copyWith(
+            isLoading: false,
+            successMessage: 'لا توجد مقالات حالياً',
+            articles: [],
+            lastPage: paginatedResponse.lastPage,
+          ));
+        } else {
+          // صفحات لاحقة = انتهت المقالات
+          emit(state.copyWith(
+            isLoading: false,
+            articles: state.articles, // لا تغير القائمة
+            lastPage: paginatedResponse.lastPage,
+            successMessage: 'انتهت المقالات'
+          ));
+        }
+        return;
       } else {
+        List<ArticleModel> updatedArticles;
+        if (page == 1) {
+          updatedArticles = articlesList;
+        } else {
+          updatedArticles = [...state.articles, ...articlesList];
+        }
         emit(state.copyWith(
           isLoading: false,
-          articles: articlesList ,
+          articles: updatedArticles,
+          lastPage: paginatedResponse.lastPage,
         ));
       }
     } catch (e) {
@@ -51,6 +74,26 @@ class ArticleCubit extends Cubit<ArticleState>{
       emit(state.copyWith(isLoading: false, failureMessage: message));
     }
   }
+  // Future<void> getArticles() async {
+  //   emit(state.copyWith(
+  //       isLoading: true, failureMessage: null, successMessage: null));
+  //
+  //   try {
+  //     final articlesList  = await articleRepository.fetchArticles();
+  //     if (articlesList .isEmpty) {
+  //       emit(state.copyWith(
+  //           isLoading: false, articles: [], successMessage: 'لا توجد مقالات حالياً'));
+  //     } else {
+  //       emit(state.copyWith(
+  //         isLoading: false,
+  //         articles: articlesList ,
+  //       ));
+  //     }
+  //   } catch (e) {
+  //     final message = ErrorHandler.handle(e);
+  //     emit(state.copyWith(isLoading: false, failureMessage: message));
+  //   }
+  // }
 
   void clearMessages() {
     emit(state.copyWith(successMessage: null, failureMessage: null));

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../doctor/widget/DoctorsPost.dart';
+import '../../doctor/widget/posts_section.dart';
 import '../../doctor/widget/home_doctor_header.dart';
 import '../../doctor/widget/tips_section.dart';
 import '../widget/patient_tips.dart';
@@ -27,7 +27,7 @@ class PatientHomeScreen extends StatelessWidget {
                   SizedBox(
                     height: 15,
                   ),
-                  PostsSection(),
+               //   PostsSection(),
                 ],
               ),
             ],

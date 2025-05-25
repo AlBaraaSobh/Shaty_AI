@@ -21,7 +21,7 @@ class LoginCubit extends Cubit<LoginState> {
     emit(state.copyWith(
         isLoading: true, failureMessage: null, successMessage: null));
     try {
-      final response = await api.post(EndPoints.baseUrl + EndPoints.login,
+      final response = await api.post(EndPoints.login,
       data: {
         "email": email.trim(),
         "password": password.trim(),
