@@ -1,25 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../features/doctor/cubit/comment_cubit.dart';
+import '../../features/doctor/cubit/comment_state.dart';
 
 class PostDetailsScreen extends StatefulWidget {
+  final int articleId;
   final String postContent;
   final String? postImage;
 
 
-  const PostDetailsScreen({super.key, required this.postContent, this.postImage});
+  const PostDetailsScreen({
+    super.key,
+    required this.articleId,
+    required this.postContent,
+    this.postImage,
+  });
 
   @override
   State<PostDetailsScreen> createState() => _PostDetailsScreenState();
 }
 
 class _PostDetailsScreenState extends State<PostDetailsScreen> {
-  final List<String> comments = [
-    'رائع جدًا!',
-    'معلومة مفيدة شكرًا لك.',
-    'نصيحة جميلة ❤️',
-  ];
 
   final TextEditingController _commentController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<CommentCubit>().fetchComments(widget.articleId.toString());
+  }
 
   @override
   void dispose() {
@@ -30,9 +40,8 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
   void _addComment() {
     final text = _commentController.text.trim();
     if (text.isNotEmpty) {
-      setState(() {
-        comments.add(text);
-      });
+      context.read<CommentCubit>().addComment(
+          widget.articleId.toString(), text);
       _commentController.clear();
     }
   }
@@ -61,16 +70,31 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
 
           // قائمة التعليقات
           Expanded(
-            child: ListView.separated(
-              itemCount: comments.length,
-              separatorBuilder: (_, __) => const Divider(),
-              itemBuilder: (context, index) {
-                return ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: AppColors.primaryColor,
-                    child: const Icon(Icons.person, color: Colors.white),
-                  ),
-                  title: Text(comments[index]),
+            child: BlocBuilder<CommentCubit, CommentState>(
+              builder: (context, state) {
+                if (state.isLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                if (state.failureMessage != null) {
+                  return Center(child: Text(state.failureMessage!));
+                }
+                if (state.comments.isEmpty) {
+                  return const Center(child: Text('لا توجد تعليقات حتى الآن.'));
+                }
+                return ListView.separated(
+                  itemCount: state.comments.length,
+                  separatorBuilder: (_, __) => const Divider(),
+                  itemBuilder: (context, index) {
+                    final comment = state.comments[index];
+                    return ListTile(
+                      leading: CircleAvatar(
+                        backgroundColor: AppColors.primaryColor,
+                        child: const Icon(Icons.person, color: Colors.white),
+                      ),
+                      title: Text(comment.user.name),
+                      subtitle: Text(comment.comment),
+                    );
+                  },
                 );
               },
             ),

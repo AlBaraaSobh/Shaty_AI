@@ -143,21 +143,23 @@ class PostsSection extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           PostAction(
-                            icon: Icons.favorite_border,
-                            label: 'إعجاب',
+                            icon: article.isLiked ? Icons.favorite : Icons.favorite_border,
+                            label: '${article.likesCount}',
+                            iconColor: article.isLiked ? Colors.red : Colors.grey[700], // ✅ تمرير اللون
                             onPressed: () {
-                              //TODO  context.read<ArticleCubit>().likeArticle(article.id);
+                              context.read<ArticleCubit>().likeArticle(article.id);
                             },
                           ),
+
                           PostAction(
                             icon: Icons.comment_outlined,
-                            label: 'تعليق',
+                            label: '',//context.loc.comment
                             onPressed: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (_) => PostDetailsScreen(
-                                    postContent: article.subject,
+                                    postContent: article.subject, articleId: article.id,
                                   ),
                                 ),
                               );
@@ -165,14 +167,14 @@ class PostsSection extends StatelessWidget {
                           ),
                           PostAction(
                             icon: Icons.share_outlined,
-                            label: 'مشاركة',
+                            label:'',// context.loc.share
                             onPressed: () {
                               // يمكنك استخدام share_plus هنا لاحقًا
                             },
                           ),
                           PostAction(
                             icon: Icons.bookmark_border,
-                            label: 'حفظ',
+                            label:'',// context.loc.save
                             onPressed: () {
                               //TODO context.read<ArticleCubit>().bookmarkArticle(article.id);
                             },
@@ -192,16 +194,19 @@ class PostsSection extends StatelessWidget {
   }
 }
 
+// ✅ 1. تحديث PostAction widget
 class PostAction extends StatelessWidget {
   final IconData icon;
   final String label;
   final VoidCallback onPressed;
+  final Color? iconColor; // إضافة iconColor parameter
 
   const PostAction({
     super.key,
     required this.icon,
     required this.label,
     required this.onPressed,
+    this.iconColor, // إضافة هذا في constructor
   });
 
   @override
@@ -210,11 +215,20 @@ class PostAction extends StatelessWidget {
       onTap: onPressed,
       child: Row(
         children: [
-          Icon(icon, size: 22, color: Colors.grey[700]),
+          Icon(
+              icon,
+              size: 22,
+              color: iconColor ?? Colors.grey[700] // ✅ استخدام iconColor هنا
+          ),
           const SizedBox(width: 6),
-          Text(label, style: TextStyle(color: Colors.grey[700])),
+          Text(
+              label,
+              style: TextStyle(color: Colors.grey[700])
+          ),
         ],
       ),
     );
   }
 }
+
+

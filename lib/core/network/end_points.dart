@@ -12,6 +12,12 @@ class EndPoints{
   static  String getAllArticle = 'doctors-articles';
   static String deleteArticle(String articleId) => 'doctor/article/delete/$articleId';
   static String updateArticle(String id) => 'doctor/article/$id/update';
+  static String likeArticle(String id) => 'article/$id/like';
+  static String saveArticle(String id) => 'article/$id/save';
+  static String getSaveArticle(String id) => 'articles/saved';
+  static String commentArticle(String id) => 'article/$id/comment/store';
+  static String deleteCommentArticle(String id) => 'comment/$id/destroy';
+  static String getCommentArticle(String id) => 'article/$id/comments';
 
 
 

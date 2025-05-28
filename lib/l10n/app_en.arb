@@ -52,7 +52,10 @@
   "archives": "Archives",
   "manage_notifications": "Manage Notifications",
   "logout": "Logout",
-  "logout_title": "Are you sure you want to leave the account?"
+  "logout_title": "Are you sure you want to leave the account?",
+  "share": "share",
+  "comment": "comment",
+  "like": "like"
 
 
 

@@ -87,7 +87,7 @@ class ArticleCard extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) => PostDetailsScreen(postContent: article.subject),
+                builder: (_) => PostDetailsScreen(postContent: article.subject, articleId: 1,),
               ),
             );
           },

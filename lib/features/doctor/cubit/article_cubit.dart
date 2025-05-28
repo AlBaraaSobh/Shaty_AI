@@ -74,31 +74,119 @@ class ArticleCubit extends Cubit<ArticleState>{
       emit(state.copyWith(isLoading: false, failureMessage: message));
     }
   }
-  // Future<void> getArticles() async {
-  //   emit(state.copyWith(
-  //       isLoading: true, failureMessage: null, successMessage: null));
-  //
+  Future<void> likeArticle(int articleId) async {
+    print('🔄 بدء عملية الإعجاب للمقال: $articleId');
+
+    final currentArticle = state.articles.firstWhere((article) => article.id == articleId);
+    print('📊 حالة المقال الحالية - مُعجب: ${currentArticle.isLiked}, عدد الإعجابات: ${currentArticle.likesCount}');
+
+    try {
+      final isLikedNow = await articleRepository.likeArticle(articleId);
+      print('✅ رد الخادم - مُعجب الآن: $isLikedNow');
+
+      final updatedArticles = state.articles.map((article) {
+        if (article.id == articleId) {
+          final updatedLikesCount = isLikedNow ? article.likesCount + 1 : article.likesCount - 1;
+          print('📈 عدد الإعجابات الجديد: $updatedLikesCount');
+          return article.copyWith(
+            isLiked: isLikedNow,
+            likesCount: updatedLikesCount,
+          );
+        }
+        return article;
+      }).toList();
+
+      emit(state.copyWith(articles: updatedArticles));
+      print('✅ تم تحديث الحالة بنجاح');
+
+    } catch (e) {
+      print('⚠️ حدث خطأ أثناء تحديث الحالة: $e');
+      final message = ErrorHandler.handle(e);
+      emit(state.copyWith(failureMessage: message));
+    }
+  }
+  // Future<void> likeArticle(int articleId) async {
   //   try {
-  //     final articlesList  = await articleRepository.fetchArticles();
-  //     if (articlesList .isEmpty) {
-  //       emit(state.copyWith(
-  //           isLoading: false, articles: [], successMessage: 'لا توجد مقالات حالياً'));
-  //     } else {
-  //       emit(state.copyWith(
-  //         isLoading: false,
-  //         articles: articlesList ,
-  //       ));
-  //     }
+  //     // تحديث مباشر سريع
+  //     final updatedArticles = state.articles.map((article) {
+  //       if (article.id == articleId) {
+  //         final isLikedNow = !article.isLiked;
+  //         final updatedLikesCount = isLikedNow ? article.likesCount + 1 : article.likesCount - 1;
+  //         return article.copyWith(
+  //           isLiked: isLikedNow,
+  //           likesCount: updatedLikesCount,
+  //         );
+  //       }
+  //       return article;
+  //     }).toList();
+  //
+  //     emit(state.copyWith(articles: updatedArticles));
+  //
+  //     // إرسال اللايك الحقيقي للسيرفر
+  //     await articleRepository.likeArticle(articleId);
+  //
   //   } catch (e) {
   //     final message = ErrorHandler.handle(e);
-  //     emit(state.copyWith(isLoading: false, failureMessage: message));
+  //     emit(state.copyWith(failureMessage: message));
   //   }
   // }
+
+
+  // Future<void> likeArticle(int articleId) async {
+  //   try {
+  //     await articleRepository.likeArticle(articleId);
+  //     final updatedArticles = state.articles.map((article) {
+  //       if (article.id == articleId) {
+  //         final isLikedNow = !article.isLiked;
+  //         final updatedLikesCount = isLikedNow ? article.likesCount + 1 : article.likesCount - 1;
+  //         return ArticleModel(
+  //           id: article.id,
+  //           title: article.title,
+  //           subject: article.subject,
+  //           img: article.img,
+  //           doctor: article.doctor,
+  //           articleInfo: article.articleInfo,
+  //           createdAt: article.createdAt,
+  //           isLiked: isLikedNow,
+  //           isBookmarked: article.isBookmarked,
+  //           likesCount: updatedLikesCount,
+  //         );
+  //       }
+  //       return article;
+  //     }).toList();
+  //
+  //     emit(state.copyWith(articles: updatedArticles));
+  //   } catch (e) {
+  //     final message = ErrorHandler.handle(e);
+  //     emit(state.copyWith(failureMessage: message));
+  //   }
+  // }
+
 
   void clearMessages() {
     emit(state.copyWith(successMessage: null, failureMessage: null));
   }
 
+// Future<void> getArticles() async {
+//   emit(state.copyWith(
+//       isLoading: true, failureMessage: null, successMessage: null));
+//
+//   try {
+//     final articlesList  = await articleRepository.fetchArticles();
+//     if (articlesList .isEmpty) {
+//       emit(state.copyWith(
+//           isLoading: false, articles: [], successMessage: 'لا توجد مقالات حالياً'));
+//     } else {
+//       emit(state.copyWith(
+//         isLoading: false,
+//         articles: articlesList ,
+//       ));
+//     }
+//   } catch (e) {
+//     final message = ErrorHandler.handle(e);
+//     emit(state.copyWith(isLoading: false, failureMessage: message));
+//   }
+// }
 }
 
 

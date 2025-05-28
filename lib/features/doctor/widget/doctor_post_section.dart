@@ -132,7 +132,7 @@ class PostsSection extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => PostDetailsScreen(
-                                  postContent: post['content']!,
+                                  postContent: post['content']!, articleId: 1,
                                 ),
                               ),
                             );

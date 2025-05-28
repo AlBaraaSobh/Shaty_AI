@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import '../../../../core/network/api_consumer.dart';
 import '../../../../core/network/end_points.dart';
 import '../models/article_model.dart';
+import '../models/comment_model.dart';
 import '../models/paginated_articles_response.dart';
 
 class ArticleRepository {
@@ -94,4 +95,28 @@ class ArticleRepository {
 
     return ArticleModel.fromJson(response['data']);
   }
+
+
+
+  Future<bool> likeArticle(int articleId) async {
+    try {
+      final response = await api.post(EndPoints.likeArticle(articleId.toString()));
+      if (response is Map<String, dynamic> && response.containsKey('like')) {
+        return response['like'] == true;
+      }
+      return false;
+    } catch (e) {
+      print('❌ خطأ أثناء عمل لايك: $e');
+      rethrow; // حتى يتم التقاطه بشكل طبيعي في cubit
+    }
+  }
+
+// Future<ArticleModel> likeArticle(int articleId) async {
+//   final response =  await api.post(EndPoints.likeArticle(articleId.toString()));
+//   //return ArticleModel.fromJson(response);
+//   return response['like'] ?? false;
+//
+// }
+
+
 }
