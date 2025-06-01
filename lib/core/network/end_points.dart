@@ -18,6 +18,12 @@ class EndPoints{
   static String commentArticle(String id) => 'article/$id/comment/store';
   static String deleteCommentArticle(String id) => 'comment/$id/destroy';
   static String getCommentArticle(String id) => 'article/$id/comments';
+  static  String getDoctorProfile = 'doctor/my';
+  static  String updateDoctorBio = 'doctor/update-bio';
+  static  String getDoctorFollowers = 'doctor/followers';
+  static  String getDoctorInfo = 'doctor/info';
+  static  String updateDoctorProfile = 'doctor/update-profile';
+
 
 
 
