@@ -143,9 +143,9 @@ class PostsSection extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           PostAction(
-                            icon: article.isLiked ? Icons.favorite : Icons.favorite_border,
-                            label: '${article.likesCount}',
-                            iconColor: article.isLiked ? Colors.red : Colors.grey[700], // ✅ تمرير اللون
+                            icon: article.articleInfo.isLiked ? Icons.favorite : Icons.favorite_border,
+                            label: '${article.articleInfo.numLikes}',
+                            iconColor: article.articleInfo.isLiked ? Colors.red : Colors.grey[700], // ✅ تمرير اللون
                             onPressed: () {
                               context.read<ArticleCubit>().likeArticle(article.id);
                             },

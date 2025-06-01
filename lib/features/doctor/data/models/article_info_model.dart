@@ -19,4 +19,18 @@ class ArticleInfoModel {
       isSaved: json['is_saved'],
     );
   }
+
+  ArticleInfoModel copyWith({
+    int? numComments,
+    int? numLikes,
+    bool? isLiked,
+    bool? isSaved,
+  }) {
+    return ArticleInfoModel(
+      numComments: numComments ?? this.numComments,
+      numLikes: numLikes ?? this.numLikes,
+      isLiked: isLiked ?? this.isLiked,
+      isSaved: isSaved ?? this.isSaved,
+    );
+  }
 }

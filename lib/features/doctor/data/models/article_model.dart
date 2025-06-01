@@ -9,9 +9,7 @@ class ArticleModel {
   final ArticleDoctorModel doctor;
   final ArticleInfoModel articleInfo;
   final String createdAt;
-  bool isLiked;
-  bool isBookmarked;
-  int likesCount;
+
 
   ArticleModel({
     required this.id,
@@ -21,9 +19,7 @@ class ArticleModel {
     required this.doctor,
     required this.articleInfo,
     required this.createdAt,
-    this.isBookmarked = false,
-    this.isLiked = false,
-    this.likesCount = 0,
+
   });
 
   factory ArticleModel.fromJson(Map<String, dynamic> json) {
@@ -42,9 +38,7 @@ class ArticleModel {
       doctor: ArticleDoctorModel.fromJson(json['doctor']),
       articleInfo: ArticleInfoModel.fromJson(json['article_info']),
       createdAt: json['created_at'],
-      isLiked: json['is_liked'] ?? false,
-      isBookmarked: json['is_bookmarked'] ?? false,
-      likesCount: json['likes_count'] ?? 0,
+
     );
   }
 
@@ -56,9 +50,6 @@ class ArticleModel {
     ArticleDoctorModel? doctor,
     ArticleInfoModel? articleInfo,
     String? createdAt,
-    bool? isLiked,
-    bool? isBookmarked,
-    int? likesCount,
   }) {
     return ArticleModel(
       id: id ?? this.id,
@@ -68,9 +59,7 @@ class ArticleModel {
       doctor: doctor ?? this.doctor,
       articleInfo: articleInfo ?? this.articleInfo,
       createdAt: createdAt ?? this.createdAt,
-      isLiked: isLiked ?? this.isLiked,
-      isBookmarked: isBookmarked ?? this.isBookmarked,
-      likesCount: likesCount ?? this.likesCount,
+
     );
   }
 }
