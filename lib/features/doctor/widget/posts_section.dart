@@ -153,7 +153,7 @@ class PostsSection extends StatelessWidget {
 
                           PostAction(
                             icon: Icons.comment_outlined,
-                            label: '',//context.loc.comment
+                            label: '${article.articleInfo.numComments}',//context.loc.comment
                             onPressed: () {
                               Navigator.push(
                                 context,

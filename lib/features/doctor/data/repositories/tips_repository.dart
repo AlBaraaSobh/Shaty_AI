@@ -15,9 +15,6 @@ class TipsRepository {
     final response = await api.post(
       EndPoints.tips,
       data: {"advice": tip},
-      options: Options(headers: {
-        "Authorization": "Bearer $token",
-      }),
     );
     final tipData = response['data'];
     return TipsModel.fromJson(tipData);
@@ -28,9 +25,7 @@ class TipsRepository {
     if (token == null) throw Exception("Token is missing");
     final response = api.delete(
       EndPoints.deleteTips('$id'),
-      options: Options(headers: {
-        "Authorization": "Bearer $token",
-      }),
+
     );
   }
 
@@ -43,9 +38,7 @@ class TipsRepository {
     final response = await api.post(
       EndPoints.updateTip(id),
       data: {"advice": advice},
-      options: Options(
-        headers: {"Authorization": "Bearer $token"},
-      ),
+
     );
     return TipsModel.fromJson(response['data']);
   }
@@ -55,9 +48,7 @@ class TipsRepository {
     if (token == null) throw Exception("Token is missing");
     final response = await api.get(
       EndPoints.getTips,
-      options: Options(headers: {
-        "Authorization": "Bearer $token",
-      }),
+
     );
 
     final List<dynamic> data = response['data'];

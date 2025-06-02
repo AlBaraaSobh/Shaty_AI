@@ -111,12 +111,7 @@ class ArticleRepository {
     }
   }
 
-// Future<ArticleModel> likeArticle(int articleId) async {
-//   final response =  await api.post(EndPoints.likeArticle(articleId.toString()));
-//   //return ArticleModel.fromJson(response);
-//   return response['like'] ?? false;
-//
-// }
+
 
 
 }

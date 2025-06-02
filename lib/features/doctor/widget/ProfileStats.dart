@@ -1,20 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shaty/core/constants/app_colors.dart';
 import 'package:shaty/core/extensions/localization_extension.dart';
+import 'package:shaty/features/doctor/cubit/article_cubit.dart';
 
-import '../../../core/constants/app_colors.dart';
+import '../cubit/doctor_profile_cubit.dart';
+import '../cubit/doctor_profile_state.dart';
+import '../cubit/tips_cubit.dart';
 
 class ProfileStats extends StatelessWidget {
   const ProfileStats({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        _StatItem(label: context.loc.followers, value: '120'),
-        _StatItem(label: context.loc.tips, value: '15'),
-        _StatItem(label: context.loc.articles, value: '10'),
-      ],
+    return BlocBuilder<DoctorProfileCubit, DoctorProfileState>(
+      builder: (context, state) {
+
+        final followersCount = state.followers.length.toString();
+        final tipsCount = context.select((TipsCubit cubit) => cubit.state.tips.length);
+        final articlesCount = context.select((ArticleCubit cubit) => cubit.state.articles.length);
+
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            _StatItem(label: context.loc.followers, value: followersCount),
+            _StatItem(label: context.loc.tips, value: tipsCount.toString()),
+            _StatItem(label: context.loc.articles, value: articlesCount.toString()),
+          ],
+        );
+      },
     );
   }
 }
@@ -29,10 +43,19 @@ class _StatItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(value,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color: AppColors.primaryColor),),
+        Text(
+          value,
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: AppColors.primaryColor,
+          ),
+        ),
         const SizedBox(height: 4),
-        Text(label, style: const TextStyle(color: Colors.grey)),
+        Text(
+          label,
+          style: const TextStyle(color: Colors.grey),
+        ),
       ],
     );
   }

@@ -27,7 +27,7 @@ class ShowTips extends StatelessWidget {
                 color: AppColors.secondaryColor),
           ),
           onTap: () {
-            ///TODO
+            //TODO
           },
         ),
       ],

@@ -55,7 +55,8 @@ class TipsCubit extends Cubit<TipsState> {
     }
   }
 
-  Future<void> getTips() async {
+  Future<void> getTips({bool forceRefresh = false}) async {
+
     emit(state.copyWith(
         isLoading: true, failureMessage: null, successMessage: null));
 

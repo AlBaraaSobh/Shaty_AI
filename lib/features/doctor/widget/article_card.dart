@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shaty/features/doctor/data/models/article_model.dart';
 import '../../../../shared/common/post_details_screen.dart';
+import '../cubit/article_cubit.dart';
 
 class ArticleCard extends StatelessWidget {
   final ArticleModel article;
@@ -67,47 +69,77 @@ class ArticleCard extends StatelessWidget {
             ],
           ),
         ),
-        IconButton(
-          onPressed: () {},
+        PopupMenuButton<String>(
+          onSelected: (value) {
+            if (value == 'edit') {
+              // TODO: تنفيذ التعديل
+            } else if (value == 'delete') {
+              // TODO: تنفيذ الحذف
+            }
+          },
+          itemBuilder: (context) => const [
+            PopupMenuItem(value: 'edit', child: Text('تعديل')),
+            PopupMenuItem(value: 'delete', child: Text('حذف')),
+          ],
           icon: const Icon(Icons.more_horiz),
         ),
       ],
     );
   }
 
+
   Widget _buildActions(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        _PostAction(icon: Icons.favorite_border, label: 'إعجاب', onPressed: () {}),
+        _PostAction(
+            icon: article.articleInfo.isLiked ? Icons.favorite : Icons.favorite_border,
+            label: '${article.articleInfo.numLikes}',
+            iconColor: article.articleInfo.isLiked ? Colors.red : Colors.grey[700],
+            onPressed: () {
+              context.read<ArticleCubit>().likeArticle(article.id);
+            },
+        ),
         _PostAction(
           icon: Icons.comment_outlined,
-          label: 'تعليق',
+          label: '${article.articleInfo.numComments} ',
           onPressed: () {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) => PostDetailsScreen(postContent: article.subject, articleId: 1,),
+                builder: (_) => PostDetailsScreen(
+                  postContent: article.subject,
+                  articleId: article.id,
+                ),
               ),
             );
           },
         ),
-        _PostAction(icon: Icons.share_outlined, label: 'مشاركة', onPressed: () {}),
-        _PostAction(icon: Icons.bookmark_border, label: 'حفظ', onPressed: () {}),
+        _PostAction(icon: Icons.share_outlined, label: '', onPressed: () {}),
+        _PostAction(
+          icon: article.articleInfo.isSaved ? Icons.bookmark : Icons.bookmark_border,
+          label: '',
+          onPressed: () {
+            // TODO: تنفيذ الحفظ
+          },
+        ),
       ],
     );
   }
+
 }
 
 class _PostAction extends StatelessWidget {
   final IconData icon;
   final String label;
   final VoidCallback onPressed;
+  final Color? iconColor;
 
   const _PostAction({
     required this.icon,
     required this.label,
     required this.onPressed,
+    this.iconColor,
   });
 
   @override
@@ -116,7 +148,7 @@ class _PostAction extends StatelessWidget {
       onTap: onPressed,
       child: Row(
         children: [
-          Icon(icon, size: 22, color: Colors.grey[700]),
+          Icon(icon, size: 22, color: iconColor ?? Colors.grey[700]),
           const SizedBox(width: 6),
           Text(label, style: TextStyle(color: Colors.grey[700])),
         ],
@@ -124,3 +156,4 @@ class _PostAction extends StatelessWidget {
     );
   }
 }
+

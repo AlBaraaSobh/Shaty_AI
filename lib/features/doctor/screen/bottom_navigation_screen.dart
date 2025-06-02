@@ -13,17 +13,21 @@ class BottomNavigationScreen extends StatefulWidget {
 }
 
 class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
-  int _selectedIndex = 0 ;
-  final List<Widget>_screens = [
+  int _selectedIndex = 0;
+  final List<Widget> _screens = [
     const DoctorHomeScreen(),
     const DoctorProfileScreen(),
     const DoctorNotificationsScreen(),
     const DoctorSettingScreen(),
   ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _screens[_selectedIndex],
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: _screens,
+      ),
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
           boxShadow: [

@@ -1,34 +1,21 @@
-import 'dart:convert';
 
 import 'package:shaty/core/network/api_consumer.dart';
-
-import '../../../../core/network/end_points.dart';
+import 'package:shaty/core/network/end_points.dart';
 import '../models/doctors_model.dart';
+import '../models/article_model.dart';
 
-class DoctorRepository {
+class DoctorProfileRepository {
   final ApiConsumer api;
 
-  DoctorRepository(this.api);
-
+  DoctorProfileRepository(this.api);
 
   Future<DoctorsModel> getDoctorProfile() async {
     final response = await api.get(EndPoints.getDoctorProfile);
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      return DoctorsModel.fromJson(data['doctor']);
-    } else {
-      throw Exception('فشل في تحميل بيانات الطبيب');
-    }
+    return DoctorsModel.fromJson(response['doctor']);
   }
 
   Future<void> updateBio(String bio) async {
-    final response = await api.put(
-      EndPoints.updateDoctorBio,
-      data: bio
-    );
-    if (response.statusCode != 200) {
-      throw Exception('فشل في تحديث النبذة');
-    }
+    await api.put(EndPoints.updateDoctorBio, data: {'bio': bio});
   }
 
   Future<DoctorsModel> updateProfile({
@@ -46,37 +33,25 @@ class DoctorRepository {
       if (img != null) 'img': img,
     };
 
-    final response = await api.post(
-      EndPoints.updateDoctorProfile,
-        data: bio
-    );
-
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      return DoctorsModel.fromJson(data['user']);
-    } else {
-      throw Exception('فشل في تحديث الملف الشخصي');
-    }
-  }
-
-  Future<List<DoctorsModel>> getFollowers() async {
-    final response = await api.get(EndPoints.getDoctorFollowers);
-
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body) as List<dynamic>;
-      return data.map((e) => DoctorsModel.fromJson(e)).toList();
-    } else {
-      throw Exception('فشل في جلب المتابعين');
-    }
+    final response = await api.post(EndPoints.updateDoctorProfile, data: body);
+    return DoctorsModel.fromJson(response['user']);
   }
 
   Future<Map<String, dynamic>> getDoctorInfo() async {
-    final response = await api.get(EndPoints.getDoctorInfo);
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      return data;
-    } else {
-      throw Exception('فشل في جلب الإحصائيات');
-    }
+    return await api.get(EndPoints.getDoctorInfo);
+  }
+
+  Future<List<DoctorsModel>> getFollowers() async {
+    final data = await api.get(EndPoints.getDoctorFollowers);
+    return (data as List).map((e) => DoctorsModel.fromJson(e)).toList();
+  }
+
+  Future<List<ArticleModel>> getDoctorArticles() async {
+    final data = await api.get(EndPoints.getArticle);
+    return (data['data'] as List).map((e) => ArticleModel.fromJson(e)).toList();
+  }
+
+  Future<void> deleteArticle(int id) async {
+    await api.delete('${EndPoints.deleteArticle}/$id');
   }
 }
