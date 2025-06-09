@@ -56,20 +56,29 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: CustomScrollView(
-          controller: _scrollController,
-          slivers: [
-            SliverToBoxAdapter(child: HomeDoctorHeader()),
-            SliverToBoxAdapter(child: SizedBox(height: 25)),
-            SliverToBoxAdapter(child: TipsSection()),
-            SliverToBoxAdapter(child: Divider(thickness: 1)),
-            SliverToBoxAdapter(child: SizedBox(height: 15)),
-            PostsSection(),
+        child: RefreshIndicator(
+          onRefresh: () => _onRefresh(),
+          child: CustomScrollView(
+            controller: _scrollController,
+            slivers: [
+              SliverToBoxAdapter(child: HomeDoctorHeader()),
+              SliverToBoxAdapter(child: SizedBox(height: 25)),
+              SliverToBoxAdapter(child: TipsSection()),
+              SliverToBoxAdapter(child: Divider(thickness: 1)),
+              SliverToBoxAdapter(child: SizedBox(height: 15)),
+              PostsSection(),
 
-
-    ],
+              ],
+          ),
         ),
       ),
     );
   }
+  Future<void> _onRefresh() async {
+    _currentPage = 1;
+    _isFetchingMore = false;
+    await context.read<TipsCubit>().getTips();
+    await context.read<ArticleCubit>().getPaginatedArticles(_currentPage);
+  }
+
 }

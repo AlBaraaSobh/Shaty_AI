@@ -73,7 +73,7 @@ class ArticleRepository {
     );
   }
 
-  Future<ArticleModel> updateTip({
+  Future<ArticleModel> updateArticle({
     required String id,
     required String title,
     required String subject,

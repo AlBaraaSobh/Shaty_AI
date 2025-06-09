@@ -17,11 +17,11 @@ class CommentModel {
 
   factory CommentModel.fromJson(Map<String, dynamic> json) {
     return CommentModel(
-      id: json['id'],
-      comment: json['comment'],
-      articleId: json['article_id'],
-      createdAt: json['created_at'],
-      updatedAt: json['updated_at'],
+      id: json['id'] ,
+      comment: json['comment'] ?? '',
+      articleId: json['article_id'] ??'',
+      createdAt: json['created_at']??'',
+      updatedAt: json['updated_at']??'',
       user: CommentUser.fromJson(json['user']),
     );
   }

@@ -27,7 +27,8 @@ class ShowTips extends StatelessWidget {
                 color: AppColors.secondaryColor),
           ),
           onTap: () {
-            //TODO
+            Navigator.pushNamed(context, '/view_tips');
+
           },
         ),
       ],

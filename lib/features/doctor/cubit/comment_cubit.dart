@@ -2,6 +2,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shaty/features/doctor/cubit/comment_state.dart';
 import 'package:shaty/features/doctor/data/repositories/comment_repository.dart';
 
+import '../data/models/comment_model.dart';
+
 class CommentCubit extends Cubit <CommentState> {
   final CommentRepository commentRepository;
   CommentCubit(this.commentRepository) : super(CommentState.initial());
@@ -17,17 +19,18 @@ class CommentCubit extends Cubit <CommentState> {
     }
   }
 
-  Future<void> addComment(String articleId, String commentText) async {
-    emit(state.copyWith(isLoading: true, failureMessage: null, successMessage: null));
+    Future<void> addComment(String articleId, String commentText) async {
+      emit(state.copyWith(isLoading: true, failureMessage: null, successMessage: null));
 
-    try {
-      await commentRepository.addComment(articleId: articleId , commentText: commentText);
-      await fetchComments(articleId);
-      emit(state.copyWith(successMessage: 'تم إضافة التعليق بنجاح'));
-    } catch (e) {
-      emit(state.copyWith(isLoading: false, failureMessage: e.toString()));
+      try {
+        await commentRepository.addComment(articleId: articleId , commentText: commentText);
+        await fetchComments(articleId);
+        emit(state.copyWith(isLoading : false,successMessage: 'تم إضافة التعليق بنجاح'));
+      } catch (e) {
+        emit(state.copyWith(isLoading: false, failureMessage: e.toString()));
+      }
     }
-  }
+
 
   Future<void> deleteComment(String commentId, String articleId) async {
     emit(state.copyWith(isLoading: true, failureMessage: null, successMessage: null));

@@ -11,7 +11,7 @@ class CommentRepository {
     required String articleId,
     required String commentText,
   }) async {
-    await api.post(
+     await api.post(
       EndPoints.commentArticle(articleId),
       data: {'comment': commentText},
     );
@@ -27,6 +27,10 @@ class CommentRepository {
 
   Future<void> deleteComment(String commentId) async {
     await api.delete(EndPoints.deleteCommentArticle(commentId));
+  }
+
+  Future<void> updateComment(int commentId, String commentText) async {
+
   }
 
 
