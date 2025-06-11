@@ -23,9 +23,14 @@ import 'package:shaty/features/doctor/screen/bottom_navigation_screen.dart';
 import 'package:shaty/features/doctor/screen/doctor_home_screen.dart';
 import 'package:shaty/features/doctor/widget/view_tips.dart';
 import 'package:shaty/features/patient/widget/patient_bottom_nav_bar.dart';
+import 'package:shaty/features/shared/cubit/saved_cubit.dart';
+import 'package:shaty/features/shared/screen/saved_article.dart';
 import 'core/utils/helpers/storage_helper.dart';
 import 'features/auth/cubit/doctor_register_cubit.dart';
 import 'features/auth/screen/sign_in_screen.dart';
+import 'features/shared/cubit/is_saved_cubit.dart';
+import 'features/shared/data/repositories/saved_repository.dart';
+import 'features/shared/screen/is_saved_repository.dart';
 
 
 void main() async {
@@ -42,6 +47,9 @@ void main() async {
     BlocProvider(create: (_) => ArticleCubit(ArticleRepository(api))),
     BlocProvider(create: (_) => CommentCubit(CommentRepository(api))),
     BlocProvider(create: (_) => DoctorProfileCubit(DoctorProfileRepository(api))),
+    BlocProvider(create: (_) => SavedCubit(SavedRepository(api))),
+    BlocProvider(create: (_) => IsSavedCubit(IsSavedRepository(api)),
+    ),
   ], child:  MyApp(
     initialRoute: token == null
         ? '/login_screen'
@@ -72,6 +80,7 @@ class MyApp extends StatelessWidget {
         '/bottom_navigation_screen': (context)=> const BottomNavigationScreen(),
         '/patient_bottom_nav_bar': (context)=> const PatientBottomNavBar(),
         '/view_tips': (context)=> const ViewTips(),
+        '/saved_article': (context)=> const SavedArticle(),
       },
       localizationsDelegates: const [
         AppLocalizations.delegate,

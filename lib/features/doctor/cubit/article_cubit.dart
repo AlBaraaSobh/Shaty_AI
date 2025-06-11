@@ -121,26 +121,7 @@ class ArticleCubit extends Cubit<ArticleState>{
     emit(state.copyWith(successMessage: null, failureMessage: null));
   }
 
-// Future<void> getArticles() async {
-//   emit(state.copyWith(
-//       isLoading: true, failureMessage: null, successMessage: null));
-//
-//   try {
-//     final articlesList  = await articleRepository.fetchArticles();
-//     if (articlesList .isEmpty) {
-//       emit(state.copyWith(
-//           isLoading: false, articles: [], successMessage: 'لا توجد مقالات حالياً'));
-//     } else {
-//       emit(state.copyWith(
-//         isLoading: false,
-//         articles: articlesList ,
-//       ));
-//     }
-//   } catch (e) {
-//     final message = ErrorHandler.handle(e);
-//     emit(state.copyWith(isLoading: false, failureMessage: message));
-//   }
-// }
+
 }
 
 

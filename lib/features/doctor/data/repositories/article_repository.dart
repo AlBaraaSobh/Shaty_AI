@@ -111,7 +111,12 @@ class ArticleRepository {
     }
   }
 
-
+  Future<void> saveArticle(int articleId) async {
+    final response = await api.post(EndPoints.saveArticle(articleId.toString()));
+    if (response['saved'] != true) {
+      throw Exception('Failed to save article');
+    }
+  }
 
 
 }

@@ -58,6 +58,7 @@ class _DoctorSettingScreenState extends State<DoctorSettingScreen> {
                 title: context.loc.archives,
                 onTap: () {
                   //TODO
+                  Navigator.pushNamed(context, '/saved_article');
 
                 },
               ),

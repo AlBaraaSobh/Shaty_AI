@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shaty/features/doctor/data/models/article_model.dart';
+import 'package:shaty/features/shared/cubit/is_saved_cubit.dart';
 import '../../../../shared/common/post_details_screen.dart';
 import '../cubit/article_cubit.dart';
 
@@ -121,6 +122,8 @@ class ArticleCard extends StatelessWidget {
           label: '',
           onPressed: () {
             // TODO: تنفيذ الحفظ
+            context.read<IsSavedCubit>().toggleSaveArticle(article.id);
+
           },
         ),
       ],
@@ -128,7 +131,6 @@ class ArticleCard extends StatelessWidget {
   }
 
 }
-
 class _PostAction extends StatelessWidget {
   final IconData icon;
   final String label;

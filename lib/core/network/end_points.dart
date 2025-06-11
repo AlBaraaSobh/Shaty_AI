@@ -23,6 +23,7 @@ class EndPoints{
   static  String getDoctorFollowers = 'doctor/followers';
   static  String getDoctorInfo = 'doctor/info';
   static  String updateDoctorProfile = 'doctor/update-profile';
+  static  String articleSaved = 'articles/saved';
 
 
 
