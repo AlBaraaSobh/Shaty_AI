@@ -6,10 +6,13 @@ import 'package:shaty/features/doctor/data/repositories/article_repository.dart'
 
 import '../../../core/errors/exceptions.dart';
 import '../../../core/utils/helpers/helpers.dart';
+import '../../../core/utils/helpers/storage_helper.dart';
 import '../data/models/article_model.dart';
 
 class ArticleCubit extends Cubit<ArticleState>{
   final ArticleRepository articleRepository;
+  int? userId;
+
   ArticleCubit(this.articleRepository) : super(ArticleState.initial());
 
   Future<void> createArticle(
@@ -34,6 +37,7 @@ class ArticleCubit extends Cubit<ArticleState>{
     emit(state.copyWith(
         isLoading: true, failureMessage: null, successMessage: null));
     try {
+      userId = await StorageHelper.getUserId();
       final paginatedResponse = await articleRepository.fetchPaginatedArticles(page: page);
       final articlesList = paginatedResponse.data;
       print('articlesList***************** ${articlesList}');
@@ -116,6 +120,20 @@ class ArticleCubit extends Cubit<ArticleState>{
       emit(state.copyWith(failureMessage: message));
     }
   }
+
+  Future<void> deleteArticle(int id) async  {
+    emit(state.copyWith(isLoading: true));
+    try{
+      await articleRepository.deleteArticles(id);
+      emit(state.copyWith(isLoading: false,successMessage: 'تم الحذف بنجاح'));
+      getPaginatedArticles(1);
+    }catch (e){
+      final message = ErrorHandler.handle(e);
+      emit(state.copyWith(isLoading: false, failureMessage: message));
+    }
+
+  }
+
 
   void clearMessages() {
     emit(state.copyWith(successMessage: null, failureMessage: null));

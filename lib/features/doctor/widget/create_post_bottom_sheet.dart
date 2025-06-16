@@ -9,10 +9,11 @@ import '../../../core/utils/helpers/helpers.dart';
 import '../../../shared/widgets/primary_button .dart';
 import '../cubit/article_cubit.dart';
 import '../cubit/article_state.dart';
+import '../data/models/article_model.dart';
 
 class CreatePostBottomSheet extends StatefulWidget {
-  const CreatePostBottomSheet({super.key});
-
+  final ArticleModel? article; // null => إنشاء، غير null => تعديل
+  const CreatePostBottomSheet({super.key, this.article});
   @override
   State<CreatePostBottomSheet> createState() => _CreatePostBottomSheetState();
 }

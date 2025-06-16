@@ -45,6 +45,7 @@ class LoginCubit extends Cubit<LoginState> {
 
       await StorageHelper.saveToken(response['token']);
       await StorageHelper.saveUserType(role == UserRole.doctor ? 'doctor' : 'patient');
+      await StorageHelper.saveUserId(user.id);
       emit(state.copyWith(isLoading : false,successMessage: "تم تسجيل الدخول بنجاح" ,route: route));
 
     }  catch (e) {

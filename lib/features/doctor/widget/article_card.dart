@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shaty/core/extensions/localization_extension.dart';
 import 'package:shaty/features/doctor/data/models/article_model.dart';
 import 'package:shaty/features/shared/cubit/is_saved_cubit.dart';
 import '../../../../shared/common/post_details_screen.dart';
+import '../../../shared/widgets/show_alert_Dialog.dart';
 import '../cubit/article_cubit.dart';
+import '../cubit/doctor_profile_cubit.dart';
+import '../cubit/doctor_profile_state.dart';
 
 class ArticleCard extends StatelessWidget {
   final ArticleModel article;
@@ -13,38 +17,56 @@ class ArticleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Colors.grey[50],
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Colors.grey.shade300),
+          color: Colors.white.withOpacity(0.95), // خلفية بيضاء شفافة قليلاً
+          borderRadius: BorderRadius.circular(20), // زوايا أكثر دائرية لنعومة التصميم
+          boxShadow: [
+            // ظل ناعم لإضافة عمق للكارد
+            BoxShadow(
+              color: Colors.black.withOpacity(0.08),
+              offset: const Offset(0, 4),
+              blurRadius: 12,
+              spreadRadius: 1,
+            ),
+          ],
+          border: Border.all(color: Colors.grey.shade200), // إطار فاتح جداً
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildHeader(),
-            const SizedBox(height: 12),
-            Text(article.subject, style: const TextStyle(fontSize: 16)),
+            _buildHeader(context),
+            const SizedBox(height: 14),
+            Text(
+              article.subject,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: Colors.black87,
+                height: 1.3,
+              ),
+            ),
             if (article.img != null) ...[
-              const SizedBox(height: 12),
+              const SizedBox(height: 14),
               ClipRRect(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(16),
                 child: Image.network(
                   article.img!,
                   width: double.infinity,
+                  height: 200,
                   fit: BoxFit.cover,
                   errorBuilder: (_, __, ___) => Container(
                     height: 200,
-                    color: Colors.grey[300],
+                    color: Colors.grey.shade300,
                     alignment: Alignment.center,
-                    child: const Icon(Icons.broken_image, size: 48),
+                    child: const Icon(Icons.broken_image, size: 48, color: Colors.grey),
                   ),
                 ),
               ),
             ],
-            const SizedBox(height: 16),
+            const SizedBox(height: 18),
             _buildActions(context),
           ],
         ),
@@ -52,58 +74,91 @@ class ArticleCard extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(BuildContext context) {
     return Row(
       children: [
         const CircleAvatar(
-          radius: 24,
+          radius: 26,
           backgroundImage: AssetImage('images/doctor.png'),
+          backgroundColor: Colors.transparent,
         ),
-        const SizedBox(width: 10),
+        const SizedBox(width: 14),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(article.doctor.name, style: const TextStyle(fontWeight: FontWeight.bold)),
-              const SizedBox(height: 4),
-              Text(article.doctor.email, style: TextStyle(color: Colors.grey[600])),
+              Text(
+                article.doctor.name,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  color: Colors.black87,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                article.doctor.email,
+                style: TextStyle(
+                  color: Colors.grey[600],
+                  fontSize: 13,
+                ),
+              ),
             ],
           ),
         ),
-        PopupMenuButton<String>(
-          onSelected: (value) {
-            if (value == 'edit') {
-              // TODO: تنفيذ التعديل
-            } else if (value == 'delete') {
-              // TODO: تنفيذ الحذف
+        BlocBuilder<DoctorProfileCubit, DoctorProfileState>(
+          builder: (context, state) {
+            final currentDoctorId = state.doctor?.id;
+
+            if (currentDoctorId != null && currentDoctorId == article.doctor.id) {
+              return PopupMenuButton<String>(
+                onSelected: (value) {
+                  if (value == 'edit') {
+                    // TODO: تنفيذ التعديل
+                  } else if (value == 'delete') {
+                    showDialog(
+                      context: context,
+                      builder: (context) => ShowAlertDialog(
+                        title: context.loc.delete,
+                        action: context.loc.delete,
+                        onConfirmed: () {
+                          context.read<ArticleCubit>().deleteArticle(article.id);
+                          Navigator.pop(context);
+                        },
+                      ),
+                    );
+                  }
+                },
+                itemBuilder: (context) => const [
+                  PopupMenuItem(value: 'edit', child: Text('تعديل')),
+                  PopupMenuItem(value: 'delete', child: Text('حذف')),
+                ],
+                icon: const Icon(Icons.more_horiz, color: Colors.grey),
+              );
+            } else {
+              return const SizedBox();
             }
           },
-          itemBuilder: (context) => const [
-            PopupMenuItem(value: 'edit', child: Text('تعديل')),
-            PopupMenuItem(value: 'delete', child: Text('حذف')),
-          ],
-          icon: const Icon(Icons.more_horiz),
         ),
       ],
     );
   }
 
-
   Widget _buildActions(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         _PostAction(
-            icon: article.articleInfo.isLiked ? Icons.favorite : Icons.favorite_border,
-            label: '${article.articleInfo.numLikes}',
-            iconColor: article.articleInfo.isLiked ? Colors.red : Colors.grey[700],
-            onPressed: () {
-              context.read<ArticleCubit>().likeArticle(article.id);
-            },
+          icon: article.articleInfo.isLiked ? Icons.favorite : Icons.favorite_border,
+          label: '${article.articleInfo.numLikes}',
+          iconColor: article.articleInfo.isLiked ? Colors.red : Colors.grey[700],
+          onPressed: () {
+            context.read<ArticleCubit>().likeArticle(article.id);
+          },
         ),
         _PostAction(
           icon: Icons.comment_outlined,
-          label: '${article.articleInfo.numComments} ',
+          label: '${article.articleInfo.numComments}',
           onPressed: () {
             Navigator.push(
               context,
@@ -116,21 +171,25 @@ class ArticleCard extends StatelessWidget {
             );
           },
         ),
-        _PostAction(icon: Icons.share_outlined, label: '', onPressed: () {}),
+        _PostAction(
+          icon: Icons.share_outlined,
+          label: '',
+          onPressed: () {
+            // TODO: إضافة وظيفة المشاركة
+          },
+        ),
         _PostAction(
           icon: article.articleInfo.isSaved ? Icons.bookmark : Icons.bookmark_border,
           label: '',
           onPressed: () {
-            // TODO: تنفيذ الحفظ
             context.read<IsSavedCubit>().toggleSaveArticle(article.id);
-
           },
         ),
       ],
     );
   }
-
 }
+
 class _PostAction extends StatelessWidget {
   final IconData icon;
   final String label;
@@ -147,15 +206,20 @@ class _PostAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      borderRadius: BorderRadius.circular(20),
       onTap: onPressed,
-      child: Row(
-        children: [
-          Icon(icon, size: 22, color: iconColor ?? Colors.grey[700]),
-          const SizedBox(width: 6),
-          Text(label, style: TextStyle(color: Colors.grey[700])),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        child: Row(
+          children: [
+            Icon(icon, size: 24, color: iconColor ?? Colors.grey[700]),
+            if (label.isNotEmpty) ...[
+              const SizedBox(width: 8),
+              Text(label, style: TextStyle(color: Colors.grey[700], fontWeight: FontWeight.w500)),
+            ],
+          ],
+        ),
       ),
     );
   }
 }
-
