@@ -67,11 +67,22 @@ class ArticleRepository {
   }
 
 
+  // Future<void> deleteArticles(int id) async {
+  //   await api.delete(
+  //     EndPoints.deleteArticle('$id'),
+  //   );
+  // }
+
   Future<void> deleteArticles(int id) async {
-    await api.delete(
+    final response = await api.delete(
       EndPoints.deleteArticle('$id'),
     );
+
+    if (response.toString().toLowerCase().contains('deleted') == false) {
+      throw Exception('فشل في الحذف');
+    }
   }
+
 
   Future<ArticleModel> updateArticle({
     required String id,

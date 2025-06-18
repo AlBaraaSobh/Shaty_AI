@@ -121,22 +121,72 @@ class ArticleCubit extends Cubit<ArticleState>{
     }
   }
 
-  Future<void> deleteArticle(int id) async  {
-    emit(state.copyWith(isLoading: true));
-    try{
-      await articleRepository.deleteArticles(id);
-      emit(state.copyWith(isLoading: false,successMessage: 'تم الحذف بنجاح'));
-      getPaginatedArticles(1);
-    }catch (e){
-      final message = ErrorHandler.handle(e);
-      emit(state.copyWith(isLoading: false, failureMessage: message));
-    }
 
+  // Future<void> deleteArticle(int id) async  {
+  //   emit(state.copyWith(isLoading: true));
+  //   try{
+  //     await articleRepository.deleteArticles(id);
+  //     emit(state.copyWith(isLoading: false,successMessage: 'تم الحذف بنجاح'));
+  //     await getPaginatedArticles(1);
+  //   }catch (e){
+  //     final message = ErrorHandler.handle(e);
+  //     emit(state.copyWith(isLoading: false, failureMessage: message));
+  //   }
+  //
+  // }
+
+  Future<void> deleteArticle(int id) async {
+    emit(state.copyWith(isLoading: true, failureMessage: null, successMessage: null));
+    try {
+      await articleRepository.deleteArticles(id);  // طلب الحذف من API
+
+      // حذف المقال محلياً من القائمة
+      final updatedArticles = state.articles.where((article) => article.id != id).toList();
+
+      emit(state.copyWith(
+        isLoading: false,
+        articles: updatedArticles,
+        successMessage: 'تم حذف المقال بنجاح',
+      ));
+    } catch (e) {
+      final errorMsg = 'حدث خطأ أثناء الحذف';  // أو استخرج رسالة الخطأ بطريقة مناسبة
+      emit(state.copyWith(isLoading: false, failureMessage: errorMsg));
+    }
   }
+
+
 
 
   void clearMessages() {
     emit(state.copyWith(successMessage: null, failureMessage: null));
+  }
+//comment
+  void incrementCommentCount(int articleId) {
+    final updatedArticles = state.articles.map((article) {
+      if (article.id == articleId) {
+        final updatedInfo = article.articleInfo.copyWith(
+          numComments: article.articleInfo.numComments + 1,
+        );
+        return article.copyWith(articleInfo: updatedInfo);
+      }
+      return article;
+    }).toList();
+
+    emit(state.copyWith(articles: updatedArticles));
+  }
+//saved
+  void toggleLocalSaveStatus(int articleId) {
+    final updatedArticles = state.articles.map((article) {
+      if (article.id == articleId) {
+        final updatedInfo = article.articleInfo.copyWith(
+          isSaved: !article.articleInfo.isSaved,
+        );
+        return article.copyWith(articleInfo: updatedInfo);
+      }
+      return article;
+    }).toList();
+
+    emit(state.copyWith(articles: updatedArticles));
   }
 
 

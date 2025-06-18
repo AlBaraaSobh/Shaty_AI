@@ -119,7 +119,7 @@ class ArticleCard extends StatelessWidget {
                     showDialog(
                       context: context,
                       builder: (context) => ShowAlertDialog(
-                        title: context.loc.delete,
+                        title: 'هل أنت متأكد من الحذف؟',
                         action: context.loc.delete,
                         onConfirmed: () {
                           context.read<ArticleCubit>().deleteArticle(article.id);
@@ -181,8 +181,13 @@ class ArticleCard extends StatelessWidget {
         _PostAction(
           icon: article.articleInfo.isSaved ? Icons.bookmark : Icons.bookmark_border,
           label: '',
-          onPressed: () {
-            context.read<IsSavedCubit>().toggleSaveArticle(article.id);
+          onPressed: (){
+          //  context.read<IsSavedCubit>().toggleSaveArticle(article.id);
+            final isSavedCubit = context.read<IsSavedCubit>();
+            final articleCubit = context.read<ArticleCubit>();
+
+             isSavedCubit.toggleSaveArticle(article.id);
+            articleCubit.toggleLocalSaveStatus(article.id);
           },
         ),
       ],

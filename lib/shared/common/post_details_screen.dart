@@ -4,6 +4,7 @@ import 'package:timeago/timeago.dart' as timeago;
 
 import '../../../core/constants/app_colors.dart';
 import '../../core/utils/helpers/helpers.dart';
+import '../../features/doctor/cubit/article_cubit.dart';
 import '../../features/doctor/cubit/comment_cubit.dart';
 import '../../features/doctor/cubit/comment_state.dart';
 import '../widgets/show_alert_Dialog.dart';
@@ -45,14 +46,34 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
     super.dispose();
   }
 
-  void _addOrUpdateComment() {
+  // void _addOrUpdateComment() {
+  //   final text = _commentController.text.trim();
+  //   if (text.isEmpty) return;
+  //
+  //   final cubit = context.read<CommentCubit>();
+  //
+  //   if (_editingCommentId == null) {
+  //     cubit.addComment(widget.articleId.toString(), text);
+  //   } else {
+  //     // TODO: تنفيذ منطق التعديل من الكيوبت
+  //     // cubit.updateComment(_editingCommentId!, text);
+  //   }
+  //
+  //   _commentController.clear();
+  //   _editingCommentId = null;
+  //   setState(() {}); // لتحديث حالة الزر والنص
+  // }
+
+  void _addOrUpdateComment() async {
     final text = _commentController.text.trim();
     if (text.isEmpty) return;
 
     final cubit = context.read<CommentCubit>();
+    final articleCubit = context.read<ArticleCubit>();
 
     if (_editingCommentId == null) {
-      cubit.addComment(widget.articleId.toString(), text);
+      await cubit.addComment(widget.articleId.toString(), text);
+      articleCubit.incrementCommentCount(widget.articleId); // ⭐️ تحديث العداد
     } else {
       // TODO: تنفيذ منطق التعديل من الكيوبت
       // cubit.updateComment(_editingCommentId!, text);
@@ -60,8 +81,9 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
 
     _commentController.clear();
     _editingCommentId = null;
-    setState(() {}); // لتحديث حالة الزر والنص
+    setState(() {});
   }
+
 
   void _startEdit(int commentId, String oldText) {
     _commentController.text = oldText;
@@ -88,7 +110,8 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
             width: double.infinity,
             padding: const EdgeInsets.all(16),
             color: AppColors.primaryColor.withOpacity(0.1),
-            child: Text(widget.postContent, style: const TextStyle(fontSize: 18)),
+            child:
+                Text(widget.postContent, style: const TextStyle(fontSize: 18)),
           ),
           const Divider(),
 
@@ -109,14 +132,17 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                   separatorBuilder: (_, __) => const Divider(),
                   itemBuilder: (context, index) {
                     final comment = state.comments[index];
-                    final timeAgo = timeago.format(DateTime.parse(comment.createdAt), locale: 'ar');
+                    final timeAgo = timeago.format(
+                        DateTime.parse(comment.createdAt),
+                        locale: 'ar');
 
                     return ListTile(
-                      leading:  CircleAvatar(
+                      leading: CircleAvatar(
                         backgroundColor: Colors.grey[200],
                         backgroundImage: comment.user.img != null
                             ? NetworkImage(comment.user.img!)
-                            : const AssetImage('images/doctor.png') as ImageProvider,
+                            : const AssetImage('images/doctor.png')
+                                as ImageProvider,
                       ),
                       title: Text(comment.user.name),
                       subtitle: Column(
@@ -126,7 +152,8 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                           const SizedBox(height: 4),
                           Text(
                             timeAgo,
-                            style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                            style: TextStyle(
+                                fontSize: 12, color: Colors.grey[600]),
                           ),
                         ],
                       ),
@@ -135,13 +162,12 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                           if (value == 'edit') {
                             _startEdit(comment.id, comment.comment);
                           } else if (value == 'delete') {
-
                             showDialog(
                               context: context,
                               builder: (context) => ShowAlertDialog(
                                 title: 'هل تريد حذف التعليق؟',
                                 action: 'حذف',
-                                onConfirmed: (){
+                                onConfirmed: () {
                                   Navigator.of(context).pop();
                                   context.read<CommentCubit>().deleteComment(
                                       comment.id.toString(),
@@ -149,12 +175,13 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                                 },
                               ),
                             );
-
                           }
                         },
                         itemBuilder: (context) => [
-                          const PopupMenuItem(value: 'edit', child: Text('تعديل')),
-                          const PopupMenuItem(value: 'delete', child: Text('حذف')),
+                          const PopupMenuItem(
+                              value: 'edit', child: Text('تعديل')),
+                          const PopupMenuItem(
+                              value: 'delete', child: Text('حذف')),
                         ],
                       ),
                     );
