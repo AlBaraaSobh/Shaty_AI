@@ -1,5 +1,5 @@
 
-import 'package:shaty/features/auth/models/patient_model.dart';
+import 'package:shaty/features/auth/data/models/patient_model.dart';
 
 class PatientResponseModel {
   final PatientModel user;

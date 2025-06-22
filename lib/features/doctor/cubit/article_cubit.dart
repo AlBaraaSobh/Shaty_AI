@@ -9,40 +9,45 @@ import '../../../core/utils/helpers/helpers.dart';
 import '../../../core/utils/helpers/storage_helper.dart';
 import '../data/models/article_model.dart';
 
-class ArticleCubit extends Cubit<ArticleState>{
+class ArticleCubit extends Cubit<ArticleState> {
   final ArticleRepository articleRepository;
   int? userId;
 
   ArticleCubit(this.articleRepository) : super(ArticleState.initial());
 
   Future<void> createArticle(
-      {required String title,
-        required String subject ,
-        File ?img }) async {
-
-    emit(state.copyWith(isLoading: true, failureMessage: null, successMessage: null));
+      {required String title, required String subject, File? img}) async {
+    emit(state.copyWith(
+        isLoading: true, failureMessage: null, successMessage: null));
     try {
-      final ArticleModel newArticle = await articleRepository.createArticles(title, subject,img);
-    //  await getArticles();
+      final ArticleModel newArticle =
+          await articleRepository.createArticles(title, subject, img);
+      //  await getArticles();
       emit(state.copyWith(
-          isLoading: false, successMessage: 'تمت إضافة المنشور بنجاح',articles: [newArticle, ...state.articles]));//خلي أول عنصر هو المقال الجديد، ثم أضف باقي المقالات تحته
+          isLoading: false,
+          successMessage: 'تمت إضافة المنشور بنجاح',
+          articles: [
+            newArticle,
+            ...state.articles
+          ])); //خلي أول عنصر هو المقال الجديد، ثم أضف باقي المقالات تحته
     } catch (e) {
       final message = ErrorHandler.handle(e);
       emit(state.copyWith(isLoading: false, failureMessage: message));
     }
   }
 
-
   Future<void> getPaginatedArticles(int page) async {
     emit(state.copyWith(
         isLoading: true, failureMessage: null, successMessage: null));
     try {
       userId = await StorageHelper.getUserId();
-      final paginatedResponse = await articleRepository.fetchPaginatedArticles(page: page);
+      final paginatedResponse =
+          await articleRepository.fetchPaginatedArticles(page: page);
       final articlesList = paginatedResponse.data;
       print('articlesList***************** ${articlesList}');
       for (var article in articlesList) {
-        print('📄 مقال: id=${article.id}, isLiked=${article.articleInfo.isLiked}, likes=${article.articleInfo.numLikes}');
+        print(
+            '📄 مقال: id=${article.id}, isLiked=${article.articleInfo.isLiked}, likes=${article.articleInfo.numLikes}');
       }
 
       if (articlesList.isEmpty) {
@@ -57,11 +62,10 @@ class ArticleCubit extends Cubit<ArticleState>{
         } else {
           // صفحات لاحقة = انتهت المقالات
           emit(state.copyWith(
-            isLoading: false,
-            articles: state.articles, // لا تغير القائمة
-            lastPage: paginatedResponse.lastPage,
-            successMessage: 'انتهت المقالات'
-          ));
+              isLoading: false,
+              articles: state.articles, // لا تغير القائمة
+              lastPage: paginatedResponse.lastPage,
+              successMessage: 'انتهت المقالات'));
         }
         return;
       } else {
@@ -86,8 +90,10 @@ class ArticleCubit extends Cubit<ArticleState>{
   Future<void> likeArticle(int articleId) async {
     print('🔄 بدء عملية الإعجاب للمقال: $articleId');
 
-    final currentArticle = state.articles.firstWhere((article) => article.id == articleId);
-    print('📊 حالة المقال الحالية - مُعجب: ${currentArticle.articleInfo.isLiked}, عدد الإعجابات: ${currentArticle.articleInfo.numLikes}');
+    final currentArticle =
+        state.articles.firstWhere((article) => article.id == articleId);
+    print(
+        '📊 حالة المقال الحالية - مُعجب: ${currentArticle.articleInfo.isLiked}, عدد الإعجابات: ${currentArticle.articleInfo.numLikes}');
 
     try {
       final isLikedNow = await articleRepository.likeArticle(articleId);
@@ -113,14 +119,12 @@ class ArticleCubit extends Cubit<ArticleState>{
 
       emit(state.copyWith(articles: updatedArticles));
       print('✅ تم تحديث الحالة بنجاح');
-
     } catch (e) {
       print('⚠️ حدث خطأ أثناء تحديث الحالة: $e');
       final message = ErrorHandler.handle(e);
       emit(state.copyWith(failureMessage: message));
     }
   }
-
 
   // Future<void> deleteArticle(int id) async  {
   //   emit(state.copyWith(isLoading: true));
@@ -136,12 +140,14 @@ class ArticleCubit extends Cubit<ArticleState>{
   // }
 
   Future<void> deleteArticle(int id) async {
-    emit(state.copyWith(isLoading: true, failureMessage: null, successMessage: null));
+    emit(state.copyWith(
+        isLoading: true, failureMessage: null, successMessage: null));
     try {
-      await articleRepository.deleteArticles(id);  // طلب الحذف من API
+      await articleRepository.deleteArticles(id); // طلب الحذف من API
 
       // حذف المقال محلياً من القائمة
-      final updatedArticles = state.articles.where((article) => article.id != id).toList();
+      final updatedArticles =
+          state.articles.where((article) => article.id != id).toList();
 
       emit(state.copyWith(
         isLoading: false,
@@ -149,17 +155,16 @@ class ArticleCubit extends Cubit<ArticleState>{
         successMessage: 'تم حذف المقال بنجاح',
       ));
     } catch (e) {
-      final errorMsg = 'حدث خطأ أثناء الحذف';  // أو استخرج رسالة الخطأ بطريقة مناسبة
+      final errorMsg =
+          'حدث خطأ أثناء الحذف'; // أو استخرج رسالة الخطأ بطريقة مناسبة
       emit(state.copyWith(isLoading: false, failureMessage: errorMsg));
     }
   }
 
-
-
-
   void clearMessages() {
     emit(state.copyWith(successMessage: null, failureMessage: null));
   }
+
 //comment
   void incrementCommentCount(int articleId) {
     final updatedArticles = state.articles.map((article) {
@@ -174,6 +179,7 @@ class ArticleCubit extends Cubit<ArticleState>{
 
     emit(state.copyWith(articles: updatedArticles));
   }
+
 //saved
   void toggleLocalSaveStatus(int articleId) {
     final updatedArticles = state.articles.map((article) {
@@ -188,8 +194,4 @@ class ArticleCubit extends Cubit<ArticleState>{
 
     emit(state.copyWith(articles: updatedArticles));
   }
-
-
 }
-
-

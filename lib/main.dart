@@ -6,6 +6,9 @@ import 'package:shaty/core/network/api_consumer.dart';
 import 'package:shaty/core/network/dio_consumer.dart';
 import 'package:shaty/features/auth/cubit/login_cubit.dart';
 import 'package:shaty/features/auth/cubit/patient_register_cubit.dart';
+import 'package:shaty/features/auth/data/repositories/doctor_register_repository.dart';
+import 'package:shaty/features/auth/data/repositories/login_repository.dart';
+import 'package:shaty/features/auth/data/repositories/patient_register_repository.dart';
 import 'package:shaty/features/auth/screen/change_password_screen.dart';
 import 'package:shaty/features/auth/screen/login_screen.dart';
 import 'package:shaty/features/auth/screen/rest_password_screen.dart';
@@ -40,9 +43,9 @@ void main() async {
   final token = await StorageHelper.getToken();
   final userType = await StorageHelper.getUserType();
   runApp(MultiBlocProvider(providers: [
-    BlocProvider(create: (_) => PatientRegisterCubit(api)),
-    BlocProvider(create: (_) => DoctorRegisterCubit(api)),
-    BlocProvider(create: (_) => LoginCubit(api)),
+    BlocProvider(create: (_) => PatientRegisterCubit(PatientRegisterRepository(api))),
+    BlocProvider(create: (_) => DoctorRegisterCubit(DoctorRegisterRepository(api))),
+    BlocProvider(create: (_) => LoginCubit(LoginRepository(api))),
     BlocProvider(create: (_) => TipsCubit(TipsRepository(api))),
     BlocProvider(create: (_) => ArticleCubit(ArticleRepository(api))),
     BlocProvider(create: (_) => CommentCubit(CommentRepository(api))),

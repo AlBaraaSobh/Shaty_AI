@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shaty/core/extensions/localization_extension.dart';
+import 'package:shaty/core/utils/helpers/helpers.dart';
 import 'package:shaty/features/doctor/data/models/article_model.dart';
 import 'package:shaty/features/shared/cubit/is_saved_cubit.dart';
 import '../../../../shared/common/post_details_screen.dart';
@@ -175,7 +176,11 @@ class ArticleCard extends StatelessWidget {
           icon: Icons.share_outlined,
           label: '',
           onPressed: () {
-            // TODO: إضافة وظيفة المشاركة
+            Helpers.shareTextAndImage(
+              context: context,
+              text: article.subject,
+              imageUrl: article.img,
+            );
           },
         ),
         _PostAction(

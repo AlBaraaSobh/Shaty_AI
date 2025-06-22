@@ -1,5 +1,9 @@
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shaty/core/constants/app_colors.dart';
 import 'package:shaty/core/utils/helpers/storage_helper.dart';
 
@@ -83,6 +87,42 @@ class Helpers {
       builder: (context) => CreateTipsBottomSheet(initialTip: initialTip, tipId: tipId),
 
     );
+  }
+
+  //
+
+  static Future<void> shareTextAndImage({
+    required BuildContext context,
+    required String text,
+    String? imageUrl,
+  }) async {
+    try {
+      if (imageUrl != null && imageUrl.isNotEmpty) {
+        final dio = Dio();
+        final response = await dio.get<List<int>>(
+          imageUrl,
+          options: Options(responseType: ResponseType.bytes),
+        );
+
+        final tempDir = await getTemporaryDirectory();
+        final file = File('${tempDir.path}/shared_image.jpg');
+        await file.writeAsBytes(response.data!);
+
+        await Share.shareXFiles(
+          [XFile(file.path)],
+          text: text,
+        );
+      } else {
+        await Share.share(text);
+      }
+    } catch (e, stackTrace) {
+      print('❌ خطأ المشاركة: $e');
+      print('📄 StackTrace: $stackTrace');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('❌ حدث خطأ أثناء المشاركة')),
+      );
+    }
+
   }
 
 

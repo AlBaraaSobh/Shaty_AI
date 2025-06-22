@@ -13,8 +13,9 @@ import '../../../shared/widgets/patient_sign_in.dart';
 import '../../../shared/widgets/primary_button .dart';
 import '../../../shared/widgets/toggle_user_role.dart';
 import '../cubit/patient_register_state.dart';
-import '../models/doctor_register_model.dart';
-import '../models/patient_register_model .dart';
+import '../data/models/doctor_register_model.dart';
+import '../data/models/patient_register_model .dart';
+
 
 
 class SignInScreen extends StatefulWidget {
@@ -45,8 +46,8 @@ class _SignInScreenState extends State<SignInScreen> {
             if (state.isLoading) {
               Helpers.handleLoading(context);
             } else if (state.successMessage !=null) {
-              Helpers.handleSuccess(
-                  context, state.successMessage!, route: '/patient_bottom_nav_bar');
+              Helpers.handleSuccess(context, state.successMessage!, route: '/login');
+
             } else if (state.failureMessage!=null) {
               Helpers.handleFailure(context, state.failureMessage!);
             }
@@ -57,7 +58,7 @@ class _SignInScreenState extends State<SignInScreen> {
             if (state.isLoading) {
               Helpers.handleLoading(context);
             } else if (state.successMessage !=null) {
-              Helpers.handleSuccess(context, state.successMessage!, route: '/bottom_navigation_screen');
+              Helpers.handleSuccess(context, state.successMessage!, route: '/login');
             } else if (state.failureMessage!=null) {
               Helpers.handleFailure(context, state.failureMessage!);
             }
