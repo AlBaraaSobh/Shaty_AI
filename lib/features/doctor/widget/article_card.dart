@@ -10,6 +10,7 @@ import '../cubit/article_cubit.dart';
 import '../cubit/doctor_profile_cubit.dart';
 import '../cubit/doctor_profile_state.dart';
 import '../screen/doctor_profile_screen.dart';
+import 'create_post_bottom_sheet.dart';
 
 class ArticleCard extends StatelessWidget {
   final ArticleModel article;
@@ -123,7 +124,15 @@ class ArticleCard extends StatelessWidget {
               return PopupMenuButton<String>(
                 onSelected: (value) {
                   if (value == 'edit') {
-                    // TODO: تنفيذ التعديل
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+                      ),
+                      builder: (_) => CreatePostBottomSheet(article: article),
+                    );
+
                   } else if (value == 'delete') {
                     showDialog(
                       context: context,

@@ -83,8 +83,7 @@ class ArticleRepository {
     }
   }
 
-
-  Future<ArticleModel> updateArticle({
+  Future<void> updateArticle({
     required String id,
     required String title,
     required String subject,
@@ -99,13 +98,48 @@ class ArticleRepository {
           filename: image.path.split('/').last,
         ),
     });
+
     final response = await api.post(
       EndPoints.updateArticle(id),
       data: formData,
     );
 
-    return ArticleModel.fromJson(response['data']);
+    if (response is String && response.toLowerCase().contains('updated')) {
+      return; // ✅ نجحنا، فقط رجعنا بدون خطأ
+    }
+
+    throw Exception('فشل في التعديل');
   }
+
+  // Future<ArticleModel> updateArticle({
+  //   required String id,
+  //   required String title,
+  //   required String subject,
+  //   File? image,
+  // }) async {
+  //   final formData = FormData.fromMap({
+  //     'title': title,
+  //     'subject': subject,
+  //     if (image != null)
+  //       'img': await MultipartFile.fromFile(
+  //         image.path,
+  //         filename: image.path.split('/').last,
+  //       ),
+  //   });
+  //   final response = await api.post(
+  //     EndPoints.updateArticle(id),
+  //     data: formData,
+  //   );
+  //
+  //   if (response is String) {
+  //     // فقط رسالة نجاح - لا ترجع ArticleModel
+  //     return Future.error('تم التعديل بنجاح ولكن لم يتم إرجاع بيانات المقال');
+  //   } else if (response is Map<String, dynamic> && response.containsKey('data')) {
+  //     return ArticleModel.fromJson(response['data']);
+  //   } else {
+  //     throw Exception('استجابة غير متوقعة من الخادم');
+  //   }
+  // }
 
 
 

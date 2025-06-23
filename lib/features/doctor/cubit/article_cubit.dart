@@ -126,18 +126,6 @@ class ArticleCubit extends Cubit<ArticleState> {
     }
   }
 
-  // Future<void> deleteArticle(int id) async  {
-  //   emit(state.copyWith(isLoading: true));
-  //   try{
-  //     await articleRepository.deleteArticles(id);
-  //     emit(state.copyWith(isLoading: false,successMessage: 'تم الحذف بنجاح'));
-  //     await getPaginatedArticles(1);
-  //   }catch (e){
-  //     final message = ErrorHandler.handle(e);
-  //     emit(state.copyWith(isLoading: false, failureMessage: message));
-  //   }
-  //
-  // }
 
   Future<void> deleteArticle(int id) async {
     emit(state.copyWith(
@@ -160,6 +148,84 @@ class ArticleCubit extends Cubit<ArticleState> {
       emit(state.copyWith(isLoading: false, failureMessage: errorMsg));
     }
   }
+  Future<void> updateArticle({
+    required String id,
+    required String title,
+    required String subject,
+    File? img,
+  }) async {
+    emit(state.copyWith(
+      isLoading: true,
+      failureMessage: null,
+      successMessage: null,
+    ));
+    try {
+      await articleRepository.updateArticle(
+        id: id,
+        title: title,
+        subject: subject,
+        image: img,
+      );
+
+      emit(state.copyWith(
+        isLoading: false,
+        successMessage: 'تم التعديل بنجاح',
+      ));
+
+      // ✅ إعادة تحميل المقالات بعد التعديل
+      await getPaginatedArticles(1);
+    } catch (e) {
+      final message = ErrorHandler.handle(e);
+      emit(state.copyWith(isLoading: false, failureMessage: message));
+    }
+  }
+
+
+  // Future<void> updateArticle({
+  //   required String id,
+  //   required String title,
+  //   required String subject,
+  //   File? img,
+  // }) async {
+  //   emit(state.copyWith(
+  //     isLoading: true,
+  //     failureMessage: null,
+  //     successMessage: null,
+  //   ));
+  //   try {
+  //     final response = await articleRepository.updateArticle(
+  //       id: id,
+  //       title: title,
+  //       subject: subject,
+  //       image: img,
+  //     );
+  //
+  //     // إذا response هو نص (مثلاً "updated successfully")
+  //     if (response is String) {
+  //       emit(state.copyWith(
+  //         isLoading: false,
+  //         successMessage:"تم التعديل بنجاح" ,
+  //       ));
+  //
+  //       // تحديث البيانات بعد التعديل
+  //       await getPaginatedArticles(1);
+  //     } else {
+  //       // لو response هو ArticleModel مثلا
+  //       final updatedArticles = state.articles
+  //           .map((e) => e.id == response.id ? response : e)
+  //           .toList();
+  //       emit(state.copyWith(
+  //         isLoading: false,
+  //         articles: updatedArticles,
+  //         successMessage: 'تم التعديل بنجاح',
+  //       ));
+  //     }
+  //   } catch (e) {
+  //     print('Error in create/update article: $e');
+  //     final message = ErrorHandler.handle(e);
+  //     emit(state.copyWith(isLoading: false, failureMessage: message));
+  //   }
+  // }
 
   void clearMessages() {
     emit(state.copyWith(successMessage: null, failureMessage: null));

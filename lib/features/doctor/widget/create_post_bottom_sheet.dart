@@ -23,6 +23,15 @@ class _CreatePostBottomSheetState extends State<CreatePostBottomSheet> {
   final _subjectController = TextEditingController();
   File? _selectedImage;
 
+  @override
+  void initState() {
+    super.initState();
+    if (widget.article != null) {
+      _titleController.text = widget.article!.title ?? '';
+      _subjectController.text = widget.article!.subject ?? '';
+      // ممكن تخزن الصورة أيضًا إذا كانت محفوظة عندك محليًا
+    }
+  }
 
   @override
   void dispose() {
@@ -35,8 +44,8 @@ class _CreatePostBottomSheetState extends State<CreatePostBottomSheet> {
     return BlocConsumer<ArticleCubit, ArticleState>(
   listener: (context, state) {
     if (state.successMessage != null) {
-      Helpers.showToast(message: state.successMessage!);
       Navigator.of(context).pop(); // إغلاق الـ BottomSheet
+      Helpers.showToast(message: state.successMessage!);
     } else if (state.failureMessage != null) {
       Helpers.showToast(message: state.failureMessage!);
     }
@@ -49,115 +58,134 @@ class _CreatePostBottomSheetState extends State<CreatePostBottomSheet> {
           top: 16,
           bottom: MediaQuery.of(context).viewInsets.bottom + 40,
           ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              Align(
-                alignment: Alignment.centerRight,
-                child: IconButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  icon: const Icon(Icons.arrow_back_ios,size: 20,),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: IconButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    icon: const Icon(Icons.arrow_back_ios,size: 20,),
+                  ),
+                ),
+                Center(
+                  child: Text(
+                      widget.article == null
+                          ? context.loc.create_new_post
+                          : context.loc.edit,
+        
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.secondaryColor,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+        
+            Row(children: [
+              const Icon(Icons.post_add),
+              const SizedBox(width: 12,),
+              Text(
+                'العنوان',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.normal,
+                  color: AppColors.secondaryColor,
                 ),
               ),
-              Center(
-                child: Text(
-                  context.loc.create_new_post,
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.secondaryColor,
-                  ),
+              Spacer(),
+              IconButton(onPressed: (){
+                _pickImage();
+        
+              }, icon: Icon(Icons.image),),
+            ],),
+            TextFormField(
+              controller: _titleController,
+              maxLines: 1,
+              decoration: InputDecoration(
+                hintText: 'ما هو عنوان المنشور',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                contentPadding: const EdgeInsets.all(12),
+              ),
+            ),
+            const SizedBox(height: 12,),
+            Row(children: [
+              const Icon(Icons.post_add),
+              const SizedBox(width: 12,),
+              Text(
+                context.loc.topic,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.normal,
+                  color: AppColors.secondaryColor,
+                ),
+              ),
+        
+            ],),
+            TextFormField(
+              controller: _subjectController,
+              maxLines: 8,
+              decoration: InputDecoration(
+                hintText: 'ماذا تريد أن تشارك؟',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                contentPadding: const EdgeInsets.all(12),
+              ),
+            ),
+            const SizedBox(height: 12),
+            if (_selectedImage != null) ...[
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.file(
+                  _selectedImage!,
+                  height: 150,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
                 ),
               ),
             ],
-          ),
-
-          Row(children: [
-            const Icon(Icons.post_add),
-            const SizedBox(width: 12,),
-            Text(
-              'العنوان',
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.normal,
-                color: AppColors.secondaryColor,
-              ),
-            ),
-            Spacer(),
-            IconButton(onPressed: (){
-              _pickImage();
-
-            }, icon: Icon(Icons.image),),
-          ],),
-          TextFormField(
-            controller: _titleController,
-            maxLines: 1,
-            decoration: InputDecoration(
-              hintText: 'ما هو عنوان المنشور',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              contentPadding: const EdgeInsets.all(12),
-            ),
-          ),
-          const SizedBox(height: 12,),
-          Row(children: [
-            const Icon(Icons.post_add),
-            const SizedBox(width: 12,),
-            Text(
-              context.loc.topic,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.normal,
-                color: AppColors.secondaryColor,
-              ),
-            ),
-
-          ],),
-          TextFormField(
-            controller: _subjectController,
-            maxLines: 8,
-            decoration: InputDecoration(
-              hintText: 'ماذا تريد أن تشارك؟',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              contentPadding: const EdgeInsets.all(12),
-            ),
-          ),
-          const SizedBox(height: 12),
-          if (_selectedImage != null) ...[
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: Image.file(
-                _selectedImage!,
-                height: 150,
-                width: double.infinity,
-                fit: BoxFit.cover,
-              ),
-            ),
-          ],
-          SizedBox(height: 40,),
-          PrimaryButton(
-            label: context.loc.post,
-            onPressed: () {
-              if (!state.isLoading) {
-                _handlePost();
+            SizedBox(height: 40,),
+            PrimaryButton(
+              label: context.loc.post,
+              onPressed: () {
+                if (!state.isLoading) {
+                  _handlePost();
+                }
               }
-            }
-          ),
-          if (state.isLoading) const CircularProgressIndicator(),
-
-
-        ],
+            ),
+            if (state.isLoading) const CircularProgressIndicator(),
+        
+        
+          ],
+        ),
       ),
     );
   },
 );
   }
+  // void _handlePost() {
+  //   final title = _titleController.text.trim();
+  //   final subject = _subjectController.text.trim();
+  //   if (title.isEmpty || subject.isEmpty) {
+  //     Helpers.showToast(message: 'يرجى ملء جميع الحقول');
+  //     return;
+  //   }
+  //
+  //   context.read<ArticleCubit>().createArticle(
+  //     title: title,
+  //     subject: subject,
+  //     img: _selectedImage,
+  //   );
+  // }
   void _handlePost() {
     final title = _titleController.text.trim();
     final subject = _subjectController.text.trim();
@@ -166,12 +194,24 @@ class _CreatePostBottomSheetState extends State<CreatePostBottomSheet> {
       return;
     }
 
-    context.read<ArticleCubit>().createArticle(
-      title: title,
-      subject: subject,
-      img: _selectedImage,
-    );
+    if (widget.article == null) {
+      // إنشاء مقال جديد
+      context.read<ArticleCubit>().createArticle(
+        title: title,
+        subject: subject,
+        img: _selectedImage,
+      );
+    } else {
+      // تعديل مقال موجود
+      context.read<ArticleCubit>().updateArticle(
+        id: widget.article!.id.toString(),
+        title: title,
+        subject: subject,
+        img: _selectedImage, // أرسل null لو ما تغيرت الصورة
+      );
+    }
   }
+
   Future<void> _pickImage() async {
     final picker = ImagePicker();
     final picked = await picker.pickImage(source: ImageSource.gallery);
