@@ -18,14 +18,13 @@ class ProfileStats extends StatelessWidget {
 
         final followersCount = state.followers.length.toString();
         final tipsCount = context.select((TipsCubit cubit) => cubit.state.tips.length);
-        final articlesCount = context.select((ArticleCubit cubit) => cubit.state.articles.length);
-
+        final articlesCount = state.articles.length.toString();
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             _StatItem(label: context.loc.followers, value: followersCount),
             _StatItem(label: context.loc.tips, value: tipsCount.toString()),
-            _StatItem(label: context.loc.articles, value: articlesCount.toString()),
+            _StatItem(label: context.loc.articles, value: articlesCount),
           ],
         );
       },

@@ -6,14 +6,14 @@ class DoctorsModel {
   final String email;
   final String? img;
   final String? bio;
-  final String jopSpecialtyNumber;
+  final String jobSpecialtyNumber;
   final List<SpecialtyModel> specialties;
 
   DoctorsModel({
     required this.id,
     required this.name,
     required this.email,
-    required this.jopSpecialtyNumber,
+    required this.jobSpecialtyNumber,
     this.img,
     this.bio,
     required this.specialties,
@@ -26,10 +26,29 @@ class DoctorsModel {
       email: json['email'],
       img: json['img'],
       bio: json['bio'],
-      jopSpecialtyNumber: json['jop_specialty_number'],
+      jobSpecialtyNumber: json['jop_specialty_number'],
       specialties: (json['specialty'] as List<dynamic>)
           .map((e) => SpecialtyModel.fromJson(e))
           .toList(),
+    );
+  }
+
+  DoctorsModel copyWith({
+    int? id,
+    String? name,
+    String? email,
+    String? bio,
+    String? img,
+    String? jobSpecialtyNumber,
+  }) {
+    return DoctorsModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      email: email ?? this.email,
+      bio: bio ?? this.bio,
+      img: img ?? this.img,
+      jobSpecialtyNumber: jobSpecialtyNumber ?? this.jobSpecialtyNumber,
+      specialties: specialties ?? this.specialties,
     );
   }
 }

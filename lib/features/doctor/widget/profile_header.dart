@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shaty/core/utils/helpers/helpers.dart';
 import 'package:shaty/features/doctor/cubit/doctor_profile_cubit.dart';
 import 'package:shaty/features/doctor/cubit/doctor_profile_state.dart';
 import '../../../core/constants/app_colors.dart';
@@ -42,7 +41,7 @@ class ProfileHeader extends StatelessWidget {
                           color: Colors.white,
                         ),
                         child: IconButton(
-                          onPressed: () {},
+                          onPressed: (){},
                           icon: Icon(
                             Icons.camera_alt,
                             size: 20,
@@ -69,4 +68,5 @@ class ProfileHeader extends StatelessWidget {
       },
     );
   }
+
 }

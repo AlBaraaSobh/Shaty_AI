@@ -58,7 +58,7 @@ class _SignInScreenState extends State<SignInScreen> {
             if (state.isLoading) {
               Helpers.handleLoading(context);
             } else if (state.successMessage !=null) {
-              Helpers.handleSuccess(context, state.successMessage!, route: '/login');
+              Helpers.handleSuccess(context, state.successMessage!, route: '/login_screen');
             } else if (state.failureMessage!=null) {
               Helpers.handleFailure(context, state.failureMessage!);
             }

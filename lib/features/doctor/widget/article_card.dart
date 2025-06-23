@@ -9,12 +9,20 @@ import '../../../shared/widgets/show_alert_Dialog.dart';
 import '../cubit/article_cubit.dart';
 import '../cubit/doctor_profile_cubit.dart';
 import '../cubit/doctor_profile_state.dart';
+import '../screen/doctor_profile_screen.dart';
 
 class ArticleCard extends StatelessWidget {
   final ArticleModel article;
 
   const ArticleCard({super.key, required this.article});
-
+  bool _isInsideDoctorProfileScreen(BuildContext context) {
+    return context.findAncestorWidgetOfExactType<DoctorProfileScreen>() != null;
+  }
+  void _updateDoctorProfileCubitIfNeeded(BuildContext context, ArticleModel updatedArticle) {
+    if (_isInsideDoctorProfileScreen(context)) {
+      context.read<DoctorProfileCubit>().updateSingleArticle(updatedArticle);
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -154,6 +162,15 @@ class ArticleCard extends StatelessWidget {
           label: '${article.articleInfo.numLikes}',
           iconColor: article.articleInfo.isLiked ? Colors.red : Colors.grey[700],
           onPressed: () {
+            //context.read<ArticleCubit>().likeArticle(article.id);
+            final updatedInfo = article.articleInfo.copyWith(
+              isLiked: !article.articleInfo.isLiked,
+              numLikes: article.articleInfo.isLiked
+                  ? article.articleInfo.numLikes - 1
+                  : article.articleInfo.numLikes + 1,
+            );
+            final updatedArticle = article.copyWith(articleInfo: updatedInfo);
+            _updateDoctorProfileCubitIfNeeded(context, updatedArticle);
             context.read<ArticleCubit>().likeArticle(article.id);
           },
         ),
@@ -191,8 +208,9 @@ class ArticleCard extends StatelessWidget {
             final isSavedCubit = context.read<IsSavedCubit>();
             final articleCubit = context.read<ArticleCubit>();
 
-             isSavedCubit.toggleSaveArticle(article.id);
+            isSavedCubit.toggleSaveArticle(article.id);
             articleCubit.toggleLocalSaveStatus(article.id);
+
           },
         ),
       ],

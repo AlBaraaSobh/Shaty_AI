@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../data/models/article_model.dart';
 import 'doctor_profile_state.dart';
 import '../data/repositories/doctor_profile_repository.dart';
 
@@ -104,4 +105,14 @@ class DoctorProfileCubit extends Cubit<DoctorProfileState> {
       emit(state.copyWith(isLoading: false, failureMessage: e.toString()));
     }
   }
+// لتحديث اللايك و التعليق و الحفظ في صفحة البروفايل الخاصةة في الطبيب
+  void updateSingleArticle(ArticleModel updatedArticle) {
+    final updatedArticles = state.articles.map((article) {
+      return article.id == updatedArticle.id ? updatedArticle : article;
+    }).toList();
+
+    emit(state.copyWith(articles: updatedArticles));
+  }
+
+
 }

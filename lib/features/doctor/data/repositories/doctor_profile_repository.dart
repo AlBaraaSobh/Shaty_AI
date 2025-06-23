@@ -1,4 +1,5 @@
 
+import 'package:dio/dio.dart';
 import 'package:shaty/core/network/api_consumer.dart';
 import 'package:shaty/core/network/end_points.dart';
 import '../models/doctors_model.dart';
@@ -54,4 +55,18 @@ class DoctorProfileRepository {
   Future<void> deleteArticle(int id) async {
     await api.delete('${EndPoints.deleteArticle}/$id');
   }
+  Future<String> uploadProfileImage(String filePath) async {
+    final formData = FormData.fromMap({
+      'img': await MultipartFile.fromFile(filePath, filename: 'profile.jpg'),
+    });
+
+    final response = await api.post(
+      EndPoints.updateDoctorImage,
+      data: formData,
+      options: Options(contentType: 'multipart/form-data'),
+    );
+
+    return response['image_url'];
+  }
+
 }
