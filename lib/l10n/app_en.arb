@@ -43,6 +43,7 @@
   "post": "Post",
   "topic": "Topic",
   "add_daily_tips": "Add daily advice",
+  "edit_daily_tips": "Edit daily advice",
   "followers": "Followers",
   "articles": "Articles",
   "tips": "Tips",
@@ -55,7 +56,16 @@
   "logout_title": "Are you sure you want to leave the account?",
   "share": "share",
   "comment": "comment",
-  "like": "like"
+  "like": "like",
+  "title": "title",
+  "hint_title": "What is the title of the post?",
+  "hint_subject": "Write your article here?",
+  "comments": "Comments",
+  "no_comments": "There are no comments yet",
+  "write_comments": "Write your comment here..",
+  "edit_comments": "Edit Comments",
+  "delete_comments": "Do you want to delete your comment?",
+  "cancel": "Cancel"
 
 
 

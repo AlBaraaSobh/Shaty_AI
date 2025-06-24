@@ -147,9 +147,9 @@ class ArticleCard extends StatelessWidget {
                     );
                   }
                 },
-                itemBuilder: (context) => const [
-                  PopupMenuItem(value: 'edit', child: Text('تعديل')),
-                  PopupMenuItem(value: 'delete', child: Text('حذف')),
+                itemBuilder: (context) => [
+                   PopupMenuItem(value: 'edit', child: Text( context.loc.edit, )),
+                  PopupMenuItem(value: 'delete', child: Text(context.loc.delete)),
                 ],
                 icon: const Icon(Icons.more_horiz, color: Colors.grey),
               );

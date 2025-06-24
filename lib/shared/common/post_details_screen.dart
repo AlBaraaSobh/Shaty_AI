@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:timeago/timeago.dart' as timeago;
-
+import 'package:shaty/core/extensions/localization_extension.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../core/utils/helpers/helpers.dart';
 import '../../features/doctor/cubit/article_cubit.dart';
@@ -101,7 +101,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('تفاصيل المنشور'),
+        title: Text(context.loc.comments),
       ),
       body: Column(
         children: [
@@ -124,7 +124,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                 if (state.failureMessage != null)
                   return Center(child: Text(state.failureMessage!));
                 if (state.comments.isEmpty)
-                  return const Center(child: Text('لا توجد تعليقات حتى الآن.'));
+                  return  Center(child: Text(context.loc.no_comments));
 
                 return ListView.separated(
                   padding: const EdgeInsets.all(8),
@@ -165,8 +165,8 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                             showDialog(
                               context: context,
                               builder: (context) => ShowAlertDialog(
-                                title: 'هل تريد حذف التعليق؟',
-                                action: 'حذف',
+                                title: context.loc.delete_comments,
+                                action: context.loc.delete,
                                 onConfirmed: () {
                                   Navigator.of(context).pop();
                                   context.read<CommentCubit>().deleteComment(
@@ -178,10 +178,10 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                           }
                         },
                         itemBuilder: (context) => [
-                          const PopupMenuItem(
-                              value: 'edit', child: Text('تعديل')),
-                          const PopupMenuItem(
-                              value: 'delete', child: Text('حذف')),
+                            PopupMenuItem(
+                              value: 'edit', child: Text(context.loc.edit)),
+                              PopupMenuItem(
+                              value: 'delete', child: Text(context.loc.delete)),
                         ],
                       ),
                     );
@@ -208,8 +208,8 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                       controller: _commentController,
                       decoration: InputDecoration(
                         hintText: _editingCommentId == null
-                            ? 'اكتب تعليقك هنا...'
-                            : 'تعديل التعليق...',
+                            ? context.loc.write_comments
+                            : context.loc.edit_comments,
                         border: InputBorder.none,
                       ),
                     ),

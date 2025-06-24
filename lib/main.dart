@@ -31,9 +31,13 @@ import 'package:shaty/features/shared/screen/saved_article.dart';
 import 'core/utils/helpers/storage_helper.dart';
 import 'features/auth/cubit/doctor_register_cubit.dart';
 import 'features/auth/screen/sign_in_screen.dart';
+import 'features/doctor/data/repositories/notification_repository.dart';
 import 'features/shared/cubit/is_saved_cubit.dart';
 import 'features/shared/data/repositories/saved_repository.dart';
 import 'features/shared/screen/is_saved_repository.dart';
+import 'package:shaty/features/doctor/cubit/notification_cubit.dart';
+
+
 
 
 void main() async {
@@ -51,8 +55,9 @@ void main() async {
     BlocProvider(create: (_) => CommentCubit(CommentRepository(api))),
     BlocProvider(create: (_) => DoctorProfileCubit(DoctorProfileRepository(api))),
     BlocProvider(create: (_) => SavedCubit(SavedRepository(api))),
-    BlocProvider(create: (_) => IsSavedCubit(IsSavedRepository(api)),
-    ),
+    BlocProvider(create: (_) => IsSavedCubit(IsSavedRepository(api))),
+    BlocProvider(create: (_) => NotificationCubit(NotificationRepository(api))),
+
   ], child:  MyApp(
     initialRoute: token == null
         ? '/login_screen'

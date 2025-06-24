@@ -59,7 +59,7 @@ class PatientNotificationsScreen extends StatelessWidget {
                 children:[ NotificationItem(
                     title: item['title'] ?? 'عنوان غير معروف',
                     subTitle: item['subtitle'] ?? 'تفاصيل غير معروفة',
-                    time: item['time'] ?? 'وقت غير معروف'),
+                    time: item['time'] ?? 'وقت غير معروف', type: '',),
                   if (index < notifications.length - 1)
                     const Divider(
                       color: Colors.grey,

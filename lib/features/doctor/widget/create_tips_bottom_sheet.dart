@@ -90,7 +90,7 @@ class _CreateTipsBottomSheetState extends State<CreateTipsBottomSheet> {
               ),
               SizedBox(height: 40,),
               PrimaryButton(
-                label:widget.tipId == null ?context.loc.post : 'تعديل النصيحة',
+                label:widget.tipId == null ?context.loc.post : context.loc.edit_daily_tips,
                 onPressed: () {
                   final text = _tipController.text.trim();
                   if (text.isNotEmpty) {

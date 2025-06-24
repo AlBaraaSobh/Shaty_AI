@@ -92,7 +92,7 @@ class _CreatePostBottomSheetState extends State<CreatePostBottomSheet> {
               const Icon(Icons.post_add),
               const SizedBox(width: 12,),
               Text(
-                'العنوان',
+               context.loc.title,
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.normal,
@@ -109,7 +109,7 @@ class _CreatePostBottomSheetState extends State<CreatePostBottomSheet> {
               controller: _titleController,
               maxLines: 1,
               decoration: InputDecoration(
-                hintText: 'ما هو عنوان المنشور',
+                hintText: context.loc.hint_title ,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -134,7 +134,7 @@ class _CreatePostBottomSheetState extends State<CreatePostBottomSheet> {
               controller: _subjectController,
               maxLines: 8,
               decoration: InputDecoration(
-                hintText: 'ماذا تريد أن تشارك؟',
+                hintText: context.loc.hint_subject,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),

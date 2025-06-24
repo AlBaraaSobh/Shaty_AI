@@ -40,10 +40,11 @@ class PostsSection extends StatelessWidget {
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: Text(
                     context.loc.new_post,
-                    style: const TextStyle(
-                      color: AppColors.secondaryColor,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
+                    style: const  TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.primaryColor,
+                      letterSpacing: 0.5,
                     ),
                   ),
                 );
@@ -74,127 +75,6 @@ class PostsSection extends StatelessWidget {
                 ),
               );
 
-              // return Padding(
-              //   padding:
-              //       const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              //   child: Container(
-              //     padding: const EdgeInsets.all(16),
-              //     decoration: BoxDecoration(
-              //       color: Colors.grey[50],
-              //       borderRadius: BorderRadius.circular(16),
-              //       border: Border.all(color: Colors.grey.shade300),
-              //     ),
-              //     child: Column(
-              //       crossAxisAlignment: CrossAxisAlignment.start,
-              //       children: [
-              //         // Header
-              //         Row(
-              //           children: [
-              //             const CircleAvatar(
-              //               radius: 24,
-              //               backgroundImage: AssetImage('images/doctor.png'),
-              //             ),
-              //             const SizedBox(width: 10),
-              //             Expanded(
-              //               child: Column(
-              //                 crossAxisAlignment: CrossAxisAlignment.start,
-              //                 children: [
-              //                   Text(
-              //                     article.doctor.name,
-              //                     style: const TextStyle(
-              //                         fontWeight: FontWeight.bold),
-              //                   ),
-              //                   const SizedBox(height: 4),
-              //                   Text(
-              //                     article.doctor.email,
-              //                     style: TextStyle(color: Colors.grey[600]),
-              //                   ),
-              //                 ],
-              //               ),
-              //             ),
-              //             IconButton(
-              //               onPressed: () {},
-              //               icon: const Icon(Icons.more_horiz),
-              //             ),
-              //           ],
-              //         ),
-              //
-              //         const SizedBox(height: 12),
-              //
-              //         // Post Text
-              //         Text(article.subject,
-              //             style: const TextStyle(fontSize: 16)),
-              //
-              //         if (article.img != null) ...[
-              //           const SizedBox(height: 12),
-              //           ClipRRect(
-              //             borderRadius: BorderRadius.circular(12),
-              //             child: Image.network(
-              //               article.img!,
-              //               width: double.infinity,
-              //               fit: BoxFit.cover,
-              //               errorBuilder: (context, error, stackTrace) {
-              //                 return Container(
-              //                   height: 200,
-              //                   color: Colors.grey[300],
-              //                   alignment: Alignment.center,
-              //                   child: const Icon(Icons.broken_image, size: 48),
-              //                 );
-              //               },
-              //             ),
-              //           ),
-              //         ],
-              //
-              //         const SizedBox(height: 16),
-              //
-              //         // Action Buttons
-              //         Row(
-              //           mainAxisAlignment: MainAxisAlignment.spaceAround,
-              //           children: [
-              //             PostAction(
-              //               icon: article.articleInfo.isLiked ? Icons.favorite : Icons.favorite_border,
-              //               label: '${article.articleInfo.numLikes}',
-              //               iconColor: article.articleInfo.isLiked ? Colors.red : Colors.grey[700], // ✅ تمرير اللون
-              //               onPressed: () {
-              //                 context.read<ArticleCubit>().likeArticle(article.id);
-              //               },
-              //             ),
-              //
-              //             PostAction(
-              //               icon: Icons.comment_outlined,
-              //               label: '${article.articleInfo.numComments}',//context.loc.comment
-              //               onPressed: () {
-              //                 Navigator.push(
-              //                   context,
-              //                   MaterialPageRoute(
-              //                     builder: (_) => PostDetailsScreen(
-              //                       postContent: article.subject, articleId: article.id,
-              //                     ),
-              //                   ),
-              //                 );
-              //               },
-              //             ),
-              //             PostAction(
-              //               icon: Icons.share_outlined,
-              //               label:'',// context.loc.share
-              //               onPressed: () {
-              //                 // يمكنك استخدام share_plus هنا لاحقًا
-              //               },
-              //             ),
-              //             PostAction(
-              //               icon: Icons.bookmark_border,
-              //               label:'',// context.loc.save
-              //               onPressed: () {
-              //                 //TODO context.read<ArticleCubit>().bookmarkArticle(article.id);
-              //
-              //               },
-              //             ),
-              //           ],
-              //         ),
-              //       ],
-              //     ),
-              //   ),
-              // );
             },
             childCount: articles.length + 1 + (state.isLoading ? 1 : 0), // state.isLoading ? articles.length + 2 : articles.length + 1,
           ),

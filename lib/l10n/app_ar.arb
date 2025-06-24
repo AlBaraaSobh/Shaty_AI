@@ -43,6 +43,8 @@
   "post": "نشر",
   "topic": "الموضوع",
   "add_daily_tips": "اضف النصيحة اليومية",
+  "edit_daily_tips": "تعديل النصيحة اليومية",
+  "delete_daily_tips": "حذف النصيحة",
   "followers": "المتابعون",
   "articles": "المقالات",
   "tips": "النصائح",
@@ -55,7 +57,16 @@
   "logout_title": " هل انت متاكد من انك تريد مغادرة الحساب؟",
   "share": "مشاركة",
   "comment": "تعليق",
-  "like": "اعجاب"
+  "like": "اعجاب",
+  "title": "العنوان",
+  "hint_title": "ما هو عنوان المنشور؟",
+  "hint_subject": "ماذا تريد أن تشارك؟",
+  "comments": "التعليقات",
+  "no_comments": "لا توجد تعليقات حتى الآن",
+  "write_comments": "اكتب تعليقك هنا..",
+  "edit_comments": "تعديل التعليق",
+  "delete_comments": "هل تريد حذف التعليق؟",
+  "cancel": "الغاء"
 
 
 

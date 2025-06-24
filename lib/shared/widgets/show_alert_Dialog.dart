@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shaty/core/constants/app_colors.dart';
+import 'package:shaty/core/extensions/localization_extension.dart';
+
 
 class ShowAlertDialog extends StatelessWidget {
   final String title;
@@ -59,8 +61,8 @@ class ShowAlertDialog extends StatelessWidget {
                     backgroundColor: Colors.grey.shade300,
                     padding: const EdgeInsets.symmetric(vertical: 12),
                   ),
-                  child: const Text(
-                    'إلغاء',
+                  child:  Text(
+                    context.loc.cancel,
                     style: TextStyle(color: Colors.black),
                   ),
                 ),
