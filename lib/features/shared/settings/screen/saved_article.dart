@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/constants/app_colors.dart';
-import '../../doctor/data/models/article_model.dart';
-import '../../doctor/widget/article_card.dart';
+import '../../../../core/constants/app_colors.dart';
+import '../../../doctor/data/models/article_model.dart';
+import '../../../doctor/widget/article_card.dart';
 import '../cubit/saved_cubit.dart';
 import '../cubit/saved_state.dart';
 

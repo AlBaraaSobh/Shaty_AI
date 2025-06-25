@@ -1,4 +1,5 @@
-import '../../doctor/data/models/article_model.dart';
+
+import '../../../doctor/data/models/article_model.dart';
 
 class SavedState {
   final bool isLoading;

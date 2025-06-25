@@ -61,6 +61,8 @@ class ArticleRepository {
       queryParameters: {'page': page},
     );
     print('Paginated Response: $response');
+    print('Response keys: ${response.keys}');
+
 
     return PaginatedArticlesResponse.fromJson(response);
 

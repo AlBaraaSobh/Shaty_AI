@@ -1,6 +1,7 @@
 import 'package:shaty/core/network/end_points.dart';
 
-import '../../../core/network/api_consumer.dart';
+import '../../../../core/network/api_consumer.dart';
+
 
 class IsSavedRepository {
   final ApiConsumer api;

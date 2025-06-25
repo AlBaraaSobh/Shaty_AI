@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shaty/features/doctor/widget/ProfileStats.dart';
 import '../data/models/article_model.dart';
 import 'doctor_profile_state.dart';
 import '../data/repositories/doctor_profile_repository.dart';
@@ -113,6 +114,8 @@ class DoctorProfileCubit extends Cubit<DoctorProfileState> {
 
     emit(state.copyWith(articles: updatedArticles));
   }
-
+  void clear() {
+    emit(DoctorProfileState.initial());
+  }
 
 }

@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:shaty/core/network/api_consumer.dart';
 import 'package:shaty/core/network/dio_consumer.dart';
 import 'package:shaty/features/auth/cubit/login_cubit.dart';
 import 'package:shaty/features/auth/cubit/patient_register_cubit.dart';
@@ -26,16 +25,21 @@ import 'package:shaty/features/doctor/screen/bottom_navigation_screen.dart';
 import 'package:shaty/features/doctor/screen/doctor_home_screen.dart';
 import 'package:shaty/features/doctor/widget/view_tips.dart';
 import 'package:shaty/features/patient/widget/patient_bottom_nav_bar.dart';
-import 'package:shaty/features/shared/cubit/saved_cubit.dart';
-import 'package:shaty/features/shared/screen/saved_article.dart';
+import 'package:shaty/features/shared/settings/cubit/change_password_cubit.dart';
+import 'package:shaty/features/shared/settings/data/repositories/change_password_repository.dart';
+
 import 'core/utils/helpers/storage_helper.dart';
 import 'features/auth/cubit/doctor_register_cubit.dart';
 import 'features/auth/screen/sign_in_screen.dart';
 import 'features/doctor/data/repositories/notification_repository.dart';
-import 'features/shared/cubit/is_saved_cubit.dart';
-import 'features/shared/data/repositories/saved_repository.dart';
-import 'features/shared/screen/is_saved_repository.dart';
+
 import 'package:shaty/features/doctor/cubit/notification_cubit.dart';
+
+import 'features/shared/settings/cubit/is_saved_cubit.dart';
+import 'features/shared/settings/cubit/saved_cubit.dart';
+import 'features/shared/settings/data/repositories/saved_repository.dart';
+import 'features/shared/settings/screen/is_saved_repository.dart';
+import 'features/shared/settings/screen/saved_article.dart';
 
 
 
@@ -57,6 +61,7 @@ void main() async {
     BlocProvider(create: (_) => SavedCubit(SavedRepository(api))),
     BlocProvider(create: (_) => IsSavedCubit(IsSavedRepository(api))),
     BlocProvider(create: (_) => NotificationCubit(NotificationRepository(api))),
+    BlocProvider(create: (_) => ChangePasswordCubit(ChangePasswordRepository(api))),
 
   ], child:  MyApp(
     initialRoute: token == null

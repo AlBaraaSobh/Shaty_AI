@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +7,13 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shaty/core/constants/app_colors.dart';
 import 'package:shaty/core/utils/helpers/storage_helper.dart';
+import 'package:shaty/features/auth/cubit/login_cubit.dart';
+import 'package:shaty/features/doctor/cubit/comment_cubit.dart';
+import 'package:shaty/features/doctor/cubit/doctor_profile_cubit.dart';
+import 'package:shaty/features/doctor/cubit/notification_cubit.dart';
+import 'package:shaty/features/doctor/cubit/tips_cubit.dart';
 
+import '../../../features/doctor/cubit/article_cubit.dart';
 import '../../../features/doctor/widget/create_tips_bottom_sheet.dart';
 
 class Helpers {
@@ -69,6 +76,15 @@ class Helpers {
 
   static Future<void> logout(BuildContext context) async {
     await StorageHelper.clearToken();
+    // تنظيف الكيوبتات
+    context.read<ArticleCubit>().clear();
+    context.read<TipsCubit>().clear();
+    context.read<CommentCubit>().clear();
+    context.read<DoctorProfileCubit>().clear();
+    context.read<NotificationCubit>().clear();
+    context.read<LoginCubit>().clear();
+
+
 
     // إزالة جميع الصفحات السابقة  والانتقال إلى صفحة تسجيل الدخول
     Navigator.of(context).pushNamedAndRemoveUntil(

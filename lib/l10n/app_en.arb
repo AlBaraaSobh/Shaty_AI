@@ -65,7 +65,10 @@
   "write_comments": "Write your comment here..",
   "edit_comments": "Edit Comments",
   "delete_comments": "Do you want to delete your comment?",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "fill_all_fields": "Fill All Fields",
+  "passwords_do_not_match": "Passwords Do Not Match",
+  "current_password": "Current Password"
 
 
 

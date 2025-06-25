@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-
-import '../../../shared/widgets/change_password_form.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shaty/core/utils/helpers/helpers.dart';
+import 'package:shaty/shared/widgets/change_password_form.dart';
+import 'package:shaty/features/shared/settings/cubit/change_password_cubit.dart';
+import 'package:shaty/features/shared/settings/cubit/change_password_state.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   const ChangePasswordScreen({super.key});
@@ -10,104 +13,84 @@ class ChangePasswordScreen extends StatefulWidget {
 }
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
+  late TextEditingController _oldPasswordController;
   late TextEditingController _newPasswordController;
   late TextEditingController _confirmNewPasswordController;
+
   @override
   void initState() {
+    _oldPasswordController = TextEditingController();
     _newPasswordController = TextEditingController();
     _confirmNewPasswordController = TextEditingController();
     super.initState();
   }
+
   @override
   void dispose() {
+    _oldPasswordController.dispose();
     _newPasswordController.dispose();
     _confirmNewPasswordController.dispose();
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-        child: ChangePasswordForm(
-            newPasswordController: _newPasswordController,
-            confirmPasswordController: _confirmNewPasswordController,
-            onConfirm: _handleConfirm),
-      ),
-    );
-  }
-
   void _handleConfirm() {
+    final oldPassword = _oldPasswordController.text.trim();
     final newPassword = _newPasswordController.text.trim();
     final confirmPassword = _confirmNewPasswordController.text.trim();
 
-    if (newPassword.isEmpty || confirmPassword.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('context.loc.fill_all_fields')),
-      );
+    if (oldPassword.isEmpty || newPassword.isEmpty || confirmPassword.isEmpty) {
+      Helpers.showToast(message: 'يرجى تعبئة جميع الحقول');
       return;
     }
 
     if (newPassword != confirmPassword) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('context.loc.passwords_do_not_match')),
-      );
+      Helpers.showToast(message: 'كلمتا المرور غير متطابقتين');
       return;
     }
 
-    // TODO: ربط بـ Cubit
-    print('New password confirmed');
+    if (newPassword.length < 6) {
+      Helpers.showToast(message: 'كلمة المرور يجب أن تكون 6 أحرف على الأقل');
+      return;
+    }
+
+    context.read<ChangePasswordCubit>().changePassword(
+      lastPassword: oldPassword,
+      newPassword: newPassword,
+      confirmPassword: confirmPassword,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("تغيير كلمة المرور")),
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: BlocConsumer<ChangePasswordCubit, ChangePasswordState>(
+          listener: (context, state) {
+            if (state.successMessage != null) {
+              Helpers.showToast(message: state.successMessage!);
+              Navigator.pop(context); // إغلاق الصفحة بعد النجاح
+            } else if (state.failureMessage != null) {
+              Helpers.showToast(message: state.failureMessage!);
+            }
+          },
+          builder: (context, state) {
+            return Stack(
+              children: [
+                ChangePasswordForm(
+                  oldPasswordController: _oldPasswordController,
+                  newPasswordController: _newPasswordController,
+                  confirmPasswordController: _confirmNewPasswordController,
+                  onConfirm: _handleConfirm,
+                ),
+                if (state.isLoading)
+                  const Center(child: CircularProgressIndicator()),
+              ],
+            );
+          },
+        ),
+      ),
+    );
   }
 }
-// child: Column(
-// crossAxisAlignment: CrossAxisAlignment.start,
-// children: [
-// Text(
-// context.loc.new_password,
-// style: TextStyle(
-// color: AppColors.primaryColor, fontWeight: FontWeight.w500,
-// fontSize: 25,
-// ),
-// ),
-// const SizedBox(height: 25,),
-// LabeledTextField(
-// label: context.loc.password,
-// hintText: context.loc.hint_password,
-// controller: _newPasswordController,obscure: true,),
-// const SizedBox(height: 25,),
-// LabeledTextField(
-// label: context.loc.confirm_password,
-// hintText: context.loc.hint_confirm_password,
-// controller: _confirmNewPasswordController,obscure: true,),
-// const SizedBox(height: 40,),
-// PrimaryButton(
-// label: context.loc.confirm_password,
-// onPressed: () {
-// FocusScope.of(context).unfocus();
-// final newPassword = _newPasswordController.text.trim();
-// final confirmPassword =
-// _confirmNewPasswordController.text.trim();
-//
-// if (newPassword.isEmpty || confirmPassword.isEmpty) {
-// ScaffoldMessenger.of(context).showSnackBar(
-// SnackBar(
-// content: Text(
-// 'context.loc.fill_all_fields')),
-// );
-// return;
-// }
-//
-// if (newPassword != confirmPassword) {
-// ScaffoldMessenger.of(context).showSnackBar(
-// SnackBar(
-// content: Text(
-// 'context.loc.passwords_do_not_match')),
-// );
-// return;
-// }
-// print('New password confirmed');
-// }),
-// ],
-// ),

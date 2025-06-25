@@ -47,5 +47,8 @@ class CommentCubit extends Cubit <CommentState> {
   void clearMessages() {
     emit(state.copyWith(successMessage: null, failureMessage: null));
   }
+  void clear() {
+    emit(CommentState.initial());
+  }
 
 }

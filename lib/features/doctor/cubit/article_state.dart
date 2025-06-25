@@ -19,7 +19,6 @@ class ArticleState {
   });
 
   factory ArticleState.initial() => ArticleState();
-
   ArticleState copyWith({
     bool? isLoading,
     String? failureMessage,
@@ -30,12 +29,30 @@ class ArticleState {
   }) {
     return ArticleState(
       isLoading: isLoading ?? this.isLoading,
-      failureMessage: failureMessage,
-      successMessage: successMessage,
+      failureMessage: failureMessage ?? this.failureMessage,
+      successMessage: successMessage ?? this.successMessage,
       articles: articles ?? this.articles,
       createdArticle: createdArticle ?? this.createdArticle,
       lastPage: lastPage ?? this.lastPage,
     );
   }
+
+  // ArticleState copyWith({
+  //   bool? isLoading,
+  //   String? failureMessage,
+  //   String? successMessage,
+  //   List<ArticleModel>? articles,
+  //   ArticleModel? createdArticle,
+  //   int? lastPage,
+  // }) {
+  //   return ArticleState(
+  //     isLoading: isLoading ?? this.isLoading,
+  //     failureMessage: failureMessage,
+  //     successMessage: successMessage,
+  //     articles: articles ?? this.articles,
+  //     createdArticle: createdArticle ?? this.createdArticle,
+  //     lastPage: lastPage ?? this.lastPage,
+  //   );
+  // }
 }
 

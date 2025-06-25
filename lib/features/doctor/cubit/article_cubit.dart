@@ -230,6 +230,10 @@ class ArticleCubit extends Cubit<ArticleState> {
   void clearMessages() {
     emit(state.copyWith(successMessage: null, failureMessage: null));
   }
+  void clear() {
+    emit(ArticleState.initial());
+  }
+
 
 //comment
   void incrementCommentCount(int articleId) {

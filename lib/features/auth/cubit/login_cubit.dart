@@ -56,6 +56,10 @@ class LoginCubit extends Cubit<LoginState> {
   void clearMessages() {
     emit(state.copyWith(successMessage: null, failureMessage: null));
   }
+
+  void clear() {
+    emit(LoginState.initial());
+  }
   // Future<void> loginCubit({
   //   required String email,
   //   required String password,

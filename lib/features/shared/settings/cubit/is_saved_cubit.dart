@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shaty/features/shared/cubit/is_saved_state.dart';
 
 import '../screen/is_saved_repository.dart';
+import 'is_saved_state.dart';
 
 class IsSavedCubit extends Cubit<IsSavedState>{
   final IsSavedRepository repository ;

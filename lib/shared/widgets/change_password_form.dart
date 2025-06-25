@@ -6,14 +6,19 @@ import '../../core/constants/app_colors.dart';
 import 'labeled_text_field.dart';
 
 class ChangePasswordForm extends StatelessWidget {
+  final TextEditingController oldPasswordController;
   final TextEditingController newPasswordController;
   final TextEditingController confirmPasswordController;
   final VoidCallback onConfirm;
-  const ChangePasswordForm({super.key, required this.newPasswordController, required this.confirmPasswordController, required this.onConfirm});
+  const ChangePasswordForm(
+      {super.key,
+      required this.oldPasswordController,
+      required this.newPasswordController,
+      required this.confirmPasswordController,
+      required this.onConfirm});
 
   @override
   Widget build(BuildContext context) {
-
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -27,25 +32,33 @@ class ChangePasswordForm extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 25),
-           LabeledTextField(
-            label:  context.loc.new_password,
+          LabeledTextField(
+            label: context.loc.current_password,
             hintText: '••••••••',
             obscure: true,
-             controller: newPasswordController,
+            controller: oldPasswordController,
           ),
-          const SizedBox(height: 25),
-           LabeledTextField(
+          LabeledTextField(
             label: context.loc.new_password,
             hintText: '••••••••',
-            obscure: true, controller: confirmPasswordController,
+            obscure: true,
+            controller: newPasswordController,
+          ),
+          const SizedBox(height: 25),
+          LabeledTextField(
+            label: context.loc.confirm_new_password,
+            hintText: '••••••••',
+            obscure: true,
+            controller: confirmPasswordController,
           ),
           const SizedBox(height: 40),
           PrimaryButton(
-            label: context.loc.confirm_password,
+            label: context.loc.change_password,
             onPressed: onConfirm,
-      
           ),
-         SizedBox(height: 40,),
+          SizedBox(
+            height: 40,
+          ),
         ],
       ),
     );

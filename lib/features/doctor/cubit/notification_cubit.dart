@@ -21,4 +21,7 @@ class NotificationCubit extends Cubit<NotificationState> {
   void clearMessages() {
     emit(state.copyWith(failureMessage: null, successMessage: null));
   }
+  void clear() {
+    emit(NotificationState.initial());
+  }
 }

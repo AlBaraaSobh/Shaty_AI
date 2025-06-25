@@ -1,7 +1,9 @@
 import 'package:shaty/core/network/end_points.dart';
 
-import '../../../../core/network/api_consumer.dart';
-import '../../../doctor/data/models/paginated_articles_response.dart';
+import '../../../../../core/network/api_consumer.dart';
+import '../../../../doctor/data/models/paginated_articles_response.dart';
+
+
 class SavedRepository {
   final ApiConsumer api;
   SavedRepository(this.api);

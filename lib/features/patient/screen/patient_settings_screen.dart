@@ -101,6 +101,7 @@ class _PatientSettingsScreenState extends State<PatientSettingsScreen> {
       ),child:
       SingleChildScrollView(
         child: ChangePasswordForm(
+          oldPasswordController: newPasswordController,//TODO عدلها وضيق كلمة المرور القديمة
           newPasswordController: newPasswordController,
           confirmPasswordController: confirmPasswordController,
           onConfirm:  _handleConfirm,
