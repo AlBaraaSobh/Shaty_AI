@@ -114,6 +114,9 @@ class DoctorProfileCubit extends Cubit<DoctorProfileState> {
 
     emit(state.copyWith(articles: updatedArticles));
   }
+  void clearMessages() {
+    emit(state.copyWith(successMessage: null, failureMessage: null));
+  }
   void clear() {
     emit(DoctorProfileState.initial());
   }

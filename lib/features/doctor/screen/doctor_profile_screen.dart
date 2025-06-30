@@ -1,3 +1,140 @@
+// import 'package:flutter/material.dart';
+// import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:shaty/core/utils/helpers/helpers.dart';
+//
+// import 'package:shaty/features/doctor/widget/ProfileStats.dart';
+// import 'package:shaty/features/doctor/widget/biography_doctor.dart';
+//
+// import '../cubit/article_state.dart';
+// import '../cubit/doctor_profile_cubit.dart';
+// import '../cubit/doctor_profile_state.dart';
+// import '../cubit/tips_cubit.dart';
+// import '../cubit/tips_state.dart';
+// import '../cubit/article_cubit.dart';
+//
+// import '../widget/doctor_posts_section.dart';
+// import '../widget/profile_header.dart';
+// import '../widget/show_tips.dart';
+//
+// class DoctorProfileScreen extends StatefulWidget {
+//   const DoctorProfileScreen({super.key});
+//
+//   @override
+//   State<DoctorProfileScreen> createState() => _DoctorProfileScreenState();
+// }
+//
+// class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
+//   @override
+//   void initState() {
+//     super.initState();
+//     final doctorCubit = context.read<DoctorProfileCubit>();
+//     doctorCubit.getDoctorProfile();
+//     doctorCubit.getDoctorArticles(); // جلب المقالات
+//     context.read<TipsCubit>().getTips();
+//   }
+//
+//   Future<void> _onRefresh() async {
+//     final doctorCubit = context.read<DoctorProfileCubit>();
+//     await doctorCubit.getDoctorProfile(forceRefresh: true);
+//     await doctorCubit.getDoctorArticles(forceRefresh: true);
+//     await context.read<TipsCubit>().getTips();
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: PreferredSize(
+//         preferredSize: const Size.fromHeight(0),
+//         child: AppBar(
+//           backgroundColor: Colors.transparent,
+//           elevation: 0,
+//         ),
+//       ),
+//       body: MultiBlocListener(
+//         listeners: [
+//           BlocListener<DoctorProfileCubit, DoctorProfileState>(
+//             listener: (context, state) {
+//               if (state.failureMessage != null) {
+//                 Helpers.showToast(message: state.failureMessage!);
+//                 context.read<DoctorProfileCubit>().clearMessages();
+//               }
+//               if (state.successMessage != null) {
+//                 Helpers.showToast(message: state.successMessage!);
+//                 context.read<DoctorProfileCubit>().clearMessages();
+//               }
+//             },
+//           ),
+//           BlocListener<TipsCubit, TipsState>(
+//             listener: (context, state) {
+//               if (state.failureMessage != null) {
+//                 Helpers.showToast(message: state.failureMessage!);
+//                 context.read<TipsCubit>().clearMessages();
+//               }
+//               if (state.successMessage != null) {
+//                 Helpers.showToast(message: state.successMessage!);
+//                 context.read<TipsCubit>().clearMessages();
+//               }
+//             },
+//           ),
+//           BlocListener<ArticleCubit, ArticleState>(
+//             listener: (context, state) {
+//               if (state.failureMessage != null) {
+//                 Helpers.showToast(message: state.failureMessage!);
+//                 context.read<ArticleCubit>().clearMessages();
+//               }
+//               if (state.successMessage != null) {
+//                 Helpers.showToast(message: state.successMessage!);
+//                 context.read<ArticleCubit>().clearMessages();
+//               }
+//             },
+//           ),
+//         ],
+//         child: BlocBuilder<DoctorProfileCubit, DoctorProfileState>(
+//           builder: (context, state) {
+//             final isLoading = state.isLoading && state.doctor == null;
+//
+//             return Stack(
+//               children: [
+//                 RefreshIndicator(
+//                   onRefresh: _onRefresh,
+//                   child: SingleChildScrollView(
+//                     physics: const AlwaysScrollableScrollPhysics(),
+//                     child: Padding(
+//                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+//                       child: Column(
+//                         crossAxisAlignment: CrossAxisAlignment.start,
+//                         children: const [
+//                           ProfileHeader(),
+//                           SizedBox(height: 10),
+//                           ProfileStats(),
+//                           SizedBox(height: 10),
+//                           BiographyDoctor(),
+//                           Divider(thickness: 2),
+//                           SizedBox(height: 8),
+//                           ShowTips(),
+//                           SizedBox(height: 8),
+//                           Divider(thickness: 2),
+//                           SizedBox(height: 8),
+//                           DoctorPostsSection(), // الآن فيها عنوان "مقالاتي"
+//                         ],
+//                       ),
+//                     ),
+//                   ),
+//                 ),
+//                 if (isLoading)
+//                   Container(
+//                     color: Colors.black.withOpacity(0.3),
+//                     child: const Center(child: CircularProgressIndicator()),
+//                   ),
+//               ],
+//             );
+//           },
+//         ),
+//       ),
+//     );
+//   }
+// }
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shaty/core/utils/helpers/helpers.dart';
@@ -53,22 +190,29 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
         listeners: [
           BlocListener<DoctorProfileCubit, DoctorProfileState>(
             listener: (context, state) {
+              final doctorCubit = context.read<DoctorProfileCubit>();
               if (state.failureMessage != null) {
                 Helpers.showToast(message: state.failureMessage!);
+                doctorCubit.clearMessages();
               }
               if (state.successMessage != null) {
                 Helpers.showToast(message: state.successMessage!);
+                doctorCubit.clearMessages();
+
               }
             },
           ),
           BlocListener<TipsCubit, TipsState>(
             listener: (context, state) {
-              if (state.failureMessage != null) {
-                Helpers.showToast(message: state.failureMessage!);
-              }
-              if (state.successMessage != null) {
-                Helpers.showToast(message: state.successMessage!);
-              }
+              final tipsCubit = context.read<TipsCubit>();
+            if (state.failureMessage != null) {
+              Helpers.showToast(message: state.failureMessage!);
+              tipsCubit.clearMessages();
+            }
+            if (state.successMessage != null) {
+              Helpers.showToast(message: state.successMessage!);
+              tipsCubit.clearMessages();
+            }
             },
           ),
         ],

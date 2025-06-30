@@ -7,6 +7,7 @@ import '../../../../shared/common/post_details_screen.dart';
 import '../../../shared/widgets/show_alert_Dialog.dart';
 import '../../shared/settings/cubit/is_saved_cubit.dart';
 import '../cubit/article_cubit.dart';
+import '../cubit/article_state.dart';
 import '../cubit/doctor_profile_cubit.dart';
 import '../cubit/doctor_profile_state.dart';
 import '../screen/doctor_profile_screen.dart';
@@ -85,11 +86,19 @@ class ArticleCard extends StatelessWidget {
   }
 
   Widget _buildHeader(BuildContext context) {
+    String fixImageUrl(String url) {
+      if (url.contains('127.0.0.1')) {
+        return url.replaceFirst('127.0.0.1', '10.0.2.2');
+      }
+      return url;
+    }
     return Row(
       children: [
-        const CircleAvatar(
+        CircleAvatar(
           radius: 26,
-          backgroundImage: AssetImage('images/doctor.png'),
+          backgroundImage: article.doctor.img != null && article.doctor.img!.isNotEmpty
+              ? NetworkImage(fixImageUrl(article.doctor.img!))
+              : const AssetImage('images/doctor.png') as ImageProvider,
           backgroundColor: Colors.transparent,
         ),
         const SizedBox(width: 14),
@@ -122,7 +131,7 @@ class ArticleCard extends StatelessWidget {
 
             if (currentDoctorId != null && currentDoctorId == article.doctor.id) {
               return PopupMenuButton<String>(
-                onSelected: (value) {
+                onSelected: (value) async {
                   if (value == 'edit') {
                     showModalBottomSheet(
                       context: context,
@@ -134,17 +143,18 @@ class ArticleCard extends StatelessWidget {
                     );
 
                   } else if (value == 'delete') {
-                    showDialog(
-                      context: context,
-                      builder: (context) => ShowAlertDialog(
-                        title: 'هل أنت متأكد من الحذف؟',
-                        action: context.loc.delete,
-                        onConfirmed: () {
-                          context.read<ArticleCubit>().deleteArticle(article.id);
-                          Navigator.pop(context);
-                        },
-                      ),
-                    );
+                    _showDeleteConfirmationDialog(context, article.id);
+                    // showDialog(
+                    //   context: context,
+                    //   builder: (context) => ShowAlertDialog(
+                    //     title: 'هل أنت متأكد من الحذف؟',
+                    //     action: context.loc.delete,
+                    //     onConfirmed: () {
+                    //       context.read<ArticleCubit>().deleteArticle(article.id);
+                    //       Navigator.pop(context);
+                    //     },
+                    //   ),
+                    // );
                   }
                 },
                 itemBuilder: (context) => [
@@ -225,6 +235,62 @@ class ArticleCard extends StatelessWidget {
       ],
     );
   }
+
+  void _showDeleteConfirmationDialog(BuildContext context, int id) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => ShowAlertDialog(
+        title: 'هل أنت متأكد من الحذف؟',
+        action: 'حذف',
+        onConfirmed: () async {
+          // إغلاق الديالوج أولاً
+          Navigator.of(dialogContext).pop();
+
+          // إظهار loading indicator
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) => Center(
+              child: Card(
+                child: Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      CircularProgressIndicator(),
+                      SizedBox(height: 16),
+                      Text('جاري الحذف...'),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+
+          try {
+            await context.read<ArticleCubit>().deleteArticle(id);
+            // إغلاق loading dialog
+            if (Navigator.canPop(context)) {
+              Navigator.pop(context);
+            }
+          } catch (e) {
+            // إغلاق loading dialog
+            if (Navigator.canPop(context)) {
+              Navigator.pop(context);
+            }
+            // إظهار رسالة خطأ
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('حدث خطأ أثناء الحذف'),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        },
+      ),
+    );
+
+  }
 }
 
 class _PostAction extends StatelessWidget {
@@ -259,4 +325,5 @@ class _PostAction extends StatelessWidget {
       ),
     );
   }
+
 }

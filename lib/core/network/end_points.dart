@@ -27,6 +27,7 @@ class EndPoints{
   static  String updateDoctorImage = 'doctor/update-img';
   static  String doctorNotifications = 'doctor/notifications';
   static  String changePassword = 'change-password';
+  static  String editDoctorProfile = 'doctor/update-profile';
 
 
 

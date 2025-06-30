@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/scheduler.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,6 +23,7 @@ class _CreatePostBottomSheetState extends State<CreatePostBottomSheet> {
   final _titleController = TextEditingController();
   final _subjectController = TextEditingController();
   File? _selectedImage;
+  bool _isClosed = false;
 
   @override
   void initState() {
@@ -37,20 +39,54 @@ class _CreatePostBottomSheetState extends State<CreatePostBottomSheet> {
   void dispose() {
     _titleController.dispose();
     _subjectController.dispose();
+    _isClosed = true; // ✅ منع أي عمليات بعد dispose
     super.dispose();
   }
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ArticleCubit, ArticleState>(
-  listener: (context, state) {
-    if (state.successMessage != null) {
-      Navigator.of(context).pop(); // إغلاق الـ BottomSheet
-      Helpers.showToast(message: state.successMessage!);
-    } else if (state.failureMessage != null) {
-      Helpers.showToast(message: state.failureMessage!);
-    }
-  },
-  builder: (context, state) {
+      listener: (context, state) {
+        if (state.successMessage != null && !_isClosed) {
+          _isClosed = true;
+
+          SchedulerBinding.instance.addPostFrameCallback((_) {
+            if (!mounted) return;
+
+            Helpers.showToast(message: state.successMessage!);
+            context.read<ArticleCubit>().clearMessages();
+
+            // تأكد أن pop يحدث بعد قليل وليس فورًا
+            Future.delayed(Duration(milliseconds: 100), () {
+              if (Navigator.canPop(context)) {
+                Navigator.pop(context);
+              }
+            });
+          });
+        } else if (state.failureMessage != null && mounted) {
+          Helpers.showToast(message: state.failureMessage!);
+          context.read<ArticleCubit>().clearMessages();
+
+        }
+      },
+
+      // listener: (context, state) {
+      //   if (state.successMessage != null && !_isClosed) {
+      //     _isClosed = true;
+      //
+      //     // ✅ استخدم SchedulerBinding مع فحص mounted
+      //     SchedulerBinding.instance.addPostFrameCallback((_) {
+      //       if (mounted && Navigator.canPop(context)) {
+      //         Navigator.pop(context);
+      //         Helpers.showToast(message: state.successMessage!);
+      //       }
+      //     });
+      //   } else if (state.failureMessage != null) {
+      //     Helpers.showToast(message: state.failureMessage!);
+      //   }
+      // },
+
+
+    builder: (context, state) {
     return Padding(
       padding: EdgeInsets.only(
           left: 16,

@@ -7,6 +7,13 @@ import '../../../core/constants/app_colors.dart';
 class ProfileHeader extends StatelessWidget {
   const ProfileHeader({super.key});
 
+  String fixImageUrl(String url) {
+    if (url.contains('127.0.0.1')) {
+      return url.replaceFirst('127.0.0.1', '10.0.2.2');
+    }
+    return url;
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<DoctorProfileCubit, DoctorProfileState>(
@@ -24,14 +31,16 @@ class ProfileHeader extends StatelessWidget {
                 CircleAvatar(
                   radius: 50,
                   backgroundImage: doctor.img != null
-                      ? NetworkImage(doctor.img!)
+                      ? NetworkImage(fixImageUrl(doctor.img!))
                       : const AssetImage('images/doctor.png') as ImageProvider,
                 ),
                 Positioned(
                   bottom: 3,
                   right: 1,
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      //TODO
+                    },
                     child: SizedBox(
                       height: 40,
                       width: 40,

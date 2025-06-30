@@ -26,7 +26,9 @@ import 'package:shaty/features/doctor/screen/doctor_home_screen.dart';
 import 'package:shaty/features/doctor/widget/view_tips.dart';
 import 'package:shaty/features/patient/widget/patient_bottom_nav_bar.dart';
 import 'package:shaty/features/shared/settings/cubit/change_password_cubit.dart';
+import 'package:shaty/features/shared/settings/cubit/edit_profile_cubit.dart';
 import 'package:shaty/features/shared/settings/data/repositories/change_password_repository.dart';
+import 'package:shaty/features/shared/settings/data/repositories/edit_profile_repository.dart';
 
 import 'core/utils/helpers/storage_helper.dart';
 import 'features/auth/cubit/doctor_register_cubit.dart';
@@ -38,11 +40,9 @@ import 'package:shaty/features/doctor/cubit/notification_cubit.dart';
 import 'features/shared/settings/cubit/is_saved_cubit.dart';
 import 'features/shared/settings/cubit/saved_cubit.dart';
 import 'features/shared/settings/data/repositories/saved_repository.dart';
+import 'features/shared/settings/screen/edit_doctor_profile_screen.dart';
 import 'features/shared/settings/screen/is_saved_repository.dart';
 import 'features/shared/settings/screen/saved_article.dart';
-
-
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -50,26 +50,39 @@ void main() async {
 
   final token = await StorageHelper.getToken();
   final userType = await StorageHelper.getUserType();
-  runApp(MultiBlocProvider(providers: [
-    BlocProvider(create: (_) => PatientRegisterCubit(PatientRegisterRepository(api))),
-    BlocProvider(create: (_) => DoctorRegisterCubit(DoctorRegisterRepository(api))),
-    BlocProvider(create: (_) => LoginCubit(LoginRepository(api))),
-    BlocProvider(create: (_) => TipsCubit(TipsRepository(api))),
-    BlocProvider(create: (_) => ArticleCubit(ArticleRepository(api))),
-    BlocProvider(create: (_) => CommentCubit(CommentRepository(api))),
-    BlocProvider(create: (_) => DoctorProfileCubit(DoctorProfileRepository(api))),
-    BlocProvider(create: (_) => SavedCubit(SavedRepository(api))),
-    BlocProvider(create: (_) => IsSavedCubit(IsSavedRepository(api))),
-    BlocProvider(create: (_) => NotificationCubit(NotificationRepository(api))),
-    BlocProvider(create: (_) => ChangePasswordCubit(ChangePasswordRepository(api))),
-
-  ], child:  MyApp(
-    initialRoute: token == null
-        ? '/login_screen'
-        : userType == 'doctor'
-        ? '/bottom_navigation_screen'
-        : '/patient_bottom_nav_bar',
-  )));
+  runApp(MultiBlocProvider(
+      providers: [
+        BlocProvider(
+            create: (_) =>
+                PatientRegisterCubit(PatientRegisterRepository(api))),
+        BlocProvider(
+            create: (_) => DoctorRegisterCubit(DoctorRegisterRepository(api))),
+        BlocProvider(create: (_) => LoginCubit(LoginRepository(api))),
+        BlocProvider(create: (_) => TipsCubit(TipsRepository(api))),
+        BlocProvider(create: (_) => ArticleCubit(ArticleRepository(api))),
+        BlocProvider(create: (_) => CommentCubit(CommentRepository(api))),
+        BlocProvider(
+            create: (_) => DoctorProfileCubit(DoctorProfileRepository(api))),
+        BlocProvider(create: (_) => SavedCubit(SavedRepository(api))),
+        BlocProvider(create: (_) => IsSavedCubit(IsSavedRepository(api))),
+        BlocProvider(
+            create: (_) => NotificationCubit(NotificationRepository(api))),
+        BlocProvider(
+            create: (_) => ChangePasswordCubit(ChangePasswordRepository(api))),
+        BlocProvider(
+          create: (context) => EditProfileCubit(
+            EditProfileRepository(api),
+            context.read<DoctorProfileCubit>(),
+          ),
+        ),
+      ],
+      child: MyApp(
+        initialRoute: token == null
+            ? '/login_screen'
+            : userType == 'doctor'
+                ? '/bottom_navigation_screen'
+                : '/patient_bottom_nav_bar',
+      )));
 }
 
 class MyApp extends StatelessWidget {
@@ -84,16 +97,19 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: initialRoute,
       routes: {
-        '/login_screen': (context)=> const LoginScreen(),
-        '/sign_in_screen': (context)=> const SignInScreen(),
-        '/rest_password_screen': (context)=> const RestPasswordScreen(),
-        '/verification_screen': (context)=> const VerificationScreen(),
-        '/change_password_screen': (context)=> const ChangePasswordScreen(),
-        '/doctor_home_screen': (context)=> const DoctorHomeScreen(),
-        '/bottom_navigation_screen': (context)=> const BottomNavigationScreen(),
-        '/patient_bottom_nav_bar': (context)=> const PatientBottomNavBar(),
-        '/view_tips': (context)=> const ViewTips(),
-        '/saved_article': (context)=> const SavedArticle(),
+        '/login_screen': (context) => const LoginScreen(),
+        '/sign_in_screen': (context) => const SignInScreen(),
+        '/rest_password_screen': (context) => const RestPasswordScreen(),
+        '/verification_screen': (context) => const VerificationScreen(),
+        '/change_password_screen': (context) => const ChangePasswordScreen(),
+        '/doctor_home_screen': (context) => const DoctorHomeScreen(),
+        '/bottom_navigation_screen': (context) =>
+            const BottomNavigationScreen(),
+        '/patient_bottom_nav_bar': (context) => const PatientBottomNavBar(),
+        '/view_tips': (context) => const ViewTips(),
+        '/saved_article': (context) => const SavedArticle(),
+        '/edit_doctor_profile_screen': (context) =>
+            const EditDoctorProfileScreen(),
       },
       localizationsDelegates: const [
         AppLocalizations.delegate,
@@ -101,13 +117,11 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate
       ],
-      supportedLocales:const [
+      supportedLocales: const [
         Locale('en'),
         Locale('ar'),
       ],
       locale: const Locale('ar'),
     );
-
   }
 }
-
