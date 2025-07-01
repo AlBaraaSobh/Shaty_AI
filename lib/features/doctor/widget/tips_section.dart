@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shaty/core/extensions/localization_extension.dart';
+import 'package:shaty/core/localization/localization_extension.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/user_type.dart';
 import '../../../core/utils/helpers/helpers.dart';

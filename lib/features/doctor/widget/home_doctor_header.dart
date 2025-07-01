@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shaty/core/constants/user_type.dart';
-import 'package:shaty/core/extensions/localization_extension.dart';
+import 'package:shaty/core/localization/localization_extension.dart';
 import '../../../core/constants/app_colors.dart';
 import 'create_post_bottom_sheet.dart';
 
@@ -75,7 +75,7 @@ class HomeDoctorHeader extends StatelessWidget {
 
 // import 'package:flutter/material.dart';
 // import 'package:shaty/core/constants/user_type.dart';
-// import 'package:shaty/core/extensions/localization_extension.dart';
+// import 'package:shaty/core/localization/localization_extension.dart';
 // import '../../../core/constants/app_colors.dart';
 // import 'create_post_bottom_sheet.dart';
 //

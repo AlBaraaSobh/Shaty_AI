@@ -39,6 +39,20 @@ class StorageHelper {
     return prefs.getInt('user_id');
   }
 
+  //localization
+  static Future<void> saveData(String key, dynamic value) async {
+    final prefs = await SharedPreferences.getInstance();
+    if (value is String) {
+      await prefs.setString(key, value);
+    }
+  }
+
+
+  static Future<String?> getData(String key) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(key);
+  }
+
 
 
 

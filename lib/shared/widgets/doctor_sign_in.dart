@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shaty/core/extensions/localization_extension.dart';
+import 'package:shaty/core/localization/localization_extension.dart';
 import 'package:shaty/core/utils/validators/validators.dart';
 import 'labeled_text_field.dart';
 

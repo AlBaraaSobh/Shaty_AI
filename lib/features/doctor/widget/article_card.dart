@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shaty/core/extensions/localization_extension.dart';
+import 'package:shaty/core/localization/localization_extension.dart';
 import 'package:shaty/core/utils/helpers/helpers.dart';
 import 'package:shaty/features/doctor/data/models/article_model.dart';
 import '../../../../shared/common/post_details_screen.dart';

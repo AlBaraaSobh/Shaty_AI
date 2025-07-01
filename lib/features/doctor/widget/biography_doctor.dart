@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shaty/core/constants/app_colors.dart';
-import 'package:shaty/core/extensions/localization_extension.dart';
+import 'package:shaty/core/localization/localization_extension.dart';
 import '../cubit/doctor_profile_cubit.dart';
 import '../cubit/doctor_profile_state.dart';
 import 'edit_biography_bottom_sheet.dart';
@@ -99,7 +99,7 @@ class BiographyDoctor extends StatelessWidget {
 // import 'package:flutter/material.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:shaty/core/constants/app_colors.dart';
-// import 'package:shaty/core/extensions/localization_extension.dart';
+// import 'package:shaty/core/localization/localization_extension.dart';
 // import '../cubit/doctor_profile_cubit.dart';
 // import '../cubit/doctor_profile_state.dart';
 // import 'edit_biography_bottom_sheet.dart';

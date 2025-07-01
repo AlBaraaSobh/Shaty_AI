@@ -69,7 +69,10 @@
   "fill_all_fields": "Fill All Fields",
   "passwords_do_not_match": "Passwords Do Not Match",
   "current_password": "Current Password",
-  "my_articles": "My Articles"
+  "my_articles": "My Articles",
+  "language": ":Language",
+  "edit_profile": "Edit profile"
+
 
 
 

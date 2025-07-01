@@ -147,7 +147,7 @@ class _EditDoctorProfileScreenState extends State<EditDoctorProfileScreen> {
         const SizedBox(height: 6),
         TextField(
           controller: controller,
-          textDirection: TextDirection.rtl,
+          textDirection: Directionality.of(context),
           decoration: InputDecoration(
             filled: true,
             fillColor: const Color(0xFFF5F6FA),

@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:shaty/core/localization/locale_cubit.dart';
 import 'package:shaty/core/network/dio_consumer.dart';
 import 'package:shaty/features/auth/cubit/login_cubit.dart';
 import 'package:shaty/features/auth/cubit/patient_register_cubit.dart';
@@ -70,18 +71,21 @@ void main() async {
         BlocProvider(
             create: (_) => ChangePasswordCubit(ChangePasswordRepository(api))),
         BlocProvider(
-          create: (context) => EditProfileCubit(
-            EditProfileRepository(api),
-            context.read<DoctorProfileCubit>(),
-          ),
+          create: (context) =>
+              EditProfileCubit(
+                EditProfileRepository(api),
+                context.read<DoctorProfileCubit>(),
+              ),
         ),
+        BlocProvider(create: (_) => LocaleCubit()),
+
       ],
       child: MyApp(
         initialRoute: token == null
             ? '/login_screen'
             : userType == 'doctor'
-                ? '/bottom_navigation_screen'
-                : '/patient_bottom_nav_bar',
+            ? '/bottom_navigation_screen'
+            : '/patient_bottom_nav_bar',
       )));
 }
 
@@ -90,38 +94,39 @@ class MyApp extends StatelessWidget {
 
   const MyApp({super.key, required this.initialRoute});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      initialRoute: initialRoute,
-      routes: {
-        '/login_screen': (context) => const LoginScreen(),
-        '/sign_in_screen': (context) => const SignInScreen(),
-        '/rest_password_screen': (context) => const RestPasswordScreen(),
-        '/verification_screen': (context) => const VerificationScreen(),
-        '/change_password_screen': (context) => const ChangePasswordScreen(),
-        '/doctor_home_screen': (context) => const DoctorHomeScreen(),
-        '/bottom_navigation_screen': (context) =>
+    return BlocBuilder<LocaleCubit, Locale>(
+      builder: (context, locale) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          initialRoute: initialRoute,
+          locale: locale,
+          supportedLocales: const [Locale('en'), Locale('ar')],
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+          ],
+          routes: {
+            '/login_screen': (context) => const LoginScreen(),
+            '/sign_in_screen': (context) => const SignInScreen(),
+            '/rest_password_screen': (context) => const RestPasswordScreen(),
+            '/verification_screen': (context) => const VerificationScreen(),
+            '/change_password_screen': (
+                context) => const ChangePasswordScreen(),
+            '/doctor_home_screen': (context) => const DoctorHomeScreen(),
+            '/bottom_navigation_screen': (context) =>
             const BottomNavigationScreen(),
-        '/patient_bottom_nav_bar': (context) => const PatientBottomNavBar(),
-        '/view_tips': (context) => const ViewTips(),
-        '/saved_article': (context) => const SavedArticle(),
-        '/edit_doctor_profile_screen': (context) =>
+            '/patient_bottom_nav_bar': (context) => const PatientBottomNavBar(),
+            '/view_tips': (context) => const ViewTips(),
+            '/saved_article': (context) => const SavedArticle(),
+            '/edit_doctor_profile_screen': (context) =>
             const EditDoctorProfileScreen(),
+          },
+        );
       },
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate
-      ],
-      supportedLocales: const [
-        Locale('en'),
-        Locale('ar'),
-      ],
-      locale: const Locale('ar'),
     );
   }
 }

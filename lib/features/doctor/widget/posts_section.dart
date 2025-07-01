@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shaty/core/constants/app_colors.dart';
-import 'package:shaty/core/extensions/localization_extension.dart';
+import 'package:shaty/core/localization/localization_extension.dart';
 import 'package:shaty/features/doctor/cubit/article_cubit.dart';
 import 'package:shaty/features/doctor/cubit/article_state.dart';
 import 'package:shaty/features/doctor/data/models/article_model.dart';
@@ -83,7 +83,7 @@ class PostsSection extends StatelessWidget {
 // import 'package:shaty/features/doctor/data/models/article_model.dart';
 // import '../../../core/utils/helpers/helpers.dart';
 // import '../../../shared/common/post_details_screen.dart';
-// import 'package:shaty/core/extensions/localization_extension.dart';
+// import 'package:shaty/core/localization/localization_extension.dart';
 //
 // import 'article_card.dart';
 //

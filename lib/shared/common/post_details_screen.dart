@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:shaty/core/extensions/localization_extension.dart';
+import 'package:shaty/core/localization/localization_extension.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../core/utils/helpers/helpers.dart';
 import '../../features/doctor/cubit/article_cubit.dart';

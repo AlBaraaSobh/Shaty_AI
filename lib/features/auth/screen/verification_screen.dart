@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shaty/core/constants/app_colors.dart';
-import 'package:shaty/core/extensions/localization_extension.dart';
+import 'package:shaty/core/localization/localization_extension.dart';
 
 import '../../../shared/widgets/pin_code_input.dart';
 import '../../../shared/widgets/primary_button .dart';

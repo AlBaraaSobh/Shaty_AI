@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shaty/core/extensions/localization_extension.dart';
+import 'package:shaty/core/localization/localization_extension.dart';
 import 'package:shaty/shared/widgets/primary_button%20.dart';
 
 import '../../core/constants/app_colors.dart';
