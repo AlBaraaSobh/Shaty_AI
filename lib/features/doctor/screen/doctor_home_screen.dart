@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shaty/core/constants/app_colors.dart';
 
 import '../../../core/utils/helpers/helpers.dart';
+import '../../chatbot/screen/chatbot_screen.dart';
 import '../cubit/article_cubit.dart';
 import '../cubit/article_state.dart';
 import '../cubit/tips_cubit.dart';
@@ -64,6 +66,16 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColors.primaryColor, // أو استخدم AppColors.primaryLight
+        tooltip: 'المساعد الصحي',
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (_) => const ChatbotScreen()),
+          );
+        },
+        child: const Icon(Icons.smart_toy_outlined, size: 28,color: Colors.white,),
+      ),
       body: SafeArea(
         child: BlocListener<ArticleCubit, ArticleState>(
           listenWhen: (previous, current) =>
