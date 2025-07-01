@@ -1,11 +1,12 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ChatbotRepository {
   final Dio dio;
 
   ChatbotRepository(this.dio);
 
-  final String _apiKey = '';
+  final String _apiKey = dotenv.env['OPENROUTER_API_KEY'] ?? '';
   final String _baseUrl = 'https://openrouter.ai/api/v1/chat/completions';
 
   Future<String> getBotReply(String message) async {

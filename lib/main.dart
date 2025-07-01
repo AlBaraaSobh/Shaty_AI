@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shaty/core/localization/locale_cubit.dart';
 import 'package:shaty/core/network/dio_consumer.dart';
@@ -48,9 +49,12 @@ import 'features/shared/settings/screen/saved_article.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final api = DioConsumer(Dio());
+  await dotenv.load(fileName: "assets/.env");
+  print(dotenv.env['OPENROUTER_API_KEY']);
 
   final token = await StorageHelper.getToken();
   final userType = await StorageHelper.getUserType();
+
   runApp(MultiBlocProvider(
       providers: [
         BlocProvider(
