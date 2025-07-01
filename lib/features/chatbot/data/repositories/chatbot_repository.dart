@@ -5,8 +5,7 @@ class ChatbotRepository {
 
   ChatbotRepository(this.dio);
 
-  final String _apiKey =
-      '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';
+  final String _apiKey = '';
   final String _baseUrl = 'https://openrouter.ai/api/v1/chat/completions';
 
   Future<String> getBotReply(String message) async {
