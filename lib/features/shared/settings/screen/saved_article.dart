@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shaty/core/localization/localization_extension.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../doctor/data/models/article_model.dart';
@@ -44,9 +45,7 @@ class _SavedArticleState extends State<SavedArticle> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'قائمة المحفوظات',
-          style: TextStyle(color: AppColors.primaryColor),
+        title:  Text(context.loc.archives,style: TextStyle(color: AppColors.primaryColor),
         ),
       ),
       body: BlocBuilder<SavedCubit, SavedState>(

@@ -47,7 +47,7 @@ class PostsSection extends StatelessWidget {
 
               // تحميل الصفحة الأولى
               if (state.isLoading && articles.isEmpty) {
-                return const Center(child: LinearProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               }
 
               // تحميل المزيد (الصفحة التالية)

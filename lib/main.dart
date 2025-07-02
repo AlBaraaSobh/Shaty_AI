@@ -50,7 +50,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final api = DioConsumer(Dio());
   await dotenv.load(fileName: "assets/.env");
-  print(dotenv.env['OPENROUTER_API_KEY']);
 
   final token = await StorageHelper.getToken();
   final userType = await StorageHelper.getUserType();

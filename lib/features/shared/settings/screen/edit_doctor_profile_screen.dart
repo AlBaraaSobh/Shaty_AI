@@ -8,6 +8,8 @@ import 'package:shaty/features/doctor/cubit/doctor_profile_cubit.dart';
 import 'package:shaty/features/shared/settings/cubit/edit_profile_cubit.dart';
 import 'package:shaty/shared/widgets/primary_button%20.dart';
 import '../cubit/edit_profile_state.dart';
+import 'package:shaty/core/localization/localization_extension.dart';
+
 
 class EditDoctorProfileScreen extends StatefulWidget {
   const EditDoctorProfileScreen({super.key});
@@ -55,8 +57,7 @@ class _EditDoctorProfileScreenState extends State<EditDoctorProfileScreen> {
             elevation: 0,
             leading: const BackButton(color: Colors.black),
             backgroundColor: Colors.white,
-            title: const Text(
-              'الملف الشخصي',
+            title:   Text(context.loc.edit_profile,
               style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
             ),
             centerTitle: true,
@@ -102,15 +103,15 @@ class _EditDoctorProfileScreenState extends State<EditDoctorProfileScreen> {
                   ],
                 ),
                 const SizedBox(height: 10),
-                const Text('تعديل الملف الشخصي', style: TextStyle(fontSize: 18)),
+                 Text(context.loc.edit_profile, style: TextStyle(fontSize: 18)),
                 const SizedBox(height: 30),
-                _buildEditableField(label: 'الاسم', controller: nameController),
+                _buildEditableField(label: context.loc.enter_your_name, controller: nameController),
                 const SizedBox(height: 15),
-                _buildEditableField(label: 'نبذة تعريفية', controller: bioController),
+                _buildEditableField(label: context.loc.biography, controller: bioController),
                 const SizedBox(height: 15),
-                _buildEditableField(label: 'البريد الإلكتروني', controller: emailController),
+                _buildEditableField(label: context.loc.email, controller: emailController),
                 const SizedBox(height: 15),
-                _buildEditableField(label: 'التخصص الطبي', controller: specialtyNumberController),
+                _buildEditableField(label: context.loc.specialty_id, controller: specialtyNumberController),
                 const SizedBox(height: 30),
                 PrimaryButton(
                   label: 'حفظ التعديلات',

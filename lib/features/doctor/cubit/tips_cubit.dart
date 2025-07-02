@@ -64,7 +64,7 @@ class TipsCubit extends Cubit<TipsState> {
       final tipsList = await tipsRepository.getTips();
       if (tipsList.isEmpty) {
         emit(state.copyWith(
-            isLoading: false, tips: [], successMessage: 'لا توجد نصائح اليوم'));
+            isLoading: false, tips: tipsList,));
       } else {
         emit(state.copyWith(
           isLoading: false,

@@ -26,6 +26,8 @@ class _TipsSectionState extends State<TipsSection> {
           context.read<TipsCubit>().clearMessages();
         } else if (state.failureMessage != null) {
           Helpers.showToast(message: state.failureMessage!);
+          context.read<TipsCubit>().clearMessages();
+
         }
       },
       builder: (context, state) {
