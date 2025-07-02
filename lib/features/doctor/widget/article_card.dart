@@ -230,6 +230,16 @@ class ArticleCard extends StatelessWidget {
             isSavedCubit.toggleSaveArticle(article.id);
             articleCubit.toggleLocalSaveStatus(article.id);
 
+            final updatedArticle = article.copyWith(
+              articleInfo: article.articleInfo.copyWith(
+                isSaved: !article.articleInfo.isSaved,
+              ),
+            );
+
+            if (_isInsideDoctorProfileScreen(context)) {
+              context.read<DoctorProfileCubit>().updateSingleArticle(updatedArticle);
+            }
+
           },
         ),
       ],
