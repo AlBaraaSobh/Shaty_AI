@@ -1,10 +1,5 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shaty/core/constants/app_colors.dart';
-import '../../../core/network/dio_consumer.dart';
-import '../cubit/article_cubit.dart';
-import '../data/repositories/article_repository.dart';
 import 'doctor_home_screen.dart';
 import 'doctor_notifications_screen.dart';
 import 'doctor_profile_screen.dart';

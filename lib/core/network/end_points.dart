@@ -28,6 +28,9 @@ class EndPoints{
   static  String doctorNotifications = 'doctor/notifications';
   static  String changePassword = 'change-password';
   static  String editDoctorProfile = 'doctor/update-profile';
+  //patient
+  static  String getAllTips = 'user/get-today-advice';
+  static  String getAllDoctors = 'user/doctors';
 
 
 

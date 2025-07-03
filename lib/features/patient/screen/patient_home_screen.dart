@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shaty/features/patient/widget/patient_header.dart';
 
-import '../../doctor/widget/posts_section.dart';
-import '../../doctor/widget/home_doctor_header.dart';
-import '../../doctor/widget/tips_section.dart';
 import '../widget/patient_tips.dart';
 class PatientHomeScreen extends StatelessWidget {
   const PatientHomeScreen({super.key});
@@ -16,7 +14,7 @@ class PatientHomeScreen extends StatelessWidget {
             children: [
               Column(
                 children: [
-                  HomeDoctorHeader(),
+                  PatientHeader(),
                   SizedBox(
                     height: 25,
                   ),

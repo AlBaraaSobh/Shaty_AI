@@ -26,7 +26,8 @@ import 'package:shaty/features/doctor/data/repositories/tips_repository.dart';
 import 'package:shaty/features/doctor/screen/bottom_navigation_screen.dart';
 import 'package:shaty/features/doctor/screen/doctor_home_screen.dart';
 import 'package:shaty/features/doctor/widget/view_tips.dart';
-import 'package:shaty/features/patient/widget/patient_bottom_nav_bar.dart';
+
+import 'package:shaty/features/patient/screen/patient_bottom_nav_bar.dart';
 import 'package:shaty/features/shared/settings/cubit/change_password_cubit.dart';
 import 'package:shaty/features/shared/settings/cubit/edit_profile_cubit.dart';
 import 'package:shaty/features/shared/settings/data/repositories/change_password_repository.dart';
@@ -71,16 +72,14 @@ void main() async {
         BlocProvider(create: (_) => IsSavedCubit(IsSavedRepository(api))),
         BlocProvider(
             create: (_) => NotificationCubit(NotificationRepository(api))),
-        BlocProvider(
-            create: (_) => ChangePasswordCubit(ChangePasswordRepository(api))),
-        BlocProvider(
-          create: (context) =>
-              EditProfileCubit(
-                EditProfileRepository(api),
-                context.read<DoctorProfileCubit>(),
+        BlocProvider(create: (_) => ChangePasswordCubit(ChangePasswordRepository(api))),
+        BlocProvider(create: (context) => EditProfileCubit(EditProfileRepository(api), context.read<DoctorProfileCubit>(),
               ),
         ),
         BlocProvider(create: (_) => LocaleCubit()),
+        //patient
+
+
 
       ],
       child: MyApp(

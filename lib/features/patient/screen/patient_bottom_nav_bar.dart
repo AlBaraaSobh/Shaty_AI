@@ -5,28 +5,40 @@ import 'package:shaty/features/patient/screen/patient_notifications_screen.dart'
 import 'package:shaty/features/patient/screen/patient_settings_screen.dart';
 
 import '../../../core/constants/app_colors.dart';
+
 class PatientBottomNavBar extends StatefulWidget {
-   const PatientBottomNavBar({super.key});
+  const PatientBottomNavBar({super.key});
 
   @override
   State<PatientBottomNavBar> createState() => _PatientBottomNavBarState();
 }
 
 class _PatientBottomNavBarState extends State<PatientBottomNavBar> {
-  int _selectedIndex = 0 ;
+  int _selectedIndex = 0;
 
-  final List<Widget>_screens = [
-
-    const PatientHomeScreen(),
-    const PatientDoctorsScreen(),
-    const PatientNotificationsScreen(),
-    const PatientSettingsScreen(),
+  final List<Widget> _screens = const [
+    PatientHomeScreen(),
+    PatientDoctorsScreen(),
+    PatientNotificationsScreen(),
+    PatientSettingsScreen(),
   ];
+
+  void _onItemTapped(int index) {
+    if (_selectedIndex != index) {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _screens[_selectedIndex],
+      // استخدمت IndexedStack للحفاظ على حالة كل شاشة أثناء التنقل
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: _screens,
+      ),
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
           boxShadow: [
@@ -44,13 +56,9 @@ class _PatientBottomNavBarState extends State<PatientBottomNavBar> {
           ),
           child: BottomNavigationBar(
             elevation: 5,
-            onTap: (value) {
-              setState(() {
-                _selectedIndex = value;
-              });
-            },
-            type: BottomNavigationBarType.fixed,
             currentIndex: _selectedIndex,
+            onTap: _onItemTapped,
+            type: BottomNavigationBarType.fixed,
             iconSize: 30,
             selectedItemColor: AppColors.primaryColor,
             unselectedItemColor: Colors.grey,

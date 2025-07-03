@@ -37,7 +37,7 @@ class HomeDoctorHeader extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 10),
-          if (UserType.isDoctor)
+          if (UserType.isDoctor) ...[
             Container(
               width: 50,
               height: 48,
@@ -56,6 +56,7 @@ class HomeDoctorHeader extends StatelessWidget {
                 ),
               ),
             ),
+          ],
         ],
       ),
     );
