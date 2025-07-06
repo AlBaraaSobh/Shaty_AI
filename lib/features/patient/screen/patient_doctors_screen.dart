@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shaty/core/constants/app_colors.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shaty/core/constants/app_colors.dart';
 import '../cubit/patient_doctors_cubit.dart';
 import '../cubit/patient_doctors_state.dart';
 import '../widget/doctor_card.dart';
@@ -17,39 +20,41 @@ class PatientDoctorsScreen extends StatefulWidget {
 class _PatientDoctorsScreenState extends State<PatientDoctorsScreen> {
   DoctorsViewType selectedView = DoctorsViewType.specialties;
   int? selectedSpecialtyIndex;
+  int? loadingSpecialtyId;
 
   final List<Map<String, dynamic>> specialties = [
-    {'id': 10, 'name': 'أمراض القلب والشرايين'},
-    {'id': 11, 'name': 'الجراحة العامة'},
-    {'id': 12, 'name': 'الأمراض الباطنية'},
-    {'id': 13, 'name': 'الأمراض الجلدية'},
-    {'id': 14, 'name': 'الأمراض العصبية'},
-    {'id': 15, 'name': 'الأمراض النفسية'},
-    {'id': 16, 'name': 'الأمراض النسائية والولادة'},
-    {'id': 17, 'name': 'الأطفال'},
-    {'id': 18, 'name': 'الأورام'},
+    {'id': 1, 'name': 'أمراض القلب والشرايين'},
+    {'id': 2, 'name': 'الجراحة العامة'},
+    {'id': 3, 'name': 'الأمراض الباطنية'},
+    {'id': 4, 'name': 'الأمراض الجلدية'},
+    {'id': 5, 'name': 'الأمراض العصبية'},
+    {'id': 6, 'name': 'الأمراض النفسية'},
+    {'id': 7, 'name': 'الأمراض النسائية والولادة'},
+    {'id': 8, 'name': 'الأطفال'},
+    {'id': 9, 'name': 'الأورام'},
+    {'id': 10, 'name': 'الأعصاب والجراحة العصبية'},
   ];
+
+  void _onSpecialtySelected(int index) {
+    final specialtyId = specialties[index]['id'] as int;
+
+    if (selectedSpecialtyIndex == index) {
+      setState(() {
+        selectedSpecialtyIndex = null;
+      });
+    } else {
+      setState(() {
+        selectedSpecialtyIndex = index;
+        loadingSpecialtyId = specialtyId;
+      });
+      context.read<PatientDoctorsCubit>().getDoctorsBySpecialty(specialtyId);
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-    _loadFollowedDoctors();
-  }
-
-  void _loadFollowedDoctors() {
-    context.read<PatientDoctorsCubit>().getAllDoctors();
-  }
-
-  void _onSpecialtySelected(int index) {
-    setState(() {
-      if (selectedSpecialtyIndex == index) {
-        selectedSpecialtyIndex = null;
-      } else {
-        selectedSpecialtyIndex = index;
-        final specialtyId = specialties[index]['id'] as int;
-        context.read<PatientDoctorsCubit>().getDoctorsBySpecialty(specialtyId);
-      }
-    });
+    context.read<PatientDoctorsCubit>().getFollowedDoctors();
   }
 
   @override
@@ -58,15 +63,19 @@ class _PatientDoctorsScreenState extends State<PatientDoctorsScreen> {
       appBar: AppBar(title: const Text('الأطباء')),
       body: BlocBuilder<PatientDoctorsCubit, PatientDoctorsState>(
         builder: (context, state) {
-          if (state.isLoading && state.doctors.isEmpty && selectedView == DoctorsViewType.following) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
           return Column(
             children: [
               const SizedBox(height: 12),
               _buildToggleButtons(),
               const SizedBox(height: 16),
+              if (state.errorMessage != null)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    state.errorMessage!,
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                ),
               Expanded(
                 child: selectedView == DoctorsViewType.specialties
                     ? _buildSpecialtiesView(state)
@@ -102,7 +111,6 @@ class _PatientDoctorsScreenState extends State<PatientDoctorsScreen> {
               isSelected: selectedView == DoctorsViewType.following,
               onTap: () {
                 setState(() => selectedView = DoctorsViewType.following);
-                _loadFollowedDoctors();
               },
               isRight: false,
             ),
@@ -122,7 +130,7 @@ class _PatientDoctorsScreenState extends State<PatientDoctorsScreen> {
       child: TextButton(
         onPressed: onTap,
         style: TextButton.styleFrom(
-          backgroundColor: isSelected ? AppColors.primaryColor.withOpacity(0.9) : Colors.transparent,
+          backgroundColor: isSelected ? Colors.blue.withOpacity(0.9) : Colors.transparent,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
               topRight: isRight ? const Radius.circular(12) : Radius.zero,
@@ -150,7 +158,9 @@ class _PatientDoctorsScreenState extends State<PatientDoctorsScreen> {
       itemCount: specialties.length,
       itemBuilder: (context, index) {
         final isSelected = selectedSpecialtyIndex == index;
-        final doctorsForSpecialty = isSelected ? state.doctors : [];
+        final specialtyId = specialties[index]['id'] as int;
+
+        final doctorsForSpecialty = state.specialtyDoctors[specialtyId] ?? [];
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -163,7 +173,7 @@ class _PatientDoctorsScreenState extends State<PatientDoctorsScreen> {
               onTap: () => _onSpecialtySelected(index),
             ),
             if (isSelected)
-              if (state.isLoading)
+              if (state.isLoading && loadingSpecialtyId == specialtyId)
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 16),
                   child: Center(child: CircularProgressIndicator()),
@@ -177,11 +187,7 @@ class _PatientDoctorsScreenState extends State<PatientDoctorsScreen> {
                 Column(
                   children: doctorsForSpecialty.map((doctor) {
                     return DoctorCard(
-                      doctor: {
-                        'name': doctor.name,
-                        'email': doctor.email,
-                        'image': doctor.image,
-                      },
+                      doctor: doctor,
                       isFollowed: doctor.isFollowed,
                       buttonText: doctor.isFollowed ? 'إلغاء المتابعة' : 'متابعة',
                       buttonColor: doctor.isFollowed ? Colors.red : AppColors.primaryColor,
@@ -199,9 +205,7 @@ class _PatientDoctorsScreenState extends State<PatientDoctorsScreen> {
 
   Widget _buildFollowingView(PatientDoctorsState state) {
     if (state.followedDoctors.isEmpty) {
-      return const Center(
-        child: Text('لم تقم بمتابعة أي طبيب بعد'),
-      );
+      return const Center(child: Text('لم تقم بمتابعة أي طبيب بعد'));
     }
 
     return ListView.builder(
@@ -209,14 +213,10 @@ class _PatientDoctorsScreenState extends State<PatientDoctorsScreen> {
       itemBuilder: (context, index) {
         final doctor = state.followedDoctors[index];
         return DoctorCard(
-          doctor: {
-            'name': doctor.name,
-            'email': doctor.email,
-            'image': doctor.image,
-          },
-          isFollowed: true,
-          buttonText: 'إلغاء المتابعة',
-          buttonColor: Colors.red,
+          doctor: doctor,
+          isFollowed: doctor.isFollowed,
+          buttonText: doctor.isFollowed ? 'إلغاء المتابعة' : 'متابعة',
+          buttonColor: doctor.isFollowed ? Colors.red : AppColors.primaryColor,
           onButtonPressed: () {
             context.read<PatientDoctorsCubit>().toggleFollowDoctor(doctor.id);
           },
@@ -225,6 +225,8 @@ class _PatientDoctorsScreenState extends State<PatientDoctorsScreen> {
     );
   }
 }
+
+
 
 // Padding(
 // padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),

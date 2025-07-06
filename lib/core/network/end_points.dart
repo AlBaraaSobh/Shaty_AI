@@ -43,7 +43,7 @@ class EndPoints {
 
   //patient
   static String getAllTips = 'user/get-today-advice';
-  static String getAllDoctors = 'user/doctors';
+  static String getAllFollowingDoctors = 'user/doctors';
 
   static String getDoctorsBySpecialty(int specialtyId) => "speciaty/$specialtyId/doctors";
 

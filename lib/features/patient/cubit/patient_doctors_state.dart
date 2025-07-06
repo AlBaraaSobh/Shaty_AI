@@ -1,35 +1,55 @@
 import '../data/models/doctor_specialty_model.dart';
 
+
 class PatientDoctorsState {
   final bool isLoading;
-  final bool isLocalLoading;
   final String? errorMessage;
-  final List<DoctorSpecialtyModel> doctors; // أطباء التخصص الحالي
+  final Map<int, List<DoctorSpecialtyModel>> specialtyDoctors;
   final List<DoctorSpecialtyModel> followedDoctors;
 
   PatientDoctorsState({
     this.isLoading = false,
-    this.isLocalLoading = false,
     this.errorMessage,
-    this.doctors = const [],
+    this.specialtyDoctors = const {},
     this.followedDoctors = const [],
   });
 
-  factory PatientDoctorsState.initial() => PatientDoctorsState();
-
   PatientDoctorsState copyWith({
     bool? isLoading,
-    bool? isLocalLoading,
     String? errorMessage,
-    List<DoctorSpecialtyModel>? doctors,
+    Map<int, List<DoctorSpecialtyModel>>? specialtyDoctors,
     List<DoctorSpecialtyModel>? followedDoctors,
   }) {
     return PatientDoctorsState(
       isLoading: isLoading ?? this.isLoading,
-      isLocalLoading: isLocalLoading ?? this.isLocalLoading,
       errorMessage: errorMessage,
-      doctors: doctors ?? this.doctors,
+      specialtyDoctors: specialtyDoctors ?? this.specialtyDoctors,
       followedDoctors: followedDoctors ?? this.followedDoctors,
     );
   }
 }
+
+
+// class PatientDoctorsState {
+//   final bool isLoading;
+//   final Map<int, List<DoctorSpecialtyModel>> specialtyDoctors;
+//   final String? errorMessage;
+//
+//   PatientDoctorsState({
+//     this.isLoading = false,
+//     this.specialtyDoctors = const {},
+//     this.errorMessage,
+//   });
+//
+//   PatientDoctorsState copyWith({
+//     bool? isLoading,
+//     Map<int, List<DoctorSpecialtyModel>>? specialtyDoctors,
+//     String? errorMessage,
+//   }) {
+//     return PatientDoctorsState(
+//       isLoading: isLoading ?? this.isLoading,
+//       specialtyDoctors: specialtyDoctors ?? this.specialtyDoctors,
+//       errorMessage: errorMessage,
+//     );
+//   }
+// }

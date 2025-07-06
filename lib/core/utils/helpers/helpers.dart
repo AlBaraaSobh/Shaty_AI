@@ -50,33 +50,31 @@ class Helpers {
   }
 
   static void hideLoadingDialog(BuildContext context) {
-    Navigator.of(context, rootNavigator: true).pop();
+    if (Navigator.canPop(context)) {
+      Navigator.of(context, rootNavigator: true).pop();
+    }
   }
 
-  //أفضل خيار عام لضمان عدم ظهور خطأ عند محاولة إغلاق شاشة غير موجودةNavigator.canPop
   static void handleLoading(BuildContext context) {
     showLoadingDialog(context);
   }
 
-  static void handleSuccess(BuildContext context, String message,{String? route}) {
-     hideLoadingDialog(context);
-     showToast(message: message);
-     if (route != null) {
-       Navigator.pushNamed(context, route);
-     }  }
-
-
-
+  static void handleSuccess(BuildContext context, String message, {String? route}) {
+    hideLoadingDialog(context);
+    showToast(message: message);
+    if (route != null) {
+      Navigator.pushNamed(context, route);
+    }
+  }
 
   static void handleFailure(BuildContext context, String error) {
-    hideLoadingDialog(context); //في حال حذفتها بتصير مشلكة انو لو صار خطا بضل يحمل وما بيرجع
-    showToast(message: error);
-    print('the error is : $error');
+    hideLoadingDialog(context);
+    showToast(message: error, backgroundColor: Colors.red);
+    debugPrint('❌ Error: $error');
   }
 
   static Future<void> logout(BuildContext context) async {
     await StorageHelper.clearToken();
-    // تنظيف الكيوبتات
     context.read<ArticleCubit>().clear();
     context.read<TipsCubit>().clear();
     context.read<CommentCubit>().clear();
@@ -84,16 +82,10 @@ class Helpers {
     context.read<NotificationCubit>().clear();
     context.read<LoginCubit>().clear();
 
-
-
-    // إزالة جميع الصفحات السابقة  والانتقال إلى صفحة تسجيل الدخول
-    Navigator.of(context).pushNamedAndRemoveUntil(
-      '/login_screen',
-          (route) => false,
-    );
+    Navigator.of(context).pushNamedAndRemoveUntil('/login_screen', (route) => false);
   }
 
-  static void showCreateTipsBottomSheet(BuildContext context,{String? initialTip, int? tipId}) {
+  static void showCreateTipsBottomSheet(BuildContext context, {String? initialTip, int? tipId}) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -101,11 +93,8 @@ class Helpers {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (context) => CreateTipsBottomSheet(initialTip: initialTip, tipId: tipId),
-
     );
   }
-
-  //
 
   static Future<void> shareTextAndImage({
     required BuildContext context,
@@ -124,23 +113,16 @@ class Helpers {
         final file = File('${tempDir.path}/shared_image.jpg');
         await file.writeAsBytes(response.data!);
 
-        await Share.shareXFiles(
-          [XFile(file.path)],
-          text: text,
-        );
+        await Share.shareXFiles([
+          XFile(file.path)
+        ], text: text);
       } else {
         await Share.share(text);
       }
     } catch (e, stackTrace) {
-      print('❌ خطأ المشاركة: $e');
-      print('📄 StackTrace: $stackTrace');
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('❌ حدث خطأ أثناء المشاركة')),
-      );
+      debugPrint('❌ خطأ المشاركة: $e');
+      debugPrint('📄 StackTrace: $stackTrace');
+      showToast(message: '❌ حدث خطأ أثناء المشاركة', backgroundColor: Colors.red);
     }
-
   }
-
-
-
 }
