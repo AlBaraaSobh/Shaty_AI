@@ -29,7 +29,7 @@ class DoctorCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final imageUrl = fixImageUrl(doctor.image.trim());
     final isNetwork = imageUrl.startsWith('http') || imageUrl.contains('/storage/') || imageUrl.contains('10.0.2.2');
-    final placeholder =  const AssetImage('images/doctor.png'); // تأكد من المسار الصحيح
+    final placeholder =  const AssetImage('images/doctor.png');
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       elevation: 3,

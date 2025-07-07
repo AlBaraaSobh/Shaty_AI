@@ -47,7 +47,7 @@ class _PatientDoctorsScreenState extends State<PatientDoctorsScreen> {
         selectedSpecialtyIndex = index;
         loadingSpecialtyId = specialtyId;
       });
-      context.read<PatientDoctorsCubit>().getDoctorsBySpecialty(specialtyId);
+      context.read<PatientDoctorsCubit>().getDoctorsBySpecialty(specialtyId.toString());
     }
   }
 
@@ -160,7 +160,7 @@ class _PatientDoctorsScreenState extends State<PatientDoctorsScreen> {
         final isSelected = selectedSpecialtyIndex == index;
         final specialtyId = specialties[index]['id'] as int;
 
-        final doctorsForSpecialty = state.specialtyDoctors[specialtyId] ?? [];
+        final doctorsForSpecialty = state.specialtyDoctors[specialtyId.toString()] ?? [];
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,

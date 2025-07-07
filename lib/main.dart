@@ -26,8 +26,11 @@ import 'package:shaty/features/doctor/data/repositories/tips_repository.dart';
 import 'package:shaty/features/doctor/screen/bottom_navigation_screen.dart';
 import 'package:shaty/features/doctor/screen/doctor_home_screen.dart';
 import 'package:shaty/features/doctor/widget/view_tips.dart';
+import 'package:shaty/features/patient/cubit/patient_article_cubit.dart';
 import 'package:shaty/features/patient/cubit/patient_doctors_cubit.dart';
+import 'package:shaty/features/patient/cubit/tips_patient_cubit.dart';
 import 'package:shaty/features/patient/data/repositories/patient_doctors_repository.dart';
+import 'package:shaty/features/patient/data/repositories/tips_patient_repository.dart';
 
 import 'package:shaty/features/patient/screen/patient_bottom_nav_bar.dart';
 import 'package:shaty/features/shared/settings/cubit/change_password_cubit.dart';
@@ -81,6 +84,8 @@ void main() async {
         BlocProvider(create: (_) => LocaleCubit()),
         //patient
         BlocProvider(create: (_) => PatientDoctorsCubit(PatientDoctorsRepository(api))),
+        BlocProvider(create: (_) => TipsPatientCubit(TipsPatientRepository(api))),
+        BlocProvider(create: (_) => PatientArticleCubit(ArticleRepository(api))),
 
 
 

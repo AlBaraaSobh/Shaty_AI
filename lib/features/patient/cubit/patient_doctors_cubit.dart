@@ -16,7 +16,7 @@ class PatientDoctorsCubit extends Cubit<PatientDoctorsState> {
     return null;
   }
 
-  void getDoctorsBySpecialty(int specialtyId) async {
+  void getDoctorsBySpecialty(String specialtyId) async {
     emit(state.copyWith(isLoading: true, errorMessage: null));
 
     try {
@@ -27,7 +27,7 @@ class PatientDoctorsCubit extends Cubit<PatientDoctorsState> {
         return !state.followedDoctors.any((followedDoctor) => followedDoctor.id == doctor.id);
       }).toList();
 
-      final updatedMap = Map<int, List<DoctorSpecialtyModel>>.from(state.specialtyDoctors);
+      final updatedMap = Map<String, List<DoctorSpecialtyModel>>.from(state.specialtyDoctors);
       updatedMap[specialtyId] = filteredDoctors;
 
       emit(state.copyWith(
@@ -58,7 +58,7 @@ class PatientDoctorsCubit extends Cubit<PatientDoctorsState> {
     try {
       final isNowFollowed = await repository.toggleFollowDoctor(doctorId);
 
-      final updatedSpecialtyDoctors = Map<int, List<DoctorSpecialtyModel>>.from(state.specialtyDoctors);
+      final updatedSpecialtyDoctors = Map<String, List<DoctorSpecialtyModel>>.from(state.specialtyDoctors);
       final updatedFollowedDoctors = List<DoctorSpecialtyModel>.from(state.followedDoctors);
 
       DoctorSpecialtyModel? targetDoctor;

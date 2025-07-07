@@ -14,13 +14,24 @@ class PaginatedArticlesResponse {
   });
 
   factory PaginatedArticlesResponse.fromJson(Map<String, dynamic> json) {
+    final articlesJson = json['data'] as List<dynamic>;
+
     return PaginatedArticlesResponse(
-      data: (json['data'] as List)
-          .map((item) => ArticleModel.fromJson(item))
-          .toList(),
+      data: articlesJson.map((item) => ArticleModel.fromJson(item)).toList(),
       currentPage: json['meta']['current_page'],
       lastPage: json['meta']['last_page'],
       nextPageUrl: json['links']['next'],
     );
   }
+
+  // factory PaginatedArticlesResponse.fromJson(Map<String, dynamic> json) {
+  //   return PaginatedArticlesResponse(
+  //     data: (json['data'] as List)
+  //         .map((item) => ArticleModel.fromJson(item))
+  //         .toList(),
+  //     currentPage: json['meta']['current_page'],
+  //     lastPage: json['meta']['last_page'],
+  //     nextPageUrl: json['links']['next'],
+  //   );
+  // }
 }

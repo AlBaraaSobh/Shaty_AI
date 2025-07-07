@@ -4,7 +4,7 @@ import '../data/models/doctor_specialty_model.dart';
 class PatientDoctorsState {
   final bool isLoading;
   final String? errorMessage;
-  final Map<int, List<DoctorSpecialtyModel>> specialtyDoctors;
+  final Map<String, List<DoctorSpecialtyModel>> specialtyDoctors;
   final List<DoctorSpecialtyModel> followedDoctors;
 
   PatientDoctorsState({
@@ -17,7 +17,7 @@ class PatientDoctorsState {
   PatientDoctorsState copyWith({
     bool? isLoading,
     String? errorMessage,
-    Map<int, List<DoctorSpecialtyModel>>? specialtyDoctors,
+    Map<String, List<DoctorSpecialtyModel>>? specialtyDoctors,
     List<DoctorSpecialtyModel>? followedDoctors,
   }) {
     return PatientDoctorsState(

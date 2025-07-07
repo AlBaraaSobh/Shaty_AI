@@ -7,7 +7,7 @@ class PatientDoctorsRepository {
 
   PatientDoctorsRepository(this.api);
 
-  Future<List<DoctorSpecialtyModel>> getDoctorsBySpecialty(int specialtyId) async {
+  Future<List<DoctorSpecialtyModel>> getDoctorsBySpecialty(String specialtyId) async {
     print('specialtyId في Repository: $specialtyId, نوعه: ${specialtyId.runtimeType}');
     await _ensureToken();
     final response = await api.get(EndPoints.getDoctorsBySpecialty(specialtyId));
@@ -45,14 +45,19 @@ class PatientDoctorsRepository {
 
   Future<List<DoctorSpecialtyModel>> getFollowedDoctors() async {
     await _ensureToken();
-    final response = await api.get(EndPoints.getAllFollowingDoctors); // لازم تضيف هذا الـ endpoint في EndPoints
+    final response = await api.get(EndPoints.getAllFollowingDoctors);
 
-    if (response == null || response['data'] == null) {
+    if (response == null) {
       throw Exception("لا يوجد بيانات");
     }
 
-    final List<dynamic> data = response['data'];
-    return data.map((json) => DoctorSpecialtyModel.fromJson(json)).toList();
+    final List<dynamic> data = response is List ? response : response['data'] ?? [];
+
+    return data.map((json) {
+      final doctor = DoctorSpecialtyModel.fromJson(json);
+      return doctor.copyWith(isFollowed: true);
+    }).toList();
+
   }
 
 }

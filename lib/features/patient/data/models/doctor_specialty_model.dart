@@ -4,7 +4,7 @@ class DoctorSpecialtyModel {
   final String email;
   final String bio;
   final String image;
-  final int specialtyNumber;
+  final String specialtyNumber;
   final bool isFollowed;
 
   DoctorSpecialtyModel({
@@ -24,7 +24,7 @@ class DoctorSpecialtyModel {
       email: json['email'],
       bio: json['bio'] ?? '',
       image: json['img'] ?? '',
-      specialtyNumber: int.tryParse('${json['jop_specialty_number']}') ?? 0,
+      specialtyNumber: json['jop_specialty_number'] ?? '',
       isFollowed: json['is_followed'] ?? false,
     );
   }
@@ -35,7 +35,7 @@ class DoctorSpecialtyModel {
     String? email,
     String? bio,
     String? image,
-    int? specialtyNumber,
+    String? specialtyNumber,
     bool? isFollowed,
   }) {
     return DoctorSpecialtyModel(
