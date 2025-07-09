@@ -71,7 +71,15 @@
   "current_password": "Current Password",
   "my_articles": "My Articles",
   "language": ":Language",
-  "edit_profile": "Edit profile"
+  "edit_profile": "Edit profile",
+  "doctors": "Doctors",
+  "specialties": "Specialties",
+  "followers": "Followers",
+  "not_followed": "You have not followed any doctor yet",
+  "un_follow": "Unfollow",
+  "follow": "Follow",
+  "no_doctors_for_this_specialty": "There are currently no doctors for this specialty"
+
 
 
 

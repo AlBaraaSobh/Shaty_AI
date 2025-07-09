@@ -17,6 +17,16 @@ class NotificationCubit extends Cubit<NotificationState> {
       emit(state.copyWith(isLoading: false, failureMessage: "فشل في تحميل الإشعارات"));
     }
   }
+  Future<void> fetchPatientNotifications() async {
+    emit(state.copyWith(isLoading: true, failureMessage: null));
+
+    try {
+      final notifications = await repository.getPatientNotifications();
+      emit(state.copyWith(isLoading: false, notifications: notifications));
+    } catch (e) {
+      emit(state.copyWith(isLoading: false, failureMessage: "فشل في تحميل الإشعارات"));
+    }
+  }
 
   void clearMessages() {
     emit(state.copyWith(failureMessage: null, successMessage: null));

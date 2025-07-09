@@ -72,7 +72,14 @@
   "current_password": "كلمة المرور الحالية",
   "my_articles": "مقالاتي",
   "language": "اللغة",
-  "edit_profile": "تعديل الملف الشخصي"
+  "edit_profile": "تعديل الملف الشخصي",
+  "doctors": "الأطباء",
+  "specialties": "التخصصات",
+  "followers": "المتابعين",
+  "not_followed": "لم تقم بمتابعة أي طبيب بعد",
+  "un_follow": "إلغاء المتابعة",
+  "follow": "متابعة",
+  "no_doctors_for_this_specialty": "لا يوجد أطباء حاليا لهذا التخصص"
 
 
 

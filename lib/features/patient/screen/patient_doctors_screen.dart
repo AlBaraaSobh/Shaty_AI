@@ -4,6 +4,7 @@ import 'package:shaty/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shaty/core/constants/app_colors.dart';
+import 'package:shaty/core/localization/localization_extension.dart';
 import '../cubit/patient_doctors_cubit.dart';
 import '../cubit/patient_doctors_state.dart';
 import '../widget/doctor_card.dart';
@@ -60,7 +61,7 @@ class _PatientDoctorsScreenState extends State<PatientDoctorsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('الأطباء')),
+      appBar: AppBar(title:  Text(context.loc.doctors,textAlign: TextAlign.center,),),
       body: BlocBuilder<PatientDoctorsCubit, PatientDoctorsState>(
         builder: (context, state) {
           return Column(
@@ -88,34 +89,28 @@ class _PatientDoctorsScreenState extends State<PatientDoctorsScreen> {
     );
   }
 
+
+
   Widget _buildToggleButtons() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.grey[200],
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          children: [
-            _buildToggleButton(
-              text: 'التخصصات',
-              isSelected: selectedView == DoctorsViewType.specialties,
-              onTap: () {
-                setState(() => selectedView = DoctorsViewType.specialties);
-              },
-              isRight: true,
-            ),
-            _buildToggleButton(
-              text: 'المتابَعين',
-              isSelected: selectedView == DoctorsViewType.following,
-              onTap: () {
-                setState(() => selectedView = DoctorsViewType.following);
-              },
-              isRight: false,
-            ),
-          ],
-        ),
+      child: Row(
+        children: [
+          _buildToggleButton(
+            text: context.loc.specialties,
+            isSelected: selectedView == DoctorsViewType.specialties,
+            onTap: () {
+              setState(() => selectedView = DoctorsViewType.specialties);
+            },
+          ),
+          _buildToggleButton(
+            text: context.loc.followers,
+            isSelected: selectedView == DoctorsViewType.following,
+            onTap: () {
+              setState(() => selectedView = DoctorsViewType.following);
+            },
+          ),
+        ],
       ),
     );
   }
@@ -124,34 +119,143 @@ class _PatientDoctorsScreenState extends State<PatientDoctorsScreen> {
     required String text,
     required bool isSelected,
     required VoidCallback onTap,
-    required bool isRight,
   }) {
     return Expanded(
-      child: TextButton(
-        onPressed: onTap,
-        style: TextButton.styleFrom(
-          backgroundColor: isSelected ? Colors.blue.withOpacity(0.9) : Colors.transparent,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              topRight: isRight ? const Radius.circular(12) : Radius.zero,
-              bottomRight: isRight ? const Radius.circular(12) : Radius.zero,
-              topLeft: !isRight ? const Radius.circular(12) : Radius.zero,
-              bottomLeft: !isRight ? const Radius.circular(12) : Radius.zero,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(10),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              text,
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                color: isSelected ? AppColors.primaryColor : Colors.grey[600],
+              ),
             ),
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 14),
-        ),
-        child: Text(
-          text,
-          style: TextStyle(
-            color: isSelected ? Colors.white : AppColors.primaryColor,
-            fontWeight: FontWeight.w600,
-            fontSize: 15,
-          ),
+            const SizedBox(height: 6),
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 250),
+              height: 3,
+              width: 60,
+              decoration: BoxDecoration(
+                color: isSelected ? AppColors.primaryColor : Colors.transparent,
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
+
+
+
+
+  // Widget _buildToggleButton({
+  //   required String text,
+  //   required bool isSelected,
+  //   required VoidCallback onTap,
+  //   required bool isRight,
+  // }) {
+  //   return Expanded(
+  //     child: GestureDetector(
+  //       onTap: onTap,
+  //       child: AnimatedContainer(
+  //         duration: const Duration(milliseconds: 200),
+  //         padding: const EdgeInsets.symmetric(vertical: 10),
+  //         decoration: BoxDecoration(
+  //           color: isSelected ? Colors.transparent : Colors.transparent,
+  //           border: Border(
+  //             bottom: BorderSide(
+  //               color: isSelected ? AppColors.primaryColor : Colors.grey.shade300,
+  //               width: 2.5,
+  //             ),
+  //           ),
+  //         ),
+  //         child: Center(
+  //           child: Text(
+  //             text,
+  //             style: TextStyle(
+  //               color: isSelected ? AppColors.primaryColor : Colors.grey[600],
+  //               fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+  //               fontSize: 15,
+  //             ),
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+
+
+  //
+  // Widget _buildToggleButtons() {
+  //   return Padding(
+  //     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+  //     child: Container(
+  //       decoration: BoxDecoration(
+  //         color: Colors.grey[200],
+  //         borderRadius: BorderRadius.circular(12),
+  //       ),
+  //       child: Row(
+  //         children: [
+  //           _buildToggleButton(
+  //             text: 'التخصصات',
+  //             isSelected: selectedView == DoctorsViewType.specialties,
+  //             onTap: () {
+  //               setState(() => selectedView = DoctorsViewType.specialties);
+  //             },
+  //             isRight: true,
+  //           ),
+  //           _buildToggleButton(
+  //             text: 'المتابَعين',
+  //             isSelected: selectedView == DoctorsViewType.following,
+  //             onTap: () {
+  //               setState(() => selectedView = DoctorsViewType.following);
+  //             },
+  //             isRight: false,
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
+  //
+  // Widget _buildToggleButton({
+  //   required String text,
+  //   required bool isSelected,
+  //   required VoidCallback onTap,
+  //   required bool isRight,
+  // }) {
+  //   return Expanded(
+  //     child: TextButton(
+  //       onPressed: onTap,
+  //       style: TextButton.styleFrom(
+  //         backgroundColor: isSelected ? Colors.blue.withOpacity(0.9) : Colors.transparent,
+  //         shape: RoundedRectangleBorder(
+  //           borderRadius: BorderRadius.only(
+  //             topRight: isRight ? const Radius.circular(12) : Radius.zero,
+  //             bottomRight: isRight ? const Radius.circular(12) : Radius.zero,
+  //             topLeft: !isRight ? const Radius.circular(12) : Radius.zero,
+  //             bottomLeft: !isRight ? const Radius.circular(12) : Radius.zero,
+  //           ),
+  //         ),
+  //         padding: const EdgeInsets.symmetric(vertical: 14),
+  //       ),
+  //       child: Text(
+  //         text,
+  //         style: TextStyle(
+  //           color: isSelected ? Colors.white : AppColors.primaryColor,
+  //           fontWeight: FontWeight.w600,
+  //           fontSize: 15,
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget _buildSpecialtiesView(PatientDoctorsState state) {
     return ListView.builder(
@@ -179,9 +283,9 @@ class _PatientDoctorsScreenState extends State<PatientDoctorsScreen> {
                   child: Center(child: CircularProgressIndicator()),
                 )
               else if (doctorsForSpecialty.isEmpty)
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  child: Center(child: Text('لا يوجد أطباء حالياً لهذا التخصص')),
+                  Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: Center(child: Text(context.loc.no_doctors_for_this_specialty)),
                 )
               else
                 Column(
@@ -189,7 +293,7 @@ class _PatientDoctorsScreenState extends State<PatientDoctorsScreen> {
                     return DoctorCard(
                       doctor: doctor,
                       isFollowed: doctor.isFollowed,
-                      buttonText: doctor.isFollowed ? 'إلغاء المتابعة' : 'متابعة',
+                      buttonText: doctor.isFollowed ? context.loc.un_follow : context.loc.follow,
                       buttonColor: doctor.isFollowed ? Colors.red : AppColors.primaryColor,
                       onButtonPressed: () {
                         context.read<PatientDoctorsCubit>().toggleFollowDoctor(doctor.id);
@@ -205,7 +309,7 @@ class _PatientDoctorsScreenState extends State<PatientDoctorsScreen> {
 
   Widget _buildFollowingView(PatientDoctorsState state) {
     if (state.followedDoctors.isEmpty) {
-      return const Center(child: Text('لم تقم بمتابعة أي طبيب بعد'));
+      return  Center(child: Text(context.loc.not_followed));
     }
 
     return ListView.builder(
@@ -215,7 +319,7 @@ class _PatientDoctorsScreenState extends State<PatientDoctorsScreen> {
         return DoctorCard(
           doctor: doctor,
           isFollowed: doctor.isFollowed,
-          buttonText: doctor.isFollowed ? 'إلغاء المتابعة' : 'متابعة',
+          buttonText: doctor.isFollowed ? context.loc.un_follow : context.loc.follow,
           buttonColor: doctor.isFollowed ? Colors.red : AppColors.primaryColor,
           onButtonPressed: () {
             context.read<PatientDoctorsCubit>().toggleFollowDoctor(doctor.id);

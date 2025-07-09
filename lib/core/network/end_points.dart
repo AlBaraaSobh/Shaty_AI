@@ -48,4 +48,6 @@ class EndPoints {
   static String getDoctorsBySpecialty(String specialtyId) => "speciaty/$specialtyId/doctors";
 
   static String followDoctor(int doctorId) => "user/follow-doctor/$doctorId";
+  static String patientNotifications = 'user/notifications';
+
 }

@@ -13,4 +13,11 @@ class NotificationRepository {
     final List<dynamic> data = response;
     return data.map((e) => DoctorNotification.fromJson(e)).toList();
   }
+
+  Future<List<DoctorNotification>> getPatientNotifications() async {
+    final response = await api.get(EndPoints.patientNotifications);
+
+    final List<dynamic> data = response;
+    return data.map((e) => DoctorNotification.fromJson(e)).toList();
+  }
 }
