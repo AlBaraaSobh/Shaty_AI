@@ -49,5 +49,8 @@ class EndPoints {
 
   static String followDoctor(int doctorId) => "user/follow-doctor/$doctorId";
   static String patientNotifications = 'user/notifications';
+  static String checkCode = 'check-code';
+  static String resetPassword = 'reset-password';
+  static String forgetPassword = 'forget-password';
 
 }

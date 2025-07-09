@@ -40,6 +40,8 @@ import 'package:shaty/features/shared/settings/data/repositories/edit_profile_re
 
 import 'core/utils/helpers/storage_helper.dart';
 import 'features/auth/cubit/doctor_register_cubit.dart';
+import 'features/auth/cubit/reset_password_cubit.dart';
+import 'features/auth/data/repositories/reset_password_repository.dart';
 import 'features/auth/screen/sign_in_screen.dart';
 import 'features/doctor/data/repositories/notification_repository.dart';
 
@@ -68,6 +70,7 @@ void main() async {
         BlocProvider(
             create: (_) => DoctorRegisterCubit(DoctorRegisterRepository(api))),
         BlocProvider(create: (_) => LoginCubit(LoginRepository(api))),
+        BlocProvider(create: (_) => ResetPasswordCubit(ResetPasswordRepository(api))),
         BlocProvider(create: (_) => TipsCubit(TipsRepository(api))),
         BlocProvider(create: (_) => ArticleCubit(ArticleRepository(api))),
         BlocProvider(create: (_) => CommentCubit(CommentRepository(api))),
@@ -122,8 +125,8 @@ class MyApp extends StatelessWidget {
           routes: {
             '/login_screen': (context) => const LoginScreen(),
             '/sign_in_screen': (context) => const SignInScreen(),
-            '/rest_password_screen': (context) => const RestPasswordScreen(),
-            '/verification_screen': (context) => const VerificationScreen(),
+            '/rest_password_screen': (context) =>  const RestPasswordScreen(),
+            '/verification_screen': (context) =>  const VerificationScreen(),
             '/change_password_screen': (
                 context) => const ChangePasswordScreen(),
             '/doctor_home_screen': (context) => const DoctorHomeScreen(),

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shaty/core/constants/app_colors.dart';
 import 'package:shaty/core/localization/localization_extension.dart';
 
 import '../../../shared/widgets/pin_code_input.dart';
 import '../../../shared/widgets/primary_button .dart';
 import '../../../shared/widgets/resend_code_timer.dart';
+import '../cubit/reset_password_cubit.dart';
 
 
 class VerificationScreen extends StatefulWidget {
@@ -14,51 +16,14 @@ class VerificationScreen extends StatefulWidget {
   State<VerificationScreen> createState() => _VerificationScreenState();
 }
 
-
 class _VerificationScreenState extends State<VerificationScreen> {
   String _code = '';
+  late String email;
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                context.loc.we_sent_code,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.primaryColor,
-                ),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              PinCodeInput(onCompleted: _onCodeCompleted),
-              SizedBox(
-                height: 30,
-              ),
-              PrimaryButton(
-                label: context.loc.confirm_code,
-                onPressed: () {
-                  Navigator.pushNamed(context, '/change_password_screen');
-                },
-              ),
-              SizedBox(height: 25,),
-              ResendCodeTimer(onResend: () {
-                _onResendCode();
-              },)
-            ],
-          ),
-        ),
-      ),
-    );
-
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    email = ModalRoute.of(context)!.settings.arguments as String;
   }
 
   void _onCodeCompleted(String code) {
@@ -66,8 +31,51 @@ class _VerificationScreenState extends State<VerificationScreen> {
   }
 
   void _onResendCode() {
-    //TODO إعادة إرسال الرمز هنا
-    print('رمز جديد تم إرساله');
+    context.read<ResetPasswordCubit>().sendEmailToReset(email);
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            Text('أدخل الرمز'),
+            const SizedBox(height: 20),
+            PinCodeInput(onCompleted: _onCodeCompleted),
+            const SizedBox(height: 20),
+            PrimaryButton(
+              label: 'تأكيد الرمز',
+              onPressed: () async {
+                if (_code.length != 4) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("يرجى إدخال الرمز الكامل")),
+                  );
+                  return;
+                }
+                try {
+                  final token = await context.read<ResetPasswordCubit>().verifyCode(
+                    email: email,
+                    code: _code,
+                  );
+                  Navigator.pushNamed(
+                    context,
+                    '/change_password_screen',
+                    arguments: {
+                      'email': email,
+                      'token': token,
+                    },
+                  );
+                } catch (_) {}
+              },
+            ),
+            const SizedBox(height: 20),
+            ResendCodeTimer(onResend: _onResendCode),
+          ],
+        ),
+      ),
+    );
+  }
 }
