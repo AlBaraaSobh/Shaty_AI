@@ -52,5 +52,6 @@ class EndPoints {
   static String checkCode = 'check-code';
   static String resetPassword = 'reset-password';
   static String forgetPassword = 'forget-password';
+  static String patientUpdateProfile = 'user/update-profile';
 
 }

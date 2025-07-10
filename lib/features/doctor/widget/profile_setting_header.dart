@@ -77,7 +77,8 @@ class ProfileSettingHeader extends StatelessWidget {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               ),
               onPressed: () {
-                Navigator.pushNamed(context, '/edit_doctor_profile_screen');
+               // Navigator.pushNamed(context, '/edit_doctor_profile_screen');
+                 Navigator.pushNamed(context, '/edit_patient_profile_screen');
               },
               child: Text(context.loc.edit_profile , style: const TextStyle(color: Colors.white),
               ),

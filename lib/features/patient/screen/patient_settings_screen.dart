@@ -10,6 +10,7 @@ import '../../doctor/widget/build_settings_tile.dart';
 import '../../doctor/widget/profile_setting_header.dart';
 import '../../shared/settings/cubit/change_password_cubit.dart';
 import '../../shared/settings/cubit/change_password_state.dart';
+import '../widget/patient_setting_header.dart';
 
 class PatientSettingsScreen extends StatefulWidget {
   const PatientSettingsScreen({super.key});
@@ -17,7 +18,6 @@ class PatientSettingsScreen extends StatefulWidget {
   @override
   State<PatientSettingsScreen> createState() => _PatientSettingsScreenState();
 }
-
 class _PatientSettingsScreenState extends State<PatientSettingsScreen> {
   bool isNotificationsEnabled = true;
   final TextEditingController oldPasswordController = TextEditingController();
@@ -55,7 +55,7 @@ class _PatientSettingsScreenState extends State<PatientSettingsScreen> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                 const ProfileSettingHeader(),
+                 const PatientSettingHeader(),
                 const Divider(color: Colors.grey, thickness: 0.5, height: 20),
                 const SizedBox(height: 10),
 

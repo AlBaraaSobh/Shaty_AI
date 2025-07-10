@@ -28,9 +28,12 @@ import 'package:shaty/features/doctor/screen/doctor_home_screen.dart';
 import 'package:shaty/features/doctor/widget/view_tips.dart';
 import 'package:shaty/features/patient/cubit/patient_article_cubit.dart';
 import 'package:shaty/features/patient/cubit/patient_doctors_cubit.dart';
+import 'package:shaty/features/patient/cubit/patient_profile_cubit.dart';
 import 'package:shaty/features/patient/cubit/tips_patient_cubit.dart';
 import 'package:shaty/features/patient/data/repositories/patient_doctors_repository.dart';
+import 'package:shaty/features/patient/data/repositories/patient_profile_repository.dart';
 import 'package:shaty/features/patient/data/repositories/tips_patient_repository.dart';
+import 'package:shaty/features/patient/screen/edit_patient_profile_screen.dart';
 
 import 'package:shaty/features/patient/screen/patient_bottom_nav_bar.dart';
 import 'package:shaty/features/shared/settings/cubit/change_password_cubit.dart';
@@ -89,6 +92,7 @@ void main() async {
         BlocProvider(create: (_) => PatientDoctorsCubit(PatientDoctorsRepository(api))),
         BlocProvider(create: (_) => TipsPatientCubit(TipsPatientRepository(api))),
         BlocProvider(create: (_) => PatientArticleCubit(ArticleRepository(api))),
+        BlocProvider(create: (_) => PatientProfileCubit(PatientProfileRepository(api))),
 
 
 
@@ -135,8 +139,8 @@ class MyApp extends StatelessWidget {
             '/patient_bottom_nav_bar': (context) => const PatientBottomNavBar(),
             '/view_tips': (context) => const ViewTips(),
             '/saved_article': (context) => const SavedArticle(),
-            '/edit_doctor_profile_screen': (context) =>
-            const EditDoctorProfileScreen(),
+            '/edit_doctor_profile_screen': (context) => const EditDoctorProfileScreen(),
+            '/edit_patient_profile_screen': (context) => const EditPatientProfileScreen(),
           },
         );
       },
