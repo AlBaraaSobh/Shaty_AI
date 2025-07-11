@@ -27,11 +27,16 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
   @override
   void initState() {
     super.initState();
-    final doctorCubit = context.read<DoctorProfileCubit>();
-    doctorCubit.getDoctorProfile();
-    doctorCubit.getDoctorArticles(); // جلب المقالات مع بيانات الطبيب
-    context.read<TipsCubit>().getTips();
+
+    Future.microtask(() async {
+      final doctorCubit = context.read<DoctorProfileCubit>();
+      await doctorCubit.getDoctorProfile();
+      await doctorCubit.getDoctorArticles();
+      await doctorCubit.getDoctorInfo();
+      await context.read<TipsCubit>().getTips();
+    });
   }
+
 
   Future<void> _onRefresh() async {
     final doctorCubit = context.read<DoctorProfileCubit>();

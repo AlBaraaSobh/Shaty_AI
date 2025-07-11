@@ -198,6 +198,16 @@ class ArticleCubit extends Cubit<ArticleState> {
 
     emit(state.copyWith(articles: updatedArticles));
   }
+
+
+  void updateSingleArticle(ArticleModel updatedArticle) {
+    final updatedArticles = state.articles.map((article) {
+      return article.id == updatedArticle.id ? updatedArticle : article;
+    }).toList();
+
+    emit(state.copyWith(articles: updatedArticles));
+  }
+
 }
 
 // import 'dart:io';

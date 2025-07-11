@@ -67,7 +67,7 @@ class _PatientTipsState extends State<PatientTips> {
               } else if (state.tips.isEmpty) {
                 return Center(
                   child: Text(
-                    "لا توجد نصائح حالياً",
+                    context.loc.no_tips,
                     style: TextStyle(
                       color: Colors.grey[600],
                       fontSize: 16,

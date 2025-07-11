@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shaty/core/localization/localization_extension.dart';
 import 'package:shaty/features/doctor/cubit/notification_cubit.dart';
 import 'package:shaty/features/doctor/cubit/notification_state.dart';
 import 'package:shaty/features/doctor/widget/notification_item.dart';
@@ -10,6 +11,7 @@ class PatientNotificationsScreen extends StatefulWidget {
   @override
   State<PatientNotificationsScreen> createState() => _PatientNotificationsScreenState();
 }
+
 class _PatientNotificationsScreenState extends State<PatientNotificationsScreen> {
   @override
   void initState() {
@@ -41,12 +43,12 @@ class _PatientNotificationsScreenState extends State<PatientNotificationsScreen>
           }
 
           if (state.notifications.isEmpty) {
-            return const Center(child: Text('لا توجد إشعارات حالياً'));
+            return  Center(child: Text(context.loc.no_notifications));
           }
 
           return RefreshIndicator(
             onRefresh: () async {
-              await context.read<NotificationCubit>().fetchNotifications();
+              await context.read<NotificationCubit>().fetchPatientNotifications(); // ✅ التعديل هنا
             },
             child: ListView.separated(
               padding: const EdgeInsets.all(20),

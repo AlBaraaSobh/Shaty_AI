@@ -35,7 +35,6 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            // 🟢 رأس الصفحة
             SliverToBoxAdapter(
               child: Column(
                 children: [

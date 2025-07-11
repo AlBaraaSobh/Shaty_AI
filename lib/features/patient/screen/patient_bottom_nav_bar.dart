@@ -66,7 +66,7 @@ class _PatientBottomNavBarState extends State<PatientBottomNavBar> {
             showUnselectedLabels: false,
             items: const [
               BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: ''),
-              BottomNavigationBarItem(icon: Icon(Icons.local_hospital), label: ''),
+              BottomNavigationBarItem(icon: Icon(Icons.medical_services), label: '',),
               BottomNavigationBarItem(icon: Icon(Icons.favorite), label: ''),
               BottomNavigationBarItem(icon: Icon(Icons.settings), label: ''),
             ],

@@ -2,7 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../data/models/article_model.dart';
 import 'doctor_profile_state.dart';
 import '../data/repositories/doctor_profile_repository.dart';
-import 'package:shaty/core/errors/exceptions.dart'; // ⬅️ لإدارة الأخطاء
+import 'package:shaty/core/errors/exceptions.dart';
 
 class DoctorProfileCubit extends Cubit<DoctorProfileState> {
   final DoctorProfileRepository repository;
@@ -77,16 +77,22 @@ class DoctorProfileCubit extends Cubit<DoctorProfileState> {
     }
   }
 
-  Future<void> getFollowers() async {
-    emit(state.copyWith(isLoading: true, failureMessage: null));
-    try {
-      final followers = await repository.getFollowers();
-      emit(state.copyWith(isLoading: false, followers: followers));
-    } catch (e) {
-      final message = ErrorHandler.handle(e);
-      emit(state.copyWith(isLoading: false, failureMessage: message));
-    }
-  }
+  // Future<void> getFollowers() async {
+  //   emit(state.copyWith(isLoading: true, failureMessage: null));
+  //   print('📥 بدأ تحميل المتابعين');
+  //
+  //   try {
+  //     final followers = await repository.getFollowers();
+  //     print('📥 عدد المتابعين المحمّلين: ${followers.length}');
+  //
+  //     emit(state.copyWith(isLoading: false, followers: followers));
+  //   } catch (e) {
+  //     final message = ErrorHandler.handle(e);
+  //     print('❌ خطأ في getFollowers: $message');
+  //
+  //     emit(state.copyWith(isLoading: false, failureMessage: message));
+  //   }
+  // }
 
   Future<void> getDoctorArticles({bool forceRefresh = false}) async {
     if (state.articles.isNotEmpty && !forceRefresh) return;

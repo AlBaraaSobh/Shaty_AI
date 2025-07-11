@@ -21,10 +21,8 @@ class _SavedArticleState extends State<SavedArticle> {
   @override
   void initState() {
     super.initState();
-    // تحميل الصفحة الأولى من المقالات المحفوظة
     context.read<SavedCubit>().getSavedArticles();
 
-    // دعم التحميل التلقائي عند الوصول لنهاية القائمة
     _scrollController.addListener(() {
       if (_scrollController.position.pixels >=
           _scrollController.position.maxScrollExtent - 200 &&
@@ -51,7 +49,6 @@ class _SavedArticleState extends State<SavedArticle> {
       body: BlocBuilder<SavedCubit, SavedState>(
         builder: (context, state) {
           if (state.isLoading && state.articles.isEmpty) {
-            // تحميل أولي
             return const Center(child: CircularProgressIndicator());
           }
 
@@ -60,7 +57,7 @@ class _SavedArticleState extends State<SavedArticle> {
           }
 
           if (state.articles.isEmpty) {
-            return const Center(child: Text('لا توجد مقالات محفوظة حتى الآن.'));
+            return  Center(child: Text(context.loc.no_saved_article));
           }
 
           return ListView.separated(
@@ -73,7 +70,6 @@ class _SavedArticleState extends State<SavedArticle> {
                 final ArticleModel article = state.articles[index];
                 return ArticleCard(article: article);
               } else {
-                // مؤشر تحميل في آخر القائمة أثناء تحميل المزيد
                 if (state.isLoadingMore) {
                   return const Padding(
                     padding: EdgeInsets.all(8),

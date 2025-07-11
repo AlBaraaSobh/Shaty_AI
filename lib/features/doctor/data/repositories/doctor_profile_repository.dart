@@ -2,6 +2,7 @@
 import 'package:dio/dio.dart';
 import 'package:shaty/core/network/api_consumer.dart';
 import 'package:shaty/core/network/end_points.dart';
+import '../models/doctor_stats_model.dart';
 import '../models/doctors_model.dart';
 import '../models/article_model.dart';
 
@@ -38,14 +39,30 @@ class DoctorProfileRepository {
     return DoctorsModel.fromJson(response['user']);
   }
 
-  Future<Map<String, dynamic>> getDoctorInfo() async {
-    return await api.get(EndPoints.getDoctorInfo);
+  // Future<Map<String, dynamic>> getDoctorInfo() async {
+  //   return await api.get(EndPoints.getDoctorInfo);
+  // }
+
+  Future<DoctorStatsModel> getDoctorInfo() async {
+    final data = await api.get(EndPoints.getDoctorInfo);
+    return DoctorStatsModel.fromJson(data);
   }
 
-  Future<List<DoctorsModel>> getFollowers() async {
-    final data = await api.get(EndPoints.getDoctorFollowers);
-    return (data as List).map((e) => DoctorsModel.fromJson(e)).toList();
-  }
+  //
+  // Future<List<DoctorsModel>> getFollowers() async {
+  //   final response = await api.get(EndPoints.getDoctorFollowers);
+  //   print('📦 Response followers: $response');
+  //
+  //   final data = response['data'] as List;
+  //   return data.map((e) => DoctorsModel.fromJson(e)).toList();
+  // }
+
+
+
+  // Future<List<DoctorsModel>> getFollowers() async {
+  //   final data = await api.get(EndPoints.getDoctorFollowers);
+  //   return (data as List).map((e) => DoctorsModel.fromJson(e)).toList();
+  // }
 
   Future<List<ArticleModel>> getDoctorArticles() async {
     final data = await api.get(EndPoints.getArticle);

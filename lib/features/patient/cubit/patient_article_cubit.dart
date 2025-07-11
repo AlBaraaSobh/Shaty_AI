@@ -118,6 +118,15 @@ class PatientArticleCubit extends Cubit<ArticleState> {
     emit(state.copyWith(articles: updatedArticles));
   }
 
+  void updateSingleArticle(ArticleModel updatedArticle) {
+    final updatedArticles = state.articles.map((article) {
+      return article.id == updatedArticle.id ? updatedArticle : article;
+    }).toList();
+
+    emit(state.copyWith(articles: updatedArticles));
+  }
+
+
   void clearMessages() {
     emit(state.copyWith(successMessage: null, failureMessage: null));
   }

@@ -6,11 +6,13 @@ import 'package:shaty/features/doctor/data/models/article_model.dart';
 import '../../../../shared/common/post_details_screen.dart';
 import '../../../shared/widgets/show_alert_Dialog.dart';
 import '../../patient/cubit/patient_article_cubit.dart';
+import '../../patient/screen/patient_home_screen.dart';
 import '../../shared/settings/cubit/is_saved_cubit.dart';
 import '../cubit/article_cubit.dart';
 import '../cubit/article_state.dart';
 import '../cubit/doctor_profile_cubit.dart';
 import '../cubit/doctor_profile_state.dart';
+import '../screen/doctor_home_screen.dart';
 import '../screen/doctor_profile_screen.dart';
 import 'create_post_bottom_sheet.dart';
 
@@ -38,7 +40,7 @@ class ArticleCard extends StatelessWidget {
     );
     final updatedArticle = article.copyWith(articleInfo: updatedInfo);
 
-    _updateDoctorProfileCubitIfNeeded(context, updatedArticle);
+    _updateArticleInCubit(context, updatedArticle);
 
     if (_isInsideDoctorProfileScreen(context)) {
       context.read<ArticleCubit>().likeArticle(article.id);
@@ -192,7 +194,6 @@ class ArticleCard extends StatelessWidget {
           onPressed: () => _handleLikeAction(context),
         ),
 
-
         _PostAction(
           icon: Icons.comment_outlined,
           label: '${article.articleInfo.numComments}',
@@ -267,7 +268,7 @@ class ArticleCard extends StatelessWidget {
               ),
             );
 
-            _updateDoctorProfileCubitIfNeeded(context, updatedArticle);
+            _updateArticleInCubit(context, updatedArticle);
           },
         ),
 
@@ -294,6 +295,24 @@ class ArticleCard extends StatelessWidget {
         // ),
       ],
     );
+  }
+
+  void _updateArticleInCubit(BuildContext context, ArticleModel updatedArticle) {
+    final isDoctorProfile = context.findAncestorWidgetOfExactType<DoctorProfileScreen>() != null;
+    final isDoctorHome = context.findAncestorWidgetOfExactType<DoctorHomeScreen>() != null;
+    final isPatientHome = context.findAncestorWidgetOfExactType<PatientHomeScreen>() != null;
+
+    if (isDoctorProfile) {
+      context.read<DoctorProfileCubit>().updateSingleArticle(updatedArticle);
+    }
+
+    if (isDoctorHome) {
+      context.read<ArticleCubit>().updateSingleArticle(updatedArticle);
+    }
+
+    if (isPatientHome) {
+      context.read<PatientArticleCubit>().updateSingleArticle(updatedArticle);
+    }
   }
 
   void _showDeleteConfirmationDialog(BuildContext context, int id) {

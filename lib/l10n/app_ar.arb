@@ -79,9 +79,19 @@
   "not_followed": "لم تقم بمتابعة أي طبيب بعد",
   "un_follow": "إلغاء المتابعة",
   "follow": "متابعة",
-  "no_doctors_for_this_specialty": "لا يوجد أطباء حاليا لهذا التخصص"
-
-
-
+  "no_doctors_for_this_specialty": "لا يوجد أطباء حاليا لهذا التخصص",
+  "no_tips": "لا توجد نصائح حاليا",
+  "specialty_cardiology": "أمراض القلب والشرايين",
+  "specialty_surgery": "الجراحة العامة",
+  "specialty_internal": "الأمراض الباطنية",
+  "specialty_dermatology": "الأمراض الجلدية",
+  "specialty_neurology": "الأمراض العصبية",
+  "specialty_psychiatry": "الأمراض النفسية",
+  "specialty_gynecology": "الأمراض النسائية والولادة",
+  "specialty_pediatrics": "الأطفال",
+  "specialty_oncology": "الأورام",
+  "specialty_neurosurgery": "الأعصاب والجراحة العصبية",
+  "no_saved_article": "لا توجد مقالات محفوظة حتى الآن",
+  "no_notifications": "لا توجد اشعارات حاليا"
 }
 

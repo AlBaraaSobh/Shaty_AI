@@ -16,13 +16,15 @@ class ProfileStats extends StatelessWidget {
     return BlocBuilder<DoctorProfileCubit, DoctorProfileState>(
       builder: (context, state) {
 
-        final followersCount = state.followers.length.toString();
+        final followersCount = state.info?.numberOfFollowers;
+        print('عدد المتابعين: $followersCount');
+
         final tipsCount = context.select((TipsCubit cubit) => cubit.state.tips.length);
         final articlesCount = state.articles.length.toString();
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            _StatItem(label: context.loc.followers, value: followersCount),
+            _StatItem(label: context.loc.followers, value: followersCount.toString()),
             _StatItem(label: context.loc.tips, value: tipsCount.toString()),
             _StatItem(label: context.loc.articles, value: articlesCount),
           ],

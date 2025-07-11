@@ -78,11 +78,20 @@
   "not_followed": "You have not followed any doctor yet",
   "un_follow": "Unfollow",
   "follow": "Follow",
-  "no_doctors_for_this_specialty": "There are currently no doctors for this specialty"
-
-
-
-
+  "no_doctors_for_this_specialty": "There are currently no doctors for this specialty",
+  "no_tips": "There are no tips currently",
+  "specialty_cardiology": "Cardiology",
+  "specialty_surgery": "General Surgery",
+  "specialty_internal": "Internal Medicine",
+  "specialty_dermatology": "Dermatology",
+  "specialty_neurology": "Neurology",
+  "specialty_psychiatry": "Psychiatry",
+  "specialty_gynecology": "Gynecology and Obstetrics",
+  "specialty_pediatrics": "Pediatrics",
+  "specialty_oncology": "Oncology",
+  "specialty_neurosurgery": "Neurosurgery",
+  "no_saved_article": "There are no articles saved yet",
+  "no_notifications": "There are no notifications currently."
 
 
 }
