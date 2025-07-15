@@ -64,7 +64,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Text(
+                  Text(
                     "الرجاء إدخال كلمة مرور جديدة",
                     style: TextStyle(
                       fontSize: 18,

@@ -60,13 +60,11 @@ class LoginCubit extends Cubit<LoginState> {
           successMessage: "تم تسجيل الدخول بنجاح",
           route: route));
     } catch (e) {
-      final message = e.toString();
+      final message = ErrorHandler.handle(e);
       if (message.contains('credentials')) {
-        Helpers.showToast(message: 'بيانات الدخول غير صحيحة');
         emit(state.copyWith(
             isLoading: false, failureMessage: 'بيانات الدخول غير صحيحة'));
       } else {
-        Helpers.showToast(message: message);
         emit(state.copyWith(isLoading: false, failureMessage: message));
       }
     }

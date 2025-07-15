@@ -99,7 +99,7 @@ class _EditPatientProfileScreenState extends State<EditPatientProfileScreen> {
             PrimaryButton(
               label: context.loc.save,
               onPressed: () {
-                Helpers.showToast(message: 'تم حفظ التعديلات محليًا (SharedPrefs)');
+                Helpers.showToast(message: 'تم حفظ التعديلات');
               },
             ),
           ],

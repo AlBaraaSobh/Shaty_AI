@@ -4,6 +4,8 @@ import 'package:shaty/features/patient/cubit/patient_article_cubit.dart';
 import 'package:shaty/features/patient/cubit/tips_patient_cubit.dart';
 import 'package:shaty/features/patient/widget/patient_header.dart';
 import 'package:shaty/features/patient/widget/patient_posts.dart';
+import '../../../core/constants/app_colors.dart';
+import '../../chatbot/screen/chatbot_screen.dart';
 import '../widget/patient_tips.dart';
 
 class PatientHomeScreen extends StatefulWidget {
@@ -31,8 +33,18 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: SafeArea(
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColors.primaryColor, // أو استخدم AppColors.primaryLight
+        tooltip: 'المساعد الصحي',
+        onPressed:() {
+          Navigator.of(context).push(
+             MaterialPageRoute(builder: (_) =>  ChatbotScreen()),
+          );
+        },
+        child:  const Icon(Icons.smart_toy_outlined, size: 28,color: Colors.white,),
+      ),
+      body: const SafeArea(
         child: CustomScrollView(
           slivers: [
             SliverToBoxAdapter(

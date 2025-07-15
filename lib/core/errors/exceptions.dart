@@ -43,8 +43,15 @@ class ErrorHandler {
       final errorModel = ErrorModel.fromJson(data);
 
       if (statusCode == 422) {
-        return errorModel.firstErrorMessage;
+        final errorMessage = errorModel.firstErrorMessage;
+
+        if (errorMessage.toLowerCase().contains('credentials')) {
+          return 'بيانات الدخول غير صحيحة';
+        }
+
+        return errorMessage;
       }
+
 
       return errorModel.message ?? 'حدث خطأ أثناء الاتصال بالخادم.';
     }

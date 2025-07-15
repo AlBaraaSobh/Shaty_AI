@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../core/errors/exceptions.dart';
 import '../../../core/utils/helpers/helpers.dart';
 import '../data/models/doctor_register_model.dart';
 import '../data/models/doctor_response_model.dart';
@@ -19,9 +20,8 @@ class DoctorRegisterCubit extends Cubit<DoctorRegisterState> {
       print("Token: ${authDoctor.token}");
       emit(state.copyWith(isLoading: false, successMessage: "تم التسجيل بنجاح"));
     } catch (e) {
-      final message = e.toString();
+      final message = ErrorHandler.handle(e);
       emit(state.copyWith(isLoading: false, failureMessage: message));
-      Helpers.showToast(message: message);
     }
   }
 }

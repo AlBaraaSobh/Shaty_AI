@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/enums/user_role_enum.dart';
 import '../../doctor/cubit/doctor_profile_cubit.dart';
 import '../../doctor/cubit/doctor_profile_state.dart';
 import 'package:shaty/core/localization/localization_extension.dart';
 
 class ProfileSettingHeader extends StatelessWidget {
   const ProfileSettingHeader({super.key});
-
   @override
   Widget build(BuildContext context) {
+    UserRole selectedRole = UserRole.doctor;
+
     return BlocBuilder<DoctorProfileCubit, DoctorProfileState>(
       builder: (context, state) {
         final doctor = state.doctor;
@@ -77,8 +79,12 @@ class ProfileSettingHeader extends StatelessWidget {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               ),
               onPressed: () {
-               // Navigator.pushNamed(context, '/edit_doctor_profile_screen');
-                 Navigator.pushNamed(context, '/edit_patient_profile_screen');
+                if (selectedRole == UserRole.doctor) {
+                  Navigator.pushNamed(context, '/edit_doctor_profile_screen');
+                } else {
+                  Navigator.pushNamed(context, '/edit_patient_profile_screen');
+                }               // Navigator.pushNamed(context, '/edit_doctor_profile_screen');
+               //  Navigator.pushNamed(context, '/edit_patient_profile_screen');
               },
               child: Text(context.loc.edit_profile , style: const TextStyle(color: Colors.white),
               ),

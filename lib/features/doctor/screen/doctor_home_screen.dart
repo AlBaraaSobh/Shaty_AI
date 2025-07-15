@@ -23,19 +23,32 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
   int _currentPage = 1;
   bool _isFetchingMore = false;
 
+  // @override
+  // void initState() {
+  //   super.initState();
+  //
+  //   final articleCubit = context.read<ArticleCubit>();
+  //   final tipsCubit = context.read<TipsCubit>();
+  //
+  //   tipsCubit.getTips();
+  //   articleCubit.getPaginatedArticles(_currentPage);
+  //
+  //   _scrollController = ScrollController();
+  //   _scrollController.addListener(_onScroll);
+  // }
+
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController()..addListener(_onScroll);
 
-    final articleCubit = context.read<ArticleCubit>();
-    final tipsCubit = context.read<TipsCubit>();
-
-    tipsCubit.getTips();
-    articleCubit.getPaginatedArticles(_currentPage);
-
-    _scrollController = ScrollController();
-    _scrollController.addListener(_onScroll);
+    // تنفيذ بعد أول إطار مرسوم (frame)
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<TipsCubit>().getTips();
+      context.read<ArticleCubit>().getPaginatedArticles(_currentPage);
+    });
   }
+
 
   void _onScroll() {
     final cubit = context.read<ArticleCubit>();

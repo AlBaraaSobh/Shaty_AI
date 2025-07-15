@@ -3,6 +3,7 @@ import 'package:shaty/core/network/api_consumer.dart';
 import 'package:shaty/core/network/end_points.dart';
 import 'package:shaty/features/auth/cubit/patient_register_state.dart';
 
+import '../../../core/errors/exceptions.dart';
 import '../../../core/utils/helpers/helpers.dart';
 import '../../../core/utils/helpers/storage_helper.dart';
 import '../data/models/patient_register_model .dart';
@@ -21,11 +22,9 @@ class PatientRegisterCubit extends Cubit<PatientRegisterState> {
       final authResponse = await repository.registerPatient(patient);
       await StorageHelper.saveToken(authResponse.token);
       emit(state.copyWith(isLoading: false, successMessage: "تم التسجيل بنجاح"));
-      Helpers.showToast(message: "تم التسجيل بنجاح");
     } catch (e) {
-      final message = e.toString();
+      final message = ErrorHandler.handle(e);
       emit(state.copyWith(isLoading: false, failureMessage: message));
-      Helpers.showToast(message: message);
     }
   }
 

@@ -15,6 +15,7 @@ class SavedRepository {
         EndPoints.articleSaved,
         queryParameters: {'page': page},
       );
+      print('📦 Saved Articles Response: $response');
 
       return PaginatedArticlesResponse.fromJson(response);
 
