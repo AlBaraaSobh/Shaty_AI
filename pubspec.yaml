@@ -48,6 +48,7 @@ dependencies:
   timeago: ^3.3.0
   share_plus: ^11.0.0
   flutter_dotenv: ^5.2.1
+  get_it: ^8.2.0
 
 
 dev_dependencies:
