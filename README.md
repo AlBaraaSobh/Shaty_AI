@@ -3,6 +3,9 @@
 
 Shaty_AI is an open-source healthcare mobile application built using Flutter. It aims to provide an interactive platform for patients and doctors, especially in challenging environments like Gaza, where access to hospitals can be difficult due to war and mobility restrictions.
 
+<img width="1600" height="684" alt="sahaty-app" src="https://github.com/user-attachments/assets/6395d8f6-9ca4-4d04-aee3-76aefe8e544a" />
+
+
 ## 💡 Key Features
 
 - 👨‍⚕️ Doctor and Patient roles with customized interfaces
